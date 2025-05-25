@@ -3,7 +3,6 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
-
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
@@ -16,6 +15,12 @@ const nextConfig: NextConfig = {
 
     remotePatterns: [],
   },
+
+  // i18n: {
+  //   locales: ['en', 'ar'],      
+  //   defaultLocale: 'en',         
+  //   // localeDetection: true        // يختار تلقائي حسب لغة المتصفح 
+  // }
 };
 
-export default nextConfig;
+export default  withNextIntl(nextConfig);
