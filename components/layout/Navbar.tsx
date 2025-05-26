@@ -61,7 +61,7 @@ export default function Navbar() {
     }, [isOpen]);
 
 
-    const logged = true;
+    const logged = false;
 
     return (
         <nav className={`navBar  gap-[50px] md:flex-shrink-0 w-full h-28 z-10 px-13 flex flex-wrap items-center justify-between bg-[#FBFAFC]`}>
