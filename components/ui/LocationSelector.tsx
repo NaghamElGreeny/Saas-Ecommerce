@@ -30,7 +30,7 @@ export default function LocationSelector() {
         <>
             {/* Trigger */}
             <div
-                className="flex items-center space-x-3 cursor-pointer"
+                className="flex flex-row items-center space-x-3 cursor-pointer sm:flex-col"
 
             >
                 <div className="w-12 h-12 rounded-full overflow-hidden">

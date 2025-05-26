@@ -42,6 +42,7 @@ export default async function LocaleLayout({
 
             <Navbar />
             {children}
+            <div className="h-[1660px] bg-red-400"></div>
             <Footer />
             {/* </AosWrapper> */}
             {/* <ScrollBtn /> */}
