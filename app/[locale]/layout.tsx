@@ -1,15 +1,13 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-// import "../globals.scss";
-// import Navbar from "@/components/layout/Navbar";
-// import Footer from "@/components/layout/Footer";
+// import "../../styles/globals.scss";
+import "../../styles/globals.css"
 import { cookies } from "next/headers";
 // import ChangeThem from "@/components/layout/changeThem";
 // import AosWrapper from "@/components/layout/AosWrapper";
 // import "aos/dist/aos.css";
-import ScrollBtn from "@/components/ui/ScrollBtn";
-// import { getSocialFooter } from "../../../services/ApiHandler";
+import { Toaster } from 'react-hot-toast';
 export default async function LocaleLayout({
   children,
   params,
@@ -30,10 +28,11 @@ export default async function LocaleLayout({
   return (
     <html className={`${themeMode ? themeMode : ''}`} lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <head>
-        <title>{locale === "ar" ? "شبل" : "shebl"}</title>
+        <title>{locale === "ar" ? "نغم" : "Nagham"}</title>
         {/* <link rel="icon" href="/assets/logo/logo-head.png" /> */}
       </head>
       <body className=" flex flex-col min-h-screen">
+        <Toaster position="top-center" />
         {/* <ChangeThem /> */}
         <NextIntlClientProvider>
           <>
