@@ -5,7 +5,7 @@ export interface TextAreaInputProp_TP extends React.TextareaHTMLAttributes<HTMLT
 }
 
 const BASE_CLASS_NAME =
-    'form-textarea w-full rounded-md border-transparent px-4 py-[.30rem] outline-none focus:!border-[1px] focus:!border-mainGreen dark:focus:!border-[#17263c] dark:focus-visible:!border-[#17263c] shadows';
+    'form-textarea w-full rounded-md border-transparent px-4 py-[.30rem] outline-none focus:border! focus:!border-mainGreen dark:focus:border-[#17263c]! dark:focus-visible:border-[#17263c]! shadows';
 
 export const TextAreaInput = ({
     name,

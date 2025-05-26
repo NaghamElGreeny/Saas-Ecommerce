@@ -78,7 +78,7 @@ export const Label = ({
 }: LabelProps_TP) => {
     return (
         <label
-            className={`!mb-2 ${label({
+            className={`mb-2! ${label({
                 className,
                 size,
                 required,

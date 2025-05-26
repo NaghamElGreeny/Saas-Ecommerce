@@ -247,7 +247,7 @@ const MultipleAttachmentsUpload: React.FC<MultipleAttachmentsUploadProps> = ({
             {attachments.length > 0 && (
                 <div className="flex items-center overflow-x-auto gap-4 space-x-3 py-2">
                     {attachments.map((attach: any) => (
-                        <div key={attach.url} className="relative flex-shrink-0">
+                        <div key={attach.url} className="relative shrink-0">
                             <span
                                 className="absolute top-2 right-2 bg-white text-red-500 font-medium w-6 h-6 rounded-full flex justify-center items-center cursor-pointer z-10"
                                 onClick={() => handleRemove(attach)}

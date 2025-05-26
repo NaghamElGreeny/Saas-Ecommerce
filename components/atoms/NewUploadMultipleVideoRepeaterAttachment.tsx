@@ -221,7 +221,7 @@ const NewUploadMultipleVideoRepeaterAttachment: React.FC<Props> = ({
     };
 
     return (
-        <div className="upload__file-wrapper !flex !flex-col gap-4">
+        <div className="upload__file-wrapper flex! flex-col! gap-4">
             <div className="flex items-center justify-center border rounded-xl border-dashed border-[#5945aa50] p-5 w-fit mx-auto">
                 <input
                     type="file"

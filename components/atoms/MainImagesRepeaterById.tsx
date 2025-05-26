@@ -151,7 +151,7 @@ const MainImagesRepeaterById = ({
                                     oldValues={values}
                                     imagePath={input?.image}
                                     showpropertie={false}
-                                    className="!flex !flex-col gap-4"
+                                    className="!flex flex-col! gap-4"
                                     onUploadSuccess={(uploadedImage: any) =>
                                         handleUploadSuccess(uploadedImage, index)
                                     }

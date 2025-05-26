@@ -5,7 +5,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 const GeneralInputClass: string = 'form-input px-4 py-[.70rem] w-full shadows';
 
 const baseInput = tv({
-    base: 'rounded-md border-[1px] focus:!border-[1px] focus:!border-mainGreen dark:focus:!border-[#17263c] dark:focus-visible:!border-[#17263c]',
+    base: 'rounded-md border focus:border! focus:!border-mainGreen dark:focus:border-[#17263c]! dark:focus-visible:border-[#17263c]!',
     variants: {
         error: {
             true: 'border-mainRed',

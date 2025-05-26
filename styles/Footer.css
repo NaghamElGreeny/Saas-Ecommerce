@@ -1,0 +1,29 @@
+footer {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+}
+footer .overlay {
+  @apply bg-overlay;
+}
+footer .foot-container {
+  @apply pt-10 pr-20 pb-14 pl-20;
+}
+footer .foot-container .footer-shebl .logo {
+  @apply w-20 h-24;
+}
+footer .foot-container .footer-shebl .logo img {
+  width: 100%;
+}
+footer .foot-container .footer-shebl .description p {
+  @apply text-SharedFontSub;
+}
+footer .foot-container .line {
+  width: 100%;
+  border-width: 1px;
+  border: 1px solid var(--Secondary-Secondary-80, #33495d);
+}
+footer .foot-container .footer-links ul li {
+  @apply size-14 gap-2 border-2 rounded-full p-4;
+  border: 1px solid var(--Secondary-Secondary-90, #1a3348);
+}/*# sourceMappingURL=Footer.css.map */

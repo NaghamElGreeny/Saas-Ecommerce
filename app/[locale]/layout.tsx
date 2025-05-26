@@ -2,12 +2,14 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 // import "../../styles/globals.scss";
-import "../../styles/globals.css"
+import "@/styles/globals.css"
 import { cookies } from "next/headers";
 // import ChangeThem from "@/components/layout/changeThem";
 // import AosWrapper from "@/components/layout/AosWrapper";
 // import "aos/dist/aos.css";
 import { Toaster } from 'react-hot-toast';
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 export default async function LocaleLayout({
   children,
   params,
@@ -28,8 +30,8 @@ export default async function LocaleLayout({
   return (
     <html className={`${themeMode ? themeMode : ''}`} lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <head>
-        <title>{locale === "ar" ? "نغم" : "Nagham"}</title>
-        {/* <link rel="icon" href="/assets/logo/logo-head.png" /> */}
+        <title>{locale === "ar" ? "نغم" : "MEA"}</title>
+        <link rel="icon" href="/assets/logo/logo.svg" />
       </head>
       <body className=" flex flex-col min-h-screen">
         <Toaster position="top-center" />
@@ -38,9 +40,9 @@ export default async function LocaleLayout({
           <>
             {/* <AosWrapper> */}
 
-            {/* <Navbar /> */}
+            <Navbar />
             {children}
-            {/* <Footer /> */}
+            <Footer />
             {/* </AosWrapper> */}
             {/* <ScrollBtn /> */}
           </>

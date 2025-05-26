@@ -6,7 +6,7 @@ function Loading() {
     return (
         <>
             <div className="fixed top-0 bottom-0 left-0 right-0 flex w-full h-full bg-transparent">
-                <div className="screen_loader m-auto fixed inset-0 bg-[#fafafa] dark:bg-[#060818] z-[60] grid place-content-center animate__animated">
+                <div className="screen_loader m-auto fixed inset-0 bg-[#fafafa] dark:bg-[#060818] z-60 grid place-content-center animate__animated">
                     <svg
                         width="64"
                         height="64"

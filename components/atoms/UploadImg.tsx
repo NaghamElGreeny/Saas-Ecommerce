@@ -24,7 +24,7 @@ const UploadImg = ({ name, className, hideTypeImage }: any) => {
                     className={`upload__image-wrapper  relative  w-fit grid grid-cols-1 md:grid-cols-3 items-center  ${className}`}
                 >
                     <div className=" flex  items-center justify-center  border rounded-xl   border-dashed border-[#5945aa50]">
-                        <div className="p-1  w-full  bg-[#F3F0FF] dark:!bg-[#0e1726] rounded-xl pr-5">
+                        <div className="p-1  w-full  bg-[#F3F0FF] dark:bg-[#0e1726]! rounded-xl pr-5">
                             <button
                                 type="button"
                                 style={isDragging ? { color: 'red' } : undefined}

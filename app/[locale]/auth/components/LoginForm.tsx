@@ -27,7 +27,6 @@ export default function LoginForm() {
             setLoading(true);
             toast.dismiss();
 
-            // 👇 محاكاة تحقق من بيانات الدخول
             if (values.phone !== '0123456789' || values.password !== 'password123') {
                 toast.error('Invalid phone or password');
                 setLoading(false);
@@ -35,10 +34,8 @@ export default function LoginForm() {
             }
 
             try {
-                // تخيلي إنه هنا حصل تسجيل دخول ناجح
                 await new Promise((res) => setTimeout(res, 1000));
 
-                // 👇 تخزين توكن مؤقت (localStorage مثلاً)
                 localStorage.setItem('token', 'mock-token');
                 toast.success('Login successful!');
                 router.push(`/${locale}/dashboard`);

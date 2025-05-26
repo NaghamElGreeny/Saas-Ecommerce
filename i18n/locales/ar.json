@@ -5,26 +5,25 @@
     "en": "عربي"
   },
   "NAV": {
-
     "lang": "EN",
     "home": "الرئيسية",
     "about": "من نحن",
-  
+    "reservation": "Reservation",
+    "menu": "Menu",
+    "contact": "اتصل بنا",
+    "logout": "تسجيل الخروج",
+    "login": "تسجيل الدخول",
     "news": "الاخبار",
     "Services": "الخدمات",
-    "contact": "اتصل بنا",
     "mainlinks": " الروابط الرئيسية ",
     "quickAccess": "الروابط الفرعية"
   },
-  "TEXT": {
- },
-
+  "TEXT": {},
   "LABELS": {
-    "contactUs":"إتصل بنا",
-    "location":"العنوان",
-    "subject":"الموضوع",
- 
-    "copied":"تم النسخ بنجاح",
+    "contactUs": "إتصل بنا",
+    "location": "العنوان",
+    "subject": "الموضوع",
+    "copied": "تم النسخ بنجاح",
     "Get Started": "ابدأ الان",
     "tooShort": "قصير جدا!",
     "tooLong": "طويل جدا!",
@@ -44,7 +43,6 @@
   "SectionsDescription": {
     "mainHeaderP": "نحن نحول أفكارك الى حقيقة. كن شريكنا في رحلة تحولك للحياة الرقمية بالأبتكار والتكنولوجيا",
     "footerdesc": "نحن حريصون على تزويدك بحلول رقمية مبتكرة ؛ اعتمادًا على خبرتنا الواسعة في مجال تقنية المعلومات.",
-
     "copyRights": "  جميع الحقوق محفوظة لشركة العالمية الحرة ",
     "SubscribeSection": "اشترك في النشرة الإخبارية لدينا للحصول على التطورات الجديدة",
     "SubscribeSectionP": "ابقَ على اتصال مع فريقنا هنا في العالمية الحرة وتعرف على أحدث إبداعاتنا ومشاريعنا من نشرتنا الإخبارية .",
@@ -55,9 +53,9 @@
     "numberOfOurYears": " سنوات من الخبرة في خدمات البرمجيات. "
   },
   "BUTTONS": {
-    "getServiceNow":"احصل علي الخدمة الأن",
-    "getStart":"ابدأ الان",
-    "subscribe":"اشترك",
+    "getServiceNow": "احصل علي الخدمة الأن",
+    "getStart": "ابدأ الان",
+    "subscribe": "اشترك",
     "introVideo": "مشاهدة الفيديو",
     "Submit": "إرسال",
     "Leave us a Message": "اترك لنا رسالة",
@@ -79,22 +77,21 @@
     "isRequired": "{name} مطلوب",
     "validEmailAddress": "يجب أن يكون عنوان البريد الإلكتروني بريدا إلكترونيا صالحا"
   },
-
   "FOOTER": {
     "rights": "جميع الحقوق محفوظة"
   },
-  "TITLES":{
-    "letsTalkTech":"دعنا نتحدث عن التقنية",
-    "letsTalkTechDesc":"هل لديك سؤال حول الحلول التقنية، البرمجيات المخصصة، أو التحول الرقمي؟ فريقنا من الخبراء جاهز للإجابة وتقديم الدعم.",
-    "yourPartnerInDigitalSuccess":"شريكك في النجاح الرقمي",
-    "creativeServices":"الخدمات الإبداعية",
-    "aboutUs":"من نحن",
+  "TITLES": {
+    "letsTalkTech": "دعنا نتحدث عن التقنية",
+    "letsTalkTechDesc": "هل لديك سؤال حول الحلول التقنية، البرمجيات المخصصة، أو التحول الرقمي؟ فريقنا من الخبراء جاهز للإجابة وتقديم الدعم.",
+    "yourPartnerInDigitalSuccess": "شريكك في النجاح الرقمي",
+    "creativeServices": "الخدمات الإبداعية",
+    "aboutUs": "من نحن",
     "ourTechnologies": "تقنياتنا المتقدمة",
     "ourTechnologiesDesc": "نستخدم أحدث التقنيات والحلول المبتكرة لضمان أعلى مستويات الأداء والكفاءة",
     "descriptionServiceSection": "حول أفكارك إلى تقنيات متطورة",
     "serviceSection": "اكتشف خدماتنا."
   },
-  "Back_to_home":"العودة للرئيسية",
+  "Back_to_home": "العودة للرئيسية",
   "Years experience in serving people and mankind": "سنوات من الخبرة في خدمة الناس والبشرية",
   "rehabilitation long-term care": "إعادة التأهيل والرعاية طويلة الأمد",
   "Release The": "تخلص من",

@@ -7,7 +7,7 @@ export default function AuthForm() {
     const [isLogin, setIsLogin] = useState(true);
 
     return (
-        <div className="bg-white rounded-2xl shadow-lg flex w-full max-w-4xl overflow-hidden">
+        <div className="bg-white  flex w-full overflow-hidden">
             <div className="w-1/2 hidden md:block">
                 <img
                     src="/assets/images/auth-image.png"
@@ -16,7 +16,7 @@ export default function AuthForm() {
                 />
             </div>
 
-            <div className="w-full md:w-1/2 p-8">
+            <div className="w-full md:w-1/2 p-8 rounded-2xl">
                 <div className="flex justify-center mb-6">
                     <img src="/assets/images/mea-logo.png" alt="Logo" className="h-10" />
                 </div>

@@ -245,7 +245,7 @@ const UploadMultipleImages = ({
     };
 
     return (
-        <div className="upload__file-wrapper !flex !flex-col gap-4">
+        <div className="upload__file-wrapper flex! flex-col! gap-4">
             <div className="w-fit mx-auto flex items-center justify-center border rounded-xl border-dashed border-[#5945aa50] p-5">
                 <input
                     type="file"
@@ -297,7 +297,7 @@ const UploadMultipleImages = ({
                 </label>
             </div>
             {!isLoading && !isUploadingImage && (
-                <div className="file-preview-container !flex !flex-wrap gap-4 mt-4">
+                <div className="file-preview-container flex! flex-wrap! gap-4 mt-4">
                     {renderFilePreviews()}
                 </div>
             )}

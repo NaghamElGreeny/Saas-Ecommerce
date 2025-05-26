@@ -191,7 +191,7 @@ const NewUploadMultipleImages: React.FC<NewUploadMultipleImagesProps> = ({
             {images.length > 0 && (
                 <div className="flex items-center overflow-x-auto gap-4 space-x-3 py-2">
                     {images.map((img) => (
-                        <div key={img.url} className="relative flex-shrink-0">
+                        <div key={img.url} className="relative shrink-0">
                             <span
                                 className="absolute top-2 right-2 bg-white text-red-500 font-medium w-6 h-6 rounded-full flex justify-center items-center cursor-pointer"
                                 onClick={() => deleteImage(img)}
