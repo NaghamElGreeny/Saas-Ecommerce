@@ -15,7 +15,7 @@ export default function AuthForm() {
                     className="h-full w-full object-cover"
                 />
             </div>
-            <div className="bg-red w-full md:w-1/2 relative">
+            <div className="w-full md:w-1/2 relative">
                 <div className="rtl:left-3.5 ltr:right-3.5 absolute w-full h-full px-28 py-48 rounded-2xl z-20 bg-white flex flex-col  justify-center">
                     <div className="flex  mb-6">
                         <img src="/assets/images/mea-logo.png" alt="Logo" className="w-[154px] h-[115px]" />

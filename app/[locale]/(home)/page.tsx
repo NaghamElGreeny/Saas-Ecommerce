@@ -14,11 +14,10 @@ export default async function HomeRedirect() {
 
   return (
     <>
-      <Navbar />
       <div className=" space-y-12">
 
       </div>
-      <Footer />
+
     </>
   )
 }

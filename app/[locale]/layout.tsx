@@ -1,15 +1,10 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-// import "../../styles/globals.scss";
 import "@/styles/globals.css"
 import { cookies } from "next/headers";
-// import ChangeThem from "@/components/layout/changeThem";
-// import AosWrapper from "@/components/layout/AosWrapper";
-// import "aos/dist/aos.css";
 import { Toaster } from 'react-hot-toast';
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import { getMessages } from "next-intl/server";
 export default async function LocaleLayout({
   children,
   params,
@@ -17,8 +12,8 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  // Ensure that the incoming `locale` is valid
   const { locale } = await params;
+  const messages = await getMessages({ locale })
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
@@ -36,15 +31,9 @@ export default async function LocaleLayout({
       <body className=" flex flex-col ">
         <Toaster position="top-center" />
         {/* <ChangeThem /> */}
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           <>
-            {/* <AosWrapper> */}
-
-            {/* <Navbar /> */}
             {children}
-            {/* <Footer /> */}
-            {/* </AosWrapper> */}
-            {/* <ScrollBtn /> */}
           </>
 
         </NextIntlClientProvider>
