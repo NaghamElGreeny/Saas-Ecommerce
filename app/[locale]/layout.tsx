@@ -33,17 +33,16 @@ export default async function LocaleLayout({
         <title>{locale === "ar" ? "نغم" : "MEA"}</title>
         <link rel="icon" href="/assets/logo/logo.svg" />
       </head>
-      <body className=" flex flex-col min-h-screen">
+      <body className=" flex flex-col ">
         <Toaster position="top-center" />
         {/* <ChangeThem /> */}
         <NextIntlClientProvider>
           <>
             {/* <AosWrapper> */}
 
-            <Navbar />
+            {/* <Navbar /> */}
             {children}
-            <div className="h-[1660px] bg-red-400"></div>
-            <Footer />
+            {/* <Footer /> */}
             {/* </AosWrapper> */}
             {/* <ScrollBtn /> */}
           </>

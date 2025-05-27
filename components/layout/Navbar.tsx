@@ -1,14 +1,11 @@
-'use client'
+'use client';
 import { useEffect, useState, useRef } from 'react';
-// import '../../styles/Nav.scss'
-import Link from "next/link";
+import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
-import Image from 'next/image';
-import { ChevronDown } from 'lucide-react';
-import LocationSelector from '../ui/LocationSelector';
 import { FiMenu, FiX } from 'react-icons/fi';
-// import ChangeThem from './changeThem';
+import LocationSelector from '../ui/LocationSelector';
+import '@/styles/Navbar.css';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +14,6 @@ export default function Navbar() {
     const router = useRouter();
     const pathname = usePathname();
     const menuRef = useRef<HTMLDivElement>(null);
-
 
     const toggleLocale = () => {
         const newLocale = locale === 'en' ? 'ar' : 'en';
@@ -29,107 +25,93 @@ export default function Navbar() {
 
     const toggleMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        setIsOpen(prevState => !prevState);
+        setIsOpen(prev => !prev);
     };
 
     useEffect(() => {
         const handleClickOutside = (e: PointerEvent) => {
-            const toggleButton = document.getElementById('toggleBtn');
             if (
                 isOpen &&
                 menuRef.current &&
                 !menuRef.current.contains(e.target as Node) &&
-                toggleButton &&
-                !toggleButton.contains(e.target as Node)
+                !(document.getElementById('toggleBtn')?.contains(e.target as Node))
             ) {
                 setIsOpen(false);
             }
         };
-
         document.addEventListener('pointerdown', handleClickOutside);
-        return () => {
-            document.removeEventListener('pointerdown', handleClickOutside);
-        };
+        return () => document.removeEventListener('pointerdown', handleClickOutside);
     }, [isOpen]);
-
 
     const logged = false;
 
     return (
-        <nav className={`navBar  md:flex-shrink-0 w-full h-28 z-10 px-13 flex items-center justify-between bg-[#FBFAFC]`}>
-            <div className="flex gap-[50px]">
-                {/* logo  */}
-                <div className='logodiv px-2'>
-                    <Link href="/" className="flex items-center space-x-8  rtl:space-x-reverse">
-                        <img src={"/assets/logo/logo.svg"} className='h-14 w-20' alt="shebl-logo" />
+        <nav className="navBar w-full h-28 px-4 md:px-10 lg:px-14 bg-bgPrimary flex items-center justify-between relative z-50">
+            {/* Logo */}
+            <div className="flex items-center ">
+                <Link href="/" className="flex items-center">
+                    <img src="/assets/logo/logo.svg" className="h-14 w-20" alt="shebl-logo" />
+                </Link>
+            </div>
+
+            {/* Desktop Links */}
+            <div className="hidden md:flex items-center gap-8 w-3/4 rtl:pr-8 ltr:pl-8">
+                <Link href="/" className="hover:opacity-80">{t('home')}</Link>
+                <Link href="/about" className="hover:opacity-80">{t('about')}</Link>
+                <Link href="/reservation" className="hover:opacity-80">{t('reservation')}</Link>
+                <Link href="/menu" className="hover:opacity-80">{t('menu')}</Link>
+                <Link href="/contact" className="hover:opacity-80">{t('contact')}</Link>
+            </div>
+
+            {/* Desktop Icons */}
+            <div className="hidden md:flex items-center gap-4">
+                <Link href="#"><img src="/assets/icons/cart.png" alt="cart" /></Link>
+                <Link href="#"><img src="/assets/icons/notifications.png" alt="notifications" /></Link>
+                {logged ? (
+                    <LocationSelector />
+                ) : (
+                    <Link href={'/auth'} className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
+                        {/* <button className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2"> */}
+                        <img src="/assets/icons/login.png" alt="login" />
+                        <span >{t('login')}</span>
+                        {/* </button> */}
                     </Link>
-                </div>
-                {/* links */}
-                <div ref={menuRef} className={`linksdiv items-center justify-between w-full md:flex md:w-auto md:order-1 ${isOpen ? 'block menublock' : 'hidden'}`} id="navbar-sticky">
-                    <ul className="flex flex-col  p-4 md:p-0 mt-4 font-medium border rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
-                        <li>
-                            <Link href="/" className="block py-2 px-3 md:p-0" aria-current="page" onClick={() => setIsOpen(false)}> {t("home")} </Link>
-                        </li>
-                        <li>
-                            <Link href="/about" className="block py-2 px-3 md:p-0" aria-current="page" onClick={() => setIsOpen(false)}> {t("about")} </Link>
-                        </li>
-                        <li>
-                            <Link href="/reservation" className="block py-2 px-3 md:p-0" onClick={() => setIsOpen(false)}>{t("reservation")}</Link>
-                        </li>
-                        <li>
-                            <Link href="/menu" className="block py-2 px-3 md:p-0 " onClick={() => setIsOpen(false)}> {t("menu")}</Link>
-                        </li>
-                        <li>
-                            <Link href="/contact" className="block py-2 px-3 md:p-0 " onClick={() => setIsOpen(false)}> {t("contact")}</Link>
-                        </li>
-                    </ul>
-                </div>
-                <button data-collapse-toggle="navbar-sticky" type="button" id='toggleBtn' className="inline-flex items-center  justify-center md:hidden" aria-controls="navbar-sticky" aria-expanded="false" onClick={e => toggleMenu(e)}>
-                    <span className="sr-only">Open main menu</span>
-                    <div className="w-10 h-10" aria-hidden="true" >
-                        {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-                    </div>
-                </button>
-            </div>
-            <div className="iconsdiv flex md:order-2 space-x-1 md:space-x-2 rtl:space-x-reverse items-center">
-                {/* account */}
-                <div className="account flex gap-4" ref={menuRef}>
-                    <div className="shared-icons flex gap-2">
-                        <button>   <img src="/assets/icons/cart.png" alt="cart" /></button>
-                        <button>   <img src="/assets/icons/notifications.png" alt="notifications" /></button>
-                    </div>
-                    {logged ?
-                        <LocationSelector />
-                        :
-                        <div className="login">
-                            <button className='rounded-full w-40 h-12 py-3 px-10 bg-[#5A6AE8] flex gap-2.5'>
-                                <img src="/assets/icons/login.png" alt="login" />
-                                <p className='font-medium text-[#F5F6FF]'> Log In</p>
-                            </button>
-                        </div>
-                    }
-                </div>
-
-
+                )}
             </div>
 
+            {/* Mobile Menu Button */}
+            <button id="toggleBtn" onClick={toggleMenu} className="md:hidden z-50">
+                <div className="w-10 h-10 border-2 border-primary rounded-full flex items-center justify-center hover:bg-primary/20 active:bg-primary/40">
+                    {isOpen ? <FiX size={24} className="text-primary" /> : <FiMenu size={24} className="text-primary" />}
+                </div>
+            </button>
 
+            {/* Mobile Menu */}
+            {isOpen && (
+                <div ref={menuRef} className="absolute top-full left-0 w-full bg-bgPrimary p-6 flex flex-col gap-4 shadow-lg md:hidden animate-slide-down">
+                    <Link href="/" onClick={() => setIsOpen(false)}>{t('home')}</Link>
+                    <Link href="/about" onClick={() => setIsOpen(false)}>{t('about')}</Link>
+                    <Link href="/reservation" onClick={() => setIsOpen(false)}>{t('reservation')}</Link>
+                    <Link href="/menu" onClick={() => setIsOpen(false)}>{t('menu')}</Link>
+                    <Link href="/contact" onClick={() => setIsOpen(false)}>{t('contact')}</Link>
+                    <hr />
+                    <Link href="#" className="flex items-center gap-2">
+                        <img src="/assets/icons/cart.png" alt="cart" />
+                        <span>Cart</span>
+                    </Link>
+                    <Link href="#" className="flex items-center gap-2">
+                        <img src="/assets/icons/notifications.png" alt="notifications" />
+                        <span>Notifications</span>
+                    </Link>
+                    {!logged && (
+                        <button className="mt-4 rounded-full w-full h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
+                            <img src="/assets/icons/login.png" alt="login" />
+                            <span>Log In</span>
+                        </button>
+                    )}
+                </div>
+            )}
         </nav>
+
     );
 }
-{/* <ChangeThem /> */ }
-{/* <button
-                    onClick={toggleLocale}
-                    className="items-center px-2 py-1 flex flex-row gap-1 "
-                >
-                    <img src={'/assets/icons/lang-icon.png'} />
-                    {locale === 'en' ? 'AR' : 'EN'}
-                </button> */}
-
-
-//<button
-//     onClick={() => setIsOpen(!isOpen)}
-//     className="text-white focus:outline-none"
-// >
-//     {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-// </button>

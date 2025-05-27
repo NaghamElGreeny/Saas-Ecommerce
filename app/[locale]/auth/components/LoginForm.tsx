@@ -82,7 +82,7 @@ export default function LoginForm() {
             <button
                 type="submit"
                 disabled={loading}
-                className={`bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition ${loading ? 'opacity-60 cursor-not-allowed' : ''
+                className={`bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition ${loading ? 'opacity-60 cursor-not-allowed' : ''
                     }`}
             >
                 {loading ? 'Logging in...' : 'Log in'}

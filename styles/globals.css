@@ -1,13 +1,15 @@
 @import 'tailwindcss';
 
 @theme inline {
-  --color-primary: #123122;
+  --color-primary: #5A6AE8;
+  --color-sub: #828ABA;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-mainFont:#111111;
 --color-subFont:#edededa5;
+--color-bgPrimary:#FBFAFC;
 
 }
 
@@ -19,5 +21,5 @@
 }
 
 body{
-  background-color: green;
+  /* background-color: green; */
 }
