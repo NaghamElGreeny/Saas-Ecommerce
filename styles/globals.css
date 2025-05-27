@@ -22,4 +22,9 @@
 
 body{
   /* background-color: green; */
+  form{
+    input{
+      border-color: var(--color-sub);
+    }
+  }
 }

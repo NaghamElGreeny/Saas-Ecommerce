@@ -1,14 +1,25 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function VerifyPage() {
     const [code, setCode] = useState<string[]>(['', '', '', '']);
-    // const phoneNumber = '182'; // Example phone number
     const [timeLeft, setTimeLeft] = useState(96); // 96 seconds
+    const [userPhone, setUserPhone] = useState('');
+    const router = useRouter();
+    const pathname = usePathname();
+    const locale = pathname.split('/')[1];
 
-    const [editingPhone, setEditingPhone] = useState(false);
-    const [phone, setPhone] = useState('182');
+    useEffect(() => {
+        // جلب رقم الهاتف من localStorage
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            const user = JSON.parse(userData);
+            setUserPhone(user.phone);
+        }
+    }, []);
 
     useEffect(() => {
         if (timeLeft > 0) {
@@ -17,15 +28,14 @@ export default function VerifyPage() {
         }
     }, [timeLeft]);
 
-    // Format the time display
     const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
+
     const handleChange = (index: number, value: string) => {
         if (/^\d*$/.test(value) && value.length <= 1) {
             const newCode = [...code];
             newCode[index] = value;
             setCode(newCode);
 
-            // Auto-focus next input
             if (value && index < 3) {
                 const nextInput = document.getElementById(`code-${index + 1}`) as HTMLInputElement;
                 if (nextInput) nextInput.focus();
@@ -44,10 +54,30 @@ export default function VerifyPage() {
         e.preventDefault();
         const fullCode = code.join('');
         console.log('Verification code:', fullCode);
-        // Add your verification logic here
+
+        // كود التحقق الوهمي الصحيح
+        const correctCode = "1234";
+
+        if (fullCode === correctCode) {
+            toast.success('Phone verified successfully!');
+
+            // تحديث حالة المستخدم في localStorage
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                const user = JSON.parse(userData);
+                user.verified = true;
+                localStorage.setItem('userData', JSON.stringify(user));
+                localStorage.setItem('token', 'mock-token'); // حفظ التوكن عند التحقق الناجح
+            }
+
+            router.push(`/${locale}/`);
+        } else {
+            toast.error('Invalid verification code. Please try again.');
+        }
     };
+
     return (
-        <div className="bg-white  flex w-full h-screen overflow-hidden">
+        <div className="bg-white flex w-full h-screen overflow-hidden">
             <div className="w-1/2 hidden md:block">
                 <img
                     src="/assets/images/auth-image.png"
@@ -57,20 +87,12 @@ export default function VerifyPage() {
             </div>
 
             <div className="bg-red w-full md:w-1/2 relative">
-                <div className="rtl:left-3.5 ltr:right-3.5 absolute w-full h-full  px-[120px] py-[320px] rounded-2xl z-20 bg-white flex flex-col  justify-center">
-                    <div className="flex  mb-6">
+                <div className="rtl:left-3.5 ltr:right-3.5 absolute w-full h-full px-[120px] py-[320px] rounded-2xl z-20 bg-white flex flex-col justify-center">
+                    <div className="flex mb-6">
                         <img src="/assets/images/mea-logo.png" alt="Logo" className="w-[154px] h-[115px]" />
                     </div>
                     <h2 className="text-xl font-bold mb-4">Enter Verification Code</h2>
-                    <p className="text-sm mb-6">We've sent a code to your phone number.</p>
-                    <p className="text-sm mb-4">
-                        <button
-                            className="text-blue-600 font-semibold underline"
-                        >
-                            Edit Phone number
-                        </button>
-
-                    </p>
+                    <p className="text-sm mb-6">We've sent a code to your phone number: <strong>{userPhone}</strong></p>
                     <form onSubmit={handleSubmit} className="mb-6">
                         <div className="flex justify-center gap-8 w-full mb-8 p-8">
                             {code.map((digit, index) => (
@@ -89,20 +111,22 @@ export default function VerifyPage() {
                                 />
                             ))}
                         </div>
+
                         <div className="flex justify-between">
-                            {/* Resend Code */}
                             <p className="text-center text-gray-500 mb-8">
-                                Didn't receive code? <span className="text-blue-600 cursor-pointer">Resend</span>
+                                Didn't receive code? <span className="text-blue-600 cursor-pointer" onClick={() => {
+                                    toast.success('Code resent!');
+                                    setTimeLeft(96);
+                                }}>Resend</span>
                             </p>
-                            {/* Timer */}
-                            <p className="text-center text-black mb-8">0:96</p>
+                            <p className="text-center text-black mb-8">{formattedTime}</p>
                         </div>
-                        {/* Next Button */}
+
                         <button
                             type="submit"
                             className="w-full py-3 mt-2 text-white font-semibold rounded-full transition duration-300 bg-blue-600 hover:bg-blue-700"
                         >
-                            Next
+                            Verify
                         </button>
                     </form>
                 </div>

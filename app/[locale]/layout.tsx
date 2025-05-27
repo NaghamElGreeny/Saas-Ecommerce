@@ -5,6 +5,9 @@ import "@/styles/globals.css"
 import { cookies } from "next/headers";
 import { Toaster } from 'react-hot-toast';
 import { getMessages } from "next-intl/server";
+// import { useEffect } from 'react';
+import { useAuthStore } from '@/store/authStore';
+import AuthProvider from "./auth/components/AuthProvider";
 export default async function LocaleLayout({
   children,
   params,
@@ -22,6 +25,14 @@ export default async function LocaleLayout({
 
   const themeMode = appCookies.get('modeLayout')
 
+  // const setToken = useAuthStore((state) => state.setToken);
+  // // توكن 
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) setToken(token);
+  // }, [setToken]);
+
+
   return (
     <html className={`${themeMode ? themeMode : ''}`} lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <head>
@@ -33,6 +44,7 @@ export default async function LocaleLayout({
         {/* <ChangeThem /> */}
         <NextIntlClientProvider messages={messages}>
           <>
+            <AuthProvider />
             {children}
           </>
 

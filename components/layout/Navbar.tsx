@@ -104,10 +104,10 @@ export default function Navbar() {
                         <span>Notifications</span>
                     </Link>
                     {!logged && (
-                        <button className="mt-4 rounded-full w-full h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
+                        <Link href={`/${locale}/auth`} className="mt-4 rounded-full w-full h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
                             <img src="/assets/icons/login.png" alt="login" />
                             <span>Log In</span>
-                        </button>
+                        </Link>
                     )}
                 </div>
             )}

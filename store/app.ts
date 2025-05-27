@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-
+//من فيديو next auth 
 export type SocialKey = "linkedin" | "facebook" | "instagram" | "youtube" | "x";
 
 export type SettingsType = {
