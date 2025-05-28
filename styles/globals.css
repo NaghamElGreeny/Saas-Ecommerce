@@ -19,13 +19,13 @@
     --foreground: #ededed;
   }
 }
-/* @font-face {
-  font-display: swap;
-  font-family:"Allura", cursive;
-  font-style: normal;
-  font-weight: 300;
-  src: url("/assets/fonts/Allura-Regular.ttf") format("ttf");
-} */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 @theme {
   --font-allura: "Allura", sans-serif; 
 }
