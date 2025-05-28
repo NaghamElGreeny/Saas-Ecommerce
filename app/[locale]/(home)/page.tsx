@@ -1,4 +1,6 @@
 import Hero from '@/components/sections/Hero';
+import { Reservation } from '@/components/sections/Reservation';
+import { DblSection } from '@/components/shared/DblSection';
 import Slider from '@/components/shared/Slider';
 
 export default async function Home() {
@@ -36,11 +38,40 @@ export default async function Home() {
       rating: 4.2
     },
   ];
+  const sharedSection =
+  {
+    title: 'We Provide Good Food For Your Family!',
+    subtitle: "Food is the foundation of true happiness.",
+    description: "Iorem ipsum dolor sit amet, consectetuer adipiscing elit aenean commodo. We see our customers as invited guests to a party, and we are the hosts. It's our job every day to make every important aspect of the customer experience a little bit better. Donec quam felis, ultricies nec, pellentesque eu.",
+    ctaText: "Discover More",
+  }
+
+
+  const handleReservationClick = () => {
+    console.log('reseerve')
+  };
 
   return (
     <div className="space-y-12">
       <Hero />
+      <Slider title="View our menus" items={items} />
+      <DblSection
+        title={sharedSection.title}
+        subtitle={sharedSection.subtitle}
+        description={sharedSection.description}
+        ctaText={sharedSection.ctaText}
+      />
       <Slider title="Popular Items" items={items} />
+      <DblSection
+        title={sharedSection.title}
+        subtitle={sharedSection.subtitle}
+        description={sharedSection.description}
+        ctaText={sharedSection.ctaText}
+      />
+      <Reservation
+        reservationHref="/reservation" // Pass the route instead
+        className="my-12"
+      />
     </div>
   );
 }
