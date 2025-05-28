@@ -15,11 +15,7 @@ export default async function LocaleLayout({
     params: Promise<{ locale: string }>;
 }) {
 
-
     return (
-
-
-
         <>
             <Navbar />
             {children}

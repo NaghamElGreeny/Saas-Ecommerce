@@ -70,7 +70,7 @@ export default function Navbar() {
                 {logged ? (
                     <LocationSelector />
                 ) : (
-                    <Link href={'/auth'} className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
+                    <Link href={`/${locale}/auth`} className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
                         {/* <button className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2"> */}
                         <img src="/assets/icons/login.png" alt="login" />
                         <span >{t('login')}</span>

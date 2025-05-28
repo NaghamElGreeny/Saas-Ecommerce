@@ -35,7 +35,7 @@ export default function LoginForm() {
             setLoading(true);
             toast.dismiss();
 
-            if (values.phone !== '0123456789' || values.password !== 'password123') {
+            if (values.phone !== '01124440319' || values.password !== '123456789') {
                 toast.error('Invalid phone or password');
                 setLoading(false);
                 return;
@@ -46,7 +46,7 @@ export default function LoginForm() {
 
                 setToken('mock-token');
                 toast.success('Login successful!');
-                router.push(`/${locale}/dashboard`);
+                router.push(`/${locale}/`);
             } catch {
                 toast.error('Something went wrong, try again.');
             } finally {
