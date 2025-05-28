@@ -1,5 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
 @import 'tailwindcss';
-
 @theme inline {
   --color-primary: #5A6AE8;
   --color-sub: #828ABA;
@@ -19,12 +19,23 @@
     --foreground: #ededed;
   }
 }
-
+/* @font-face {
+  font-display: swap;
+  font-family:"Allura", cursive;
+  font-style: normal;
+  font-weight: 300;
+  src: url("/assets/fonts/Allura-Regular.ttf") format("ttf");
+} */
+@theme {
+  --font-allura: "Allura", sans-serif; 
+}
 body{
+  /* font-family: "Allura"; */
   /* background-color: green; */
   form{
-    input{
+    input,select{
       border-color: var(--color-sub);
     }
+   
   }
 }

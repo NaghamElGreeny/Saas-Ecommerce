@@ -2,6 +2,12 @@
 import Link from 'next/link';
 
 export default function Footer() {
+    const socials = [
+        'facebook',
+        'twitter',
+        'messenger',
+        'instagram'
+    ]
     return (
         <footer className="bg-gray-900 w-full text-white py-12 px-4 sm:px-6 lg:px-8 bottom-0 left-0">
             <div className="max-w-7xl mx-auto">
@@ -94,10 +100,9 @@ export default function Footer() {
                         © {new Date().getFullYear()} All Rights Reserved
                     </div>
                     <div className="flex w-56 gap-4">
-                        <Link className='size-11 border rounded-full flex items-center justify-center' href={'Facebook.com'}><img src="/assets/icons/facebook.svg" alt="facebook" /></Link>
-                        <Link className='size-11 border rounded-full flex items-center justify-center' href={'twitter.com'}><img src="/assets/icons/twitter.svg" alt="twitter" /></Link>
-                        <Link className='size-11 border rounded-full flex items-center justify-center' href={'messenger.com'}><img src="/assets/icons/messenger.svg" alt="messenger" /></Link>
-                        <Link className='size-11 border rounded-full flex items-center justify-center' href={'instagram.com'}><img src="/assets/icons/instagram.svg" alt="instagram" /></Link>
+                        {socials.map((social, index) => {
+                            return <Link key={index} className='size-11 border rounded-full flex items-center justify-center' href={`${social}.com`}><img src={`/assets/icons/${social}.svg`} alt={`${social}`} /></Link>
+                        })}
                     </div>
                 </div>
             </div>

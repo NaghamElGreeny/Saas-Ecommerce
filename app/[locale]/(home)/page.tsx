@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
+import Hero from '@/components/sections/Hero';
 
 export default async function HomeRedirect() {
   const cookieStore = await cookies();
@@ -12,7 +13,7 @@ export default async function HomeRedirect() {
   return (
     <>
       <div className=" space-y-12">
-
+        <Hero />
       </div>
 
     </>

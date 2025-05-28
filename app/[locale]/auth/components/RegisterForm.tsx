@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useAuthStore } from '@/store/authStore';
 
 const countryCodes = [
     { code: '+20', label: 'Egypt' },
@@ -18,6 +19,7 @@ export default function RegisterPage() {
     const pathname = usePathname();
     const locale = pathname.split('/')[1];
     const [loading, setLoading] = useState(false);
+    const user = useAuthStore((state) => state.userData);
 
     const formik = useFormik({
         initialValues: {
@@ -44,7 +46,7 @@ export default function RegisterPage() {
 
             const fullPhone = values.countryCode + values.phone;
 
-            if (fullPhone === '+200123456789') {
+            if (fullPhone === user?.phone) {
                 toast.error('This phone number is already registered');
                 setLoading(false);
                 return;

@@ -9,8 +9,8 @@ interface Store {
     location: string;
 }
 
-export default function LocationSelector() {
-    const [open, setOpen] = useState(false);
+export default function LocationSelector(active: { active?: boolean }) {
+    const [open, setOpen] = useState(active ? active : false);
     const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
     const stores: Store[] = [

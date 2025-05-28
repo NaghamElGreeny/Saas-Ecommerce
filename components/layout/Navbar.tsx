@@ -43,7 +43,7 @@ export default function Navbar() {
         return () => document.removeEventListener('pointerdown', handleClickOutside);
     }, [isOpen]);
 
-    const logged = false;
+    const logged = true;
 
     return (
         <nav className="navBar w-full h-28 px-4 md:px-10 lg:px-14 bg-bgPrimary flex items-center justify-between relative z-50">
@@ -68,7 +68,7 @@ export default function Navbar() {
                 <Link href="#"><img src="/assets/icons/cart.png" alt="cart" /></Link>
                 <Link href="#"><img src="/assets/icons/notifications.png" alt="notifications" /></Link>
                 {logged ? (
-                    <LocationSelector />
+                    <LocationSelector active={true} />
                 ) : (
                     <Link href={`/${locale}/auth`} className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
                         {/* <button className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2"> */}
