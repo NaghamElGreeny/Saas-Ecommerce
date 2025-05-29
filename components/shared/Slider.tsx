@@ -4,19 +4,17 @@ import React from 'react';
 import { useLikedStore } from '@/store/likedStore';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { ArrowRight } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import Card from './Card';
+import { CardItem } from '@/utils/types';
+// Import Swiper styles
 
-type Item = {
-    id: string;
-    name: string;
-    description: string;
-    price: string;
-    image: string;
-    rating: number;
-};
+
 
 type SliderProps = {
     title?: string;
-    items: Item[];
+    items: CardItem[];
 };
 
 export default function Slider({ title, items }: SliderProps) {
@@ -28,7 +26,7 @@ export default function Slider({ title, items }: SliderProps) {
         console.log("View all clicked");
     };
 
-    const handleItemPress = (item: Item) => {
+    const handleItemPress = (item: CardItem) => {
         console.log("Item clicked:", item.name);
     };
 
@@ -47,46 +45,47 @@ export default function Slider({ title, items }: SliderProps) {
 
             {/* Items Slider */}
             <div className="relative">
-                <div className="flex h-full overflow-x-auto scrollbar-hide ps-[120px] pb-4 px-4 gap-6">
-                    {items.map((item) => (
-                        <div
-                            key={item.id}
-                            onClick={() => handleItemPress(item)}
-                            className="flex-shrink-0 w-[408px] h-[509px] pt-2.5 pb-6 px-4  bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                        >
-                            <div className="img relative mb-4">
-                                <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    className="h-[325px] w-96 object-cover rounded-2xl"
+                <div className="container flex h-full scrollbar-hide  pb-4">
+                    <Swiper
+                        slidesPerView={3.5}
+                        centeredSlides={true}
+                        spaceBetween={30}
+                        pagination={{
+                            clickable: true,
+                        }}
+                        breakpoints={
+                            {    // when window width is >= 320px
+                                320: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 10
+                                },
+                                // when window width is >= 480px
+                                480: {
+                                    slidesPerView: 2.5,
+                                    spaceBetween: 20
+                                },
+                                // when window width is >= 640px
+                                640: {
+                                    slidesPerView: 3.5,
+                                    spaceBetween: 30
+                                }
+                            }
+                        }
+                        className="mySwiper"
+                    >
+                        {items.map((item) => (
+                            <SwiperSlide key={item.id}>
+                                <Card
+                                    item={item}
+                                    onPress={handleItemPress}
+                                    toggleLike={toggleLike}
+                                    isLiked={isLiked}
                                 />
-                                <div className="absolute top-2 left-2 bg-yellow-50 rounded-full text-xs font-bold px-2 py-1  shadow">
-                                    ⭐ {item.rating}
-                                </div>
-                            </div>
-                            <div className="item-desc flex flex-col min-h-[134px] justify-around shrink-1">
-                                <h3 className="text-lg font-bold mb-1">{item.name}</h3>
-                                <p className="text-gray-600 text-sm mb-2">{item.description}</p>
-                                <div className="flex  flex-1 justify-between items-center mt-2">
-                                    <p className="text-2xl font-bold">{item.price}</p>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            toggleLike(item.id);
-                                        }}
-                                    >
-                                        {isLiked(item.id) ? (
-                                            <AiFillHeart className="text-red-600 text-xl" />
-                                        ) : (
-                                            <AiOutlineHeart className="text-gray-400 hover:text-red-400 text-xl transition-colors" />
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

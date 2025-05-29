@@ -11,6 +11,15 @@
 --color-subFont:#edededa5;
 --color-bgPrimary:#FBFAFC;
 
+  --breakpoint-xs: 475px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1500px;
+  --breakpoint-3xl: 1600px;
+
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,5 +47,30 @@ body{
       border-color: var(--color-sub);
     }
    
+  }
+}
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 475px) {
+    max-width: 100%;
+  }
+  @media (min-width: 576px) {
+    max-width: 100%;
+  }
+  @media (min-width: 768px) {
+    max-width: 100%;
+  }
+  @media (min-width: 992px) {
+    max-width: 992px;
+  }
+  @media (min-width: 1200px) {
+    max-width: 1200px;
+  }
+  @media (min-width: 1400px) {
+    max-width: 1400px;
+  }
+  @media (min-width: 1200px) {
+    padding-inline: 0;
   }
 }

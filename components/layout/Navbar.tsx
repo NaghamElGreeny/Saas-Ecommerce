@@ -43,7 +43,7 @@ export default function Navbar() {
         return () => document.removeEventListener('pointerdown', handleClickOutside);
     }, [isOpen]);
 
-    const logged = true;
+    const logged = false;
 
     return (
         <nav className="navBar w-full h-28 px-4 md:px-10 lg:px-14 bg-bgPrimary flex items-center justify-between relative z-50">

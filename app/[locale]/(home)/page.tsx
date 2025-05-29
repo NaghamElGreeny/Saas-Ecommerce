@@ -55,7 +55,7 @@ export default async function Home() {
   const div = `<h2 className='bg-red-500'>Hey</h2>`
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 overflow-hidden">
       <Hero />
       <Slider title="View our menus" items={items} />
       <DblSection

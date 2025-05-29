@@ -51,7 +51,7 @@ export default function Hero() {
             className="slider-bg h-[90vh] bg-no-repeat bg-cover bg-center"
             style={style}
         >
-            <div className="container h-full w-full px-16 sm:px-6 lg:px-32  bg-black/50">
+            <div className=" h-full w-full px-16 sm:px-6 lg:px-32  bg-black/50">
                 <div className="max-w-2xl mx-auto text-center h-4/5 flex flex-col justify-center items-center">
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-[Allura] text-white mb-4">
                         Exotic and Delicious
