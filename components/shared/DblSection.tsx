@@ -48,7 +48,7 @@ export function DblSection({
                 <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
 
                     {/* Image Section */}
-                    <div className={`
+                    {/* <div className={`
                         relative h-80 md:h-96 lg:h-[700px] lg:w-[560px]
                         rounded-full overflow-hidden shadow-lg mx-auto
                         ${imageFirst ? 'order-1 lg:order-1' : 'order-1 lg:order-2'}
@@ -61,8 +61,18 @@ export function DblSection({
                             priority
                             sizes="(max-width: 768px) 100vw, 50vw"
                         />
-                    </div>
-
+                    </div> */}
+                    <Image
+                        src={imageSrc}
+                        alt={imageAlt}
+                        width={1000}
+                        height={1000}
+                        className={`object-cover  relative h-80 w-80 md:h-96 lg:h-[700px] lg:w-[560px]
+                        rounded-full overflow-hidden shadow-lg mx-auto
+                        ${imageFirst ? 'order-1 lg:order-1' : 'order-1 lg:order-2'}`}
+                        priority
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                     {/* Text Section */}
                     <div className={`
                         flex flex-col justify-center h-full px-2 mb-4

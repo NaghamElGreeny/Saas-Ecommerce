@@ -1,13 +1,23 @@
 import React from 'react'
 
 function FollowusSection() {
+    const images = [
+        "url(/assets/images/menu/1.jpg)",
+        '/assets/images/menu/2.jpg',
+        '/assets/images/menu/3.jpg',
+        '/assets/images/menu/4.jpg',
+        '/assets/images/menu/5.jpg',
+    ]
     return (
-        <div className="w-full grid grid-cols-7 grid-rows-2">
-            <div className='grid-cols-2 grid-rows-1'></div>
-            <div className='grid-cols-3 grid-rows-1'></div>
-            <div className='grid-cols-2 grid-rows-1'></div>
-            <div className='grid-cols-5 grid-rows-1'></div>
-            <div className='grid-cols-2 grid-rows-1'></div>
+        <div className="relative w-full min-h-[838px] grid  lg:grid-cols-7 md:grid-cols-7 grid-cols-1 lg:grid-rows-2 md:grid-rows-2 gap-5">
+            <div className={`lg:col-span-2 md:col-span-2 col-span-1  bg-[url('/assets/images/menu/1.jpg')] bg-cover min-h-[350px]`}></div>
+            <div className={`lg:col-span-3 md:col-span-3 col-span-1  bg-[url('/assets/images/menu/2.jpg')] bg-cover min-h-[350px]`}></div>
+            <div className={`lg:col-span-2 md:col-span-2 col-span-1  bg-[url('/assets/images/menu/3.jpg')] bg-cover min-h-[350px]`}></div>
+            <div className={`lg:col-span-5 md:col-span-5 col-span-1  bg-[url('/assets/images/menu/4.jpg')] bg-cover min-h-[350px]`}></div>
+            <div className={`lg:col-span-2 md:col-span-2 col-span-1  bg-[url('/assets/images/menu/5.jpg')] bg-cover min-h-[350px]`}></div>
+            <div className="follow absolute size-56 rounded-full bg-primary text-white text-2xl font-medium flex items-center justify-center text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <p>follow us on instagram</p>
+            </div>
         </div>
     )
 }

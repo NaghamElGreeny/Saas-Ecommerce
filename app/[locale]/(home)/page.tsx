@@ -1,3 +1,4 @@
+import FollowusSection from '@/components/sections/FollowusSection';
 import Hero from '@/components/sections/Hero';
 import ReservationForm from '@/components/sections/Reservation';
 import { DblSection } from '@/components/shared/DblSection';
@@ -80,6 +81,7 @@ export default async function Home() {
         description={sharedSection.description}
         section='subscribe'
       />
+      <FollowusSection />
       <ReservationForm
       // reservationHref="/reservation" // Pass the route instead
       // className="my-12"
