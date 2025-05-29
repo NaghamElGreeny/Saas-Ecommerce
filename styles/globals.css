@@ -46,12 +46,16 @@ body{
     input,select{
       border-color: var(--color-sub);
     }
-   
+  .reserve{
+    border: 0;
+    border-bottom:1px solid #0b173c ;
+   }
   }
+
 }
-@utility container {
+/* @utility container {
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: 3rem;
   @media (min-width: 475px) {
     max-width: 100%;
   }
@@ -73,5 +77,24 @@ body{
   @media (min-width: 1200px) {
     padding-inline: 0;
   }
-}
+} */
 
+@layer utilities {
+  .container-custom {
+    margin-inline: auto;
+    padding-inline: 3rem;
+  }
+
+  @media (min-width: 1200px) {
+    .container-custom {
+      max-width: 1200px;
+      padding-inline: 0;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .container-custom {
+      max-width: 1400px;
+    }
+  }
+}
