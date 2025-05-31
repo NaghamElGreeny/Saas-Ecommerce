@@ -65,7 +65,7 @@ export default function RegisterPage() {
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} className="space-y-6 max-w-md mx-auto p-4">
+        <form onSubmit={formik.handleSubmit} className="space-y-6 w-full mx-auto p-4">
             <div>
                 <input
                     type="text"

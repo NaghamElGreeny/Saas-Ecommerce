@@ -1,21 +1,28 @@
-// middleware.ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+const locales = ["en", "ar"];
+const defaultLocale = "en";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname } = request.nextUrl;
 
-  if (pathname === '/') {
-    const url = request.nextUrl.clone()
-    url.pathname = '/en' 
-    return NextResponse.redirect(url)
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    /\.(.*)$/.test(pathname)
+  ) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next()
-}
+  const pathnameParts = pathname.split("/").filter(Boolean);
+  const hasLocale = locales.includes(pathnameParts[0]);
 
-// ↓↓↓ مهم جداً عشان الميدل وير يتنفذ بس على المسارات المطلوبة
-export const config = {
-  matcher: ['/', '/((?!_next|favicon.ico).*)'],
+  if (!hasLocale) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}${pathname}`;
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
 }

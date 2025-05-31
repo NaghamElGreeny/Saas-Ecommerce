@@ -7,9 +7,10 @@ type CardProps = {
     onPress: (item: CardItem) => void;
     toggleLike: (id: string) => void;
     isLiked: (id: string) => boolean;
+    offer?:string;
 };
 
-function Card({ item, onPress, toggleLike, isLiked }: CardProps) {
+function Card({ item, onPress, toggleLike, isLiked,offer }: CardProps) {
     return (
         <div
             onClick={() => onPress(item)}
