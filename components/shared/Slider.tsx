@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import Card from './Card';
 import { CardItem } from '@/utils/types';
+import Link from 'next/link';
 // Import Swiper styles
 
 
@@ -22,10 +23,6 @@ export default function Slider({ title, items }: SliderProps) {
     const toggleLike = useLikedStore(state => state.toggleLike);
     const isLiked = useLikedStore(state => state.isLiked);
 
-    const handleViewAll = () => {
-        console.log("View all clicked");
-    };
-
     const handleItemPress = (item: CardItem) => {
         console.log("Item clicked:", item.name);
     };
@@ -35,12 +32,12 @@ export default function Slider({ title, items }: SliderProps) {
             {/* Header */}
             <div className="flex justify-between items-center px-28 mb-10">
                 <h2 className="lg:text-5xl md:text-4xl text-3xl font-bold">{title}</h2>
-                <button
-                    onClick={handleViewAll}
-                    className="rtl:flex-row-reverse text-indigo-600 hover:text-indigo-800 text-sm flex"
+                <Link
+                    href='/menu'
+                    className="rtl:flex-row-reverse text-indigo-600 hover:text-indigo-800 text-sm flex cursor-pointer"
                 >
                     <p className="me-1">View All</p> <ArrowRight />
-                </button>
+                </Link>
             </div>
 
             {/* Items Slider */}

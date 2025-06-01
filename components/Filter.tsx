@@ -31,7 +31,7 @@ const FilterSchema = Yup.object().shape({
   subCategory: Yup.string().when('mainCategory', (mainCategory, schema) => {
     return !!mainCategory
       ? schema.notRequired()
-      : schema.notRequired(); 
+      : schema.notRequired();
   }),
 });
 
@@ -49,23 +49,23 @@ export default function FilterForm({ categories }: FilterFormProps) {
     onSubmit: (values) => {
       const newFilters = [];
       const mainCat = categories.find(c => c.id === values.mainCategory);
-      
+
       if (mainCat) {
         newFilters.push(mainCat.name);
-        
+
         if (values.subCategory) {
           const subCat = mainCat.subCategories?.find(s => s.id === values.subCategory);
           if (subCat) newFilters.push(subCat.name);
         }
       }
-      
+
       setActiveFilters(newFilters);
     },
   });
 
   const removeFilter = (filter: string) => {
     setActiveFilters(activeFilters.filter(f => f !== filter));
-    
+
     // If removing a main category, reset both fields
     if (categories.some(c => c.name === filter)) {
       formik.setFieldValue('mainCategory', '');
@@ -75,11 +75,26 @@ export default function FilterForm({ categories }: FilterFormProps) {
 
   const selectedCategory = categories.find(c => c.id === formik.values.mainCategory);
   const subCategories = selectedCategory?.subCategories || [];
-
+const handleClearAll = () => {
+  formik.resetForm(); 
+  setActiveFilters([]);  
+};
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-sm">
-              <h1 className="text-2xl font-bold mb-6">Menu Filter</h1>
-      
+      <div className="title-clear flex justify-between">
+        <h1 className="text-2xl font-bold mb-6">Menu Filter</h1>
+        {(formik.values.search || formik.values.mainCategory || formik.values.subCategory) && (
+          <div className="flex justify-end mb-2">
+            <button
+              type="button"
+              onClick={handleClearAll}
+              className="text-sm text-red-600 hover:bold cursor-pointer"
+            >
+              Clear All
+            </button>
+          </div>
+        )}
+      </div>
       {/* Active Filters Display */}
       <div className="mb-4">
         <h3 className="text-sm font-medium text-gray-700 mb-2">Active filters</h3>
@@ -139,7 +154,7 @@ export default function FilterForm({ categories }: FilterFormProps) {
                   .flatMap(c => c.subCategories || [])
                   .find(s => s.name === 'Burger');
                 if (burger) {
-                  const parentCat = categories.find(c => 
+                  const parentCat = categories.find(c =>
                     c.subCategories?.some(s => s.id === burger.id)
                   );
                   if (parentCat) {
@@ -166,11 +181,10 @@ export default function FilterForm({ categories }: FilterFormProps) {
               <button
                 key={category.id}
                 type="button"
-                className={`px-4 py-2 rounded-md text-sm ${
-                  formik.values.mainCategory === category.id
+                className={`px-4 py-2 rounded-md text-sm ${formik.values.mainCategory === category.id
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
+                  }`}
                 onClick={() => {
                   formik.setFieldValue('mainCategory', category.id);
                   formik.setFieldValue('subCategory', '');
@@ -191,11 +205,10 @@ export default function FilterForm({ categories }: FilterFormProps) {
                 <button
                   key={subCategory.id}
                   type="button"
-                  className={`px-4 py-2 rounded-md text-sm ${
-                    formik.values.subCategory === subCategory.id
+                  className={`px-4 py-2 rounded-md text-sm ${formik.values.subCategory === subCategory.id
                       ? 'bg-blue-500 text-white'
                       : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  }`}
+                    }`}
                   onClick={() => {
                     formik.setFieldValue('subCategory', subCategory.id);
                   }}
@@ -204,7 +217,7 @@ export default function FilterForm({ categories }: FilterFormProps) {
                 </button>
               ))}
               {subCategories.length > 6 && (
-                <button 
+                <button
                   type="button"
                   className="px-4 py-2 rounded-md text-sm bg-gray-100 text-gray-800 hover:bg-gray-200"
                 >

@@ -39,6 +39,7 @@ function Card({ item, offer,width}: CardProps) {
                 <p className="text-gray-600 text-sm mb-2">{item.description}</p>
                 <div className="flex flex-1 justify-between items-center mt-2">
                     <p className="text-2xl font-bold">{item.price}</p>
+                  
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
