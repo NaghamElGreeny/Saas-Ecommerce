@@ -78,6 +78,8 @@ export default function FilterForm({ categories }: FilterFormProps) {
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-sm">
+              <h1 className="text-2xl font-bold mb-6">Menu Filter</h1>
+      
       {/* Active Filters Display */}
       <div className="mb-4">
         <h3 className="text-sm font-medium text-gray-700 mb-2">Active filters</h3>

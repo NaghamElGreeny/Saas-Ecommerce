@@ -2,6 +2,7 @@ import { items } from "@/app/[locale]/(home)/page" ;
 import Image from 'next/image';
 
 const Menu: React.FC = () => {
+  console.log("Menu component",items);
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       {/* Categories Navigation */}
@@ -38,9 +39,8 @@ const Menu: React.FC = () => {
               <Image
                 src={item.image}
                 alt={item.name}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-t-lg"
+                fill
+                className="rounded-t-lg object-cover object-center"
               />
             </div>
             <div className="p-4">

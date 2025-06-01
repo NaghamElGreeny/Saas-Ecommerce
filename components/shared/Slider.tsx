@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useLikedStore } from '@/store/likedStore';
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+// import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { ArrowRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -18,7 +18,7 @@ type SliderProps = {
 };
 
 export default function Slider({ title, items }: SliderProps) {
-    const likedItems = useLikedStore(state => state.likedItems);
+    // const likedItems = useLikedStore(state => state.likedItems);
     const toggleLike = useLikedStore(state => state.toggleLike);
     const isLiked = useLikedStore(state => state.isLiked);
 

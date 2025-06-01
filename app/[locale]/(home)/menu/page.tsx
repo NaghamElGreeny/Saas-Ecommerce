@@ -1,14 +1,14 @@
 import Filter from '@/components/Filter';
-import Menu from '@/components/Menu';
+import Menu from '@/components/menu';
 import React from 'react'
-type Category = {
-  id: string;
-  name: string;
-  subCategories?: SubCategory[];
-}; type SubCategory = {
-  id: string;
-  name: string;
-};
+// type Category = {
+//   id: string;
+//   name: string;
+//   subCategories?: SubCategory[];
+// }; type SubCategory = {
+//   id: string;
+//   name: string;
+// };
 function MenuPage
   () {
     const categories = [
@@ -52,8 +52,7 @@ function MenuPage
 
   return (
     <main className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Menu Filter</h1>
+      <div className="max-w-4xl mx-auto grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1  gap-8">
         <Filter
           categories={categories}
         />
