@@ -80,9 +80,10 @@ export default function Slider({ title, items }: SliderProps) {
                             <SwiperSlide key={item.id}>
                                 <Card
                                     item={item}
-                                    onPress={handleItemPress}
-                                    toggleLike={toggleLike}
-                                    isLiked={isLiked}
+                                    width='408px'
+                                    // onPress={handleItemPress}
+                                    // toggleLike={toggleLike}
+                                    // isLiked={isLiked}
                                 />
                             </SwiperSlide>
                         ))}

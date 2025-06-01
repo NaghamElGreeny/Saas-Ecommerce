@@ -1,5 +1,6 @@
 import Filter from '@/components/Filter';
-import Menu from '@/components/menu';
+// import Menu from '@/components/Menu';
+import Menu from '@/components/menu.tsx';
 import React from 'react'
 // type Category = {
 //   id: string;
@@ -51,8 +52,8 @@ function MenuPage
     ];
 
   return (
-    <main className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-4xl mx-auto grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1  gap-8">
+    <main className="min-h-screen  bg-gray-50 container">
+      <div className="grid grid-cols-4">
         <Filter
           categories={categories}
         />

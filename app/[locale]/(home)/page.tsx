@@ -37,6 +37,214 @@ export const items = [
     image: "/assets/images/menu/shredd.jpg",
     rating: 4.2
   },
+  {
+    id: '5',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '6',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '7',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '8',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '9',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '10',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '11',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '12',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '8',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
+  {
+    id: '13',
+    name: "Shredd",
+    description: "Cheesy shredded delight",
+    price: "50.00 EGP",
+    image: "/assets/images/menu/shredd.jpg",
+    rating: 4.2
+  },
 ];
 export default async function Home() {
   const sharedSection =

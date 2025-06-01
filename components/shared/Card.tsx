@@ -1,20 +1,28 @@
+'use client';
+
 import { CardItem } from '@/utils/types';
 import React from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { useLikedStore } from '@/store/likedStore';
 
 type CardProps = {
     item: CardItem;
-    onPress: (item: CardItem) => void;
-    toggleLike: (id: string) => void;
-    isLiked: (id: string) => boolean;
-    offer?:string;
+    offer?: string;
+    width?:string;
 };
 
-function Card({ item, onPress, toggleLike, isLiked,offer }: CardProps) {
+function Card({ item, offer,width}: CardProps) {
+    const likedItems = useLikedStore(state => state.likedItems);
+    const toggleLike = useLikedStore(state => state.toggleLike);
+    const liked = likedItems.includes(item.id);
+    const handlePress = () => {
+        console.log("Item clicked:", item.name);
+    };
+
     return (
         <div
-            onClick={() => onPress(item)}
-            className="flex-shrink-0 h-[509px] pt-2.5 pb-6 px-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+            onClick={handlePress}
+            className={`flex-shrink-0 h-[509px] w-[${width}] pt-2.5 pb-6 px-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer`}
         >
             <div className="img relative mb-4">
                 <img
@@ -37,7 +45,7 @@ function Card({ item, onPress, toggleLike, isLiked,offer }: CardProps) {
                             toggleLike(item.id);
                         }}
                     >
-                        {isLiked(item.id) ? (
+                        {liked ? (
                             <AiFillHeart className="text-red-600 text-xl" />
                         ) : (
                             <AiOutlineHeart className="text-gray-400 hover:text-red-400 text-xl transition-colors" />

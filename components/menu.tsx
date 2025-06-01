@@ -1,12 +1,71 @@
-import { items } from "@/app/[locale]/(home)/page" ;
-import Image from 'next/image';
+"use client";
+import { useState } from 'react';
+import { items } from "@/app/[locale]/(home)/page";
+import Card from "./shared/Card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const ITEMS_PER_PAGE = 6;
 
 const Menu: React.FC = () => {
-  console.log("Menu component",items);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = items.slice(startIndex, endIndex);
+
+  const handlePageClick = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const renderPageNumbers = () => {
+    const pages: (number | string)[] = [];
+
+    if (totalPages <= 3) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (currentPage > 2) pages.push(1);
+      if (currentPage > 3) pages.push("...");
+
+      for (
+        let i = Math.max(1, currentPage - 1);
+        i <= Math.min(totalPages, currentPage + 1);
+        i++
+      ) {
+        pages.push(i);
+      }
+
+      if (currentPage < totalPages - 2) pages.push("...");
+      if (currentPage < totalPages - 1) pages.push(totalPages);
+    }
+
+    return pages.map((page, index) =>
+      typeof page === "number" ? (
+        <button
+          key={index}
+          onClick={() => handlePageClick(page)}
+          className={`px-4 py-2 rounded-full transition ${
+            page === currentPage
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-blue-400 hover:text-white"
+          }`}
+        >
+          {page}
+        </button>
+      ) : (
+        <span key={index} className="px-2 py-2 text-gray-500">
+          ...
+        </span>
+      )
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      {/* Categories Navigation */}
-      <div className="flex justify-around mb-6 overflow-x-auto whitespace-nowrap">
+    <div className="min-h-screen p-4 col-span-3">
+      {/* Categories */}
+      <div className="flex justify-around mb-6 overflow-x-auto scrollbar-hide whitespace-nowrap">
         {[
           'All',
           'Breakfast',
@@ -19,98 +78,50 @@ const Menu: React.FC = () => {
         ].map((category) => (
           <button
             key={category}
-            className={`px-4 py-2 rounded-full ${
-              category === 'All' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
-            } hover:bg-blue-400 hover:text-white transition`}
+            className={`px-4 py-2 rounded-full ${category === 'All' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+              } hover:bg-blue-400 hover:text-white transition`}
           >
             {category}
           </button>
         ))}
       </div>
 
-      {/* Menu Items Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition"
-          >
-            <div className="relative w-full h-48">
-              <Image
-                src={item.image}
-                alt={item.name}
-                fill
-                className="rounded-t-lg object-cover object-center"
-              />
-            </div>
-            <div className="p-4">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
-                <div className="flex items-center">
-                  <span className="text-yellow-500">★</span>
-                  <span className="ml-1 text-gray-600">{item.rating}</span>
-                </div>
-              </div>
-              <p className="text-sm text-gray-500 mb-2">{item.description}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-gray-800">{item.price}</span>
-                <button className="text-blue-500 hover:text-blue-700">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
+      {/* Cards Grid */}
+      <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-center gap-3">
+        {currentItems.map((item, index) => (
+          <Card key={index} item={item} width='full'/>
         ))}
       </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center mt-6 space-x-4">
-        <button className="text-blue-500 hover:text-blue-700">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
+      {/* Smart Pagination */}
+      <div className="flex justify-center mt-6 space-x-2 flex-wrap items-center">
+        {/* Left arrow */}
+        <button
+          onClick={() => handlePageClick(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`p-2 rounded-full ${
+            currentPage === 1
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-gray-200 hover:bg-blue-400 hover:text-white"
+          }`}
+        >
+          <ChevronLeft size={20} />
         </button>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-full">1</button>
-        <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full">2</button>
-        <button className="text-blue-500 hover:text-blue-700">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
+
+        {/* Smart page numbers */}
+        {renderPageNumbers()}
+
+        {/* Right arrow */}
+        <button
+          onClick={() => handlePageClick(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`p-2 rounded-full ${
+            currentPage === totalPages
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-gray-200 hover:bg-blue-400 hover:text-white"
+          }`}
+        >
+          <ChevronRight size={20} />
         </button>
       </div>
     </div>
