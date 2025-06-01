@@ -46,9 +46,9 @@ function Card({ item, offer,width}: CardProps) {
                         }}
                     >
                         {liked ? (
-                            <AiFillHeart className="text-red-600 text-xl" />
+                            <AiFillHeart className=" text-primary text-xl" />
                         ) : (
-                            <AiOutlineHeart className="text-gray-400 hover:text-red-400 text-xl transition-colors" />
+                            <AiOutlineHeart className="text-gray-400 hover:text-blue-400 text-xl transition-colors" />
                         )}
                     </button>
                 </div>

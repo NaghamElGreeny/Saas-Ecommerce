@@ -31,7 +31,7 @@ export default function Slider({ title, items }: SliderProps) {
     };
 
     return (
-        <div className="my-6">
+        <div className="sliderr container px-10  my-6 min-h-screen h-[450px]">
             {/* Header */}
             <div className="flex justify-between items-center px-28 mb-10">
                 <h2 className="lg:text-5xl md:text-4xl text-3xl font-bold">{title}</h2>
@@ -44,8 +44,8 @@ export default function Slider({ title, items }: SliderProps) {
             </div>
 
             {/* Items Slider */}
-            <div className="relative">
-                <div className="container flex h-full scrollbar-hide  pb-4">
+            <div className="relative h-full">
+                <div className="container flex h-full  scrollbar-hide  ">
                     <Swiper
                         slidesPerView={3.5}
                         spaceBetween={10}
@@ -69,7 +69,7 @@ export default function Slider({ title, items }: SliderProps) {
                                     slidesPerView: 3.5,
                                     spaceBetween: 30
                                 }, 1024: {
-                                    slidesPerView: 4,
+                                    slidesPerView: 3.5,
                                     spaceBetween: 30
                                 }
                             }

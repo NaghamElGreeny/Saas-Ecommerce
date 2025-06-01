@@ -102,7 +102,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '8',
+    id: '868',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -118,7 +118,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '14',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -126,7 +126,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '15',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -134,7 +134,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '16',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -142,7 +142,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '17',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -150,7 +150,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '18',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -158,7 +158,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '19',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -166,7 +166,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '122',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -174,7 +174,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '124',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -182,7 +182,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '165',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -190,7 +190,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '178',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -198,7 +198,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '1654',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -206,7 +206,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '121',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -214,7 +214,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '1125',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -222,7 +222,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '1233',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -230,7 +230,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '133',
     name: "Shredd",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
@@ -238,7 +238,7 @@ export const items = [
     rating: 4.2
   },
   {
-    id: '13',
+    id: '1333',
     name: "Shredd",
     category:"Breakfast",
     description: "Cheesy shredded delight",

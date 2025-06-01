@@ -1,6 +1,7 @@
 import Filter from '@/components/Filter';
 // import Menu from '@/components/Menu';
-import Menu from '@/components/menu.tsx';
+import Menu from '@/components/Menu';
+import HeroSection from '@/components/shared/HeroSection';
 import React from 'react'
 // type Category = {
 //   id: string;
@@ -52,8 +53,9 @@ function MenuPage
     ];
 
   return (
-    <main className="min-h-screen  bg-gray-50 container">
-      <div className="grid grid-cols-4">
+    <main className="min-h-screen  bg-gray-50 ">
+      <HeroSection title='Menu' />
+      <div className="grid grid-cols-4 container py-5">
         <Filter
           categories={categories}
         />

@@ -70,8 +70,8 @@ const Menu: React.FC = () => {
           onClick={() => handlePageClick(page)}
           className={`px-4 py-2 rounded-full transition ${
             page === currentPage
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-blue-400 hover:text-white"
+              ? "bg-primary text-white"
+              : "bg-primary/20 text-gray-700 hover:bg-primary/90 hover:text-white"
           }`}
         >
           {page}
@@ -94,9 +94,9 @@ const Menu: React.FC = () => {
             onClick={() => handleCategorySelect(category)}
             className={`px-4 py-2 rounded-full ${
               category === selectedCategory
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700'
-            } hover:bg-blue-400 hover:text-white transition`}
+                ? 'bg-primary text-white'
+                : 'bg-primary/20 text-gray-700'
+            } hover:bg-primary/80 hover:text-white transition`}
           >
             {category}
           </button>
@@ -118,7 +118,7 @@ const Menu: React.FC = () => {
           className={`p-2 rounded-full ${
             currentPage === 1
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-gray-200 hover:bg-blue-400 hover:text-white"
+              : "bg-gray-200 hover:bg-primary/80 hover:text-white"
           }`}
         >
           <ChevronLeft size={20} />
@@ -132,7 +132,7 @@ const Menu: React.FC = () => {
           className={`p-2 rounded-full ${
             currentPage === totalPages
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-gray-200 hover:bg-blue-400 hover:text-white"
+              : "bg-gray-200 hover:bg-primary/80 hover:text-white"
           }`}
         >
           <ChevronRight size={20} />

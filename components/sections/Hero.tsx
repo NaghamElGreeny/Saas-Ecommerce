@@ -6,15 +6,15 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function Hero() {
     const socials = ['facebook', 'twitter', 'messenger', 'instagram'];
+    const [current, setCurrent] = useState(0);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    
     const images = [
         "url('/assets/images/img1.jpg')",
         "url('/assets/images/img2.jpg')",
         "url('/assets/images/img3.jpg')",
         "url('/assets/images/img4.jpg')",
     ];
-
-    const [current, setCurrent] = useState(0);
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         startAutoSlide();
