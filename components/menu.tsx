@@ -6,18 +6,40 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ITEMS_PER_PAGE = 6;
 
+const categories = [
+  'All',
+  'Breakfast',
+  'Lunch',
+  'Dinner',
+  'Mexican',
+  'Italian',
+  'Desserts',
+  'Drinks',
+];
+
 const Menu: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const filteredItems = selectedCategory === 'All'
+    ? items
+    : items.filter(item => item.category === selectedCategory);
+
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentItems = items.slice(startIndex, endIndex);
+  const currentItems = filteredItems.slice(startIndex, endIndex);
 
   const handlePageClick = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1); // إعادة تعيين الصفحة عند تغيير الفئة
   };
 
   const renderPageNumbers = () => {
@@ -65,21 +87,16 @@ const Menu: React.FC = () => {
   return (
     <div className="min-h-screen p-4 col-span-3">
       {/* Categories */}
-      <div className="flex justify-around mb-6 overflow-x-auto scrollbar-hide whitespace-nowrap">
-        {[
-          'All',
-          'Breakfast',
-          'Lunch',
-          'Dinner',
-          'Mexican',
-          'Italian',
-          'Desserts',
-          'Drinks',
-        ].map((category) => (
+      <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide whitespace-nowrap">
+        {categories.map((category) => (
           <button
             key={category}
-            className={`px-4 py-2 rounded-full ${category === 'All' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
-              } hover:bg-blue-400 hover:text-white transition`}
+            onClick={() => handleCategorySelect(category)}
+            className={`px-4 py-2 rounded-full ${
+              category === selectedCategory
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-700'
+            } hover:bg-blue-400 hover:text-white transition`}
           >
             {category}
           </button>
@@ -87,15 +104,14 @@ const Menu: React.FC = () => {
       </div>
 
       {/* Cards Grid */}
-      <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-center gap-3">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-center gap-3">
         {currentItems.map((item, index) => (
-          <Card key={index} item={item} width='full'/>
+          <Card key={index} item={item} width="full" />
         ))}
       </div>
 
       {/* Smart Pagination */}
       <div className="flex justify-center mt-6 space-x-2 flex-wrap items-center">
-        {/* Left arrow */}
         <button
           onClick={() => handlePageClick(currentPage - 1)}
           disabled={currentPage === 1}
@@ -108,10 +124,8 @@ const Menu: React.FC = () => {
           <ChevronLeft size={20} />
         </button>
 
-        {/* Smart page numbers */}
         {renderPageNumbers()}
 
-        {/* Right arrow */}
         <button
           onClick={() => handlePageClick(currentPage + 1)}
           disabled={currentPage === totalPages}

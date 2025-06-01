@@ -240,6 +240,7 @@ export const items = [
   {
     id: '13',
     name: "Shredd",
+    category:"Breakfast",
     description: "Cheesy shredded delight",
     price: "50.00 EGP",
     image: "/assets/images/menu/shredd.jpg",
