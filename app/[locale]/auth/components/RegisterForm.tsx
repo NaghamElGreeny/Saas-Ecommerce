@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { BrandCountry, register, getCountryCodes } from '@/services/ClientApiHandler';
+import { BrandCountry, register, getCountryCodes, RegisterPayload } from '@/services/ClientApiHandler';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/authStore';
 import toast from 'react-hot-toast';
@@ -66,7 +66,7 @@ const setFormData = useAuthStore((state) => state.setFormData);
   toast.dismiss();
 
   try {
-    const payload = {
+    const payload: RegisterPayload = {
       full_name: values.full_name,
       email: values.email,
       phone_code: values.phone_code,
@@ -77,9 +77,8 @@ const setFormData = useAuthStore((state) => state.setFormData);
     };
  console.log('Register Payload:', payload); 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const data = await register(payload);
-
-  
 
 setFormData({
   full_name: values.full_name,

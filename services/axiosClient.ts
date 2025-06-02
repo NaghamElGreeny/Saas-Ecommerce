@@ -10,8 +10,6 @@ const axiosInstance = axios.create({
     'os': 'web',
   }
 });
-console.log('axiosInstance',process.env.NEXT_PUBLIC_BASE_URL);
-
 axiosInstance.interceptors.request.use(
     (config) => {
 

@@ -33,7 +33,7 @@ interface AuthStore {
     phone?: string;
     password?: string;
     password_confirmation?: string;
-    device_type?: string;
+    device_type?: "web" | "ios" | "android";
   };
   setToken: (token: string) => void;
   setUserData: (data: unknown) => void;

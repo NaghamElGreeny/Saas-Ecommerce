@@ -7,13 +7,15 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/authStore';
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { ChevronDown, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginForm() {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
 
   const router = useRouter();
   const setToken = useAuthStore((state) => state.setToken);
@@ -84,11 +86,15 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full mx-auto p-4">
-      <div className="flex gap-2">
+     <div className="phone-dev flex gap-2 items-center">
+      {/* Select with Chevron */}
+      <div className="relative w-24">
         <select
-          className="p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 w-32"
+          className="p-3 border rounded-xl appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
           value={formik.values.phone_code}
           onChange={handleCountryChange}
+          onClick={() => setIsOpen(!isOpen)}
+          onBlur={() => setIsOpen(false)}
         >
           {countryCodes.map((country) => (
             <option key={country.id} value={country.phone_code}>
@@ -97,13 +103,24 @@ export default function LoginForm() {
           ))}
         </select>
 
-        <input
-          type="tel"
-          placeholder="Phone"
-          className="border p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-          {...formik.getFieldProps('phone')}
-        />
+        {/* Chevron Icon */}
+        <div
+          className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        >
+          <ChevronDown size={18} />
+        </div>
       </div>
+
+      {/* Phone Input */}
+      <input
+        type="tel"
+        placeholder="Phone"
+        className="border p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+        {...formik.getFieldProps("phone")}
+      />
+    </div>
       {formik.touched.phone && formik.errors.phone && (
         <div className="text-red-500 text-sm">{formik.errors.phone}</div>
       )}

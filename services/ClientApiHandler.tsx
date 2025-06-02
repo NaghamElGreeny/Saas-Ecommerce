@@ -1,7 +1,7 @@
 'use client';
 import axiosClient from './axiosClient';
 
-interface LoginPayload {
+export interface LoginPayload {
   phone_code: string;
   phone: string;
   password: string;
@@ -9,11 +9,12 @@ interface LoginPayload {
   device_token?: string;
 }
 
-interface RegisterPayload {
+export interface RegisterPayload {
   phone_code: string;
   phone: string;
   password: string;
   full_name: string;
+  password_confirmation: string;
   email: string;
   device_type: 'web' | 'ios' | 'android';
   device_token?: string;
