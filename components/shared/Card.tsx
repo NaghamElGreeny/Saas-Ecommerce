@@ -3,7 +3,7 @@
 import { CardItem } from '@/utils/types';
 import React from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import { useLikedStore } from '@/store/likedStore';
+import { useLikedStore } from '@/stores/likedStore';
 
 type CardProps = {
     item: CardItem;

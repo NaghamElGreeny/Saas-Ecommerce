@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { Toaster } from 'react-hot-toast';
 import { getMessages } from "next-intl/server";
 // import { useEffect } from 'react';
-import { useAuthStore } from '@/store/authStore';
+// import { useAuthStore } from '@/stores/authStore';
 import AuthProvider from "./auth/components/AuthProvider";
 export default async function LocaleLayout({
   children,

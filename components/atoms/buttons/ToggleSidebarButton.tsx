@@ -2,7 +2,7 @@ import React from 'react'
 import ThemeSwitchButton from './ThemeSwitchButton';
 import ToggleIcon from '../icons/ToggleIcon';
 import { useDispatch } from 'react-redux';
-import { toggleSidebar } from '../../../store/themeConfigSlice';
+import { toggleSidebar } from '../../../stores/themeConfigSlice';
 
 const ToggleSidebarButton = () => {
     const dispatch = useDispatch();

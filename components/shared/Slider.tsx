@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useLikedStore } from '@/store/likedStore';
+import { useLikedStore } from '@/stores/likedStore';
 // import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { ArrowRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
