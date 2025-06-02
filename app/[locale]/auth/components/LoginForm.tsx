@@ -92,7 +92,7 @@ export default function LoginForm() {
         >
           {countryCodes.map((country) => (
             <option key={country.id} value={country.phone_code}>
-              {country.flag ? '🌐' : ''} +{country.phone_code}
+              +{country.phone_code}
             </option>
           ))}
         </select>

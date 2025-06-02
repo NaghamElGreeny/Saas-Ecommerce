@@ -1,16 +1,17 @@
-// stores/useVerificationStore.ts
-import {create }from 'zustand';
+// useVerificationStore.ts
+import { create } from 'zustand';
 
-interface VerificationState {
-  verificationType: 'register' | 'forgot_password' | null;
+type VerificationState = {
   phone: string;
-  setVerificationType: (type: 'register' | 'forgot_password') => void;
-  setPhone: (phone: string) => void;
-}
+  phoneCode: string; // ← أضفنا ده
+  verificationType: 'register' | 'forgot_password' | null;
+  setVerificationData: (data: { phone: string; phoneCode: string; verificationType: 'register' | 'forgot_password' }) => void;
+};
 
 export const useVerificationStore = create<VerificationState>((set) => ({
-  verificationType: null,
   phone: '',
-  setVerificationType: (type) => set({ verificationType: type }),
-  setPhone: (phone) => set({ phone }),
+  phoneCode: '',
+  verificationType: null,
+  setVerificationData: ({ phone, phoneCode, verificationType }) =>
+    set({ phone, phoneCode, verificationType }),
 }));

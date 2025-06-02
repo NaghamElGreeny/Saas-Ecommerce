@@ -7,6 +7,7 @@ import { BrandCountry, register, getCountryCodes } from '@/services/ClientApiHan
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/authStore';
 import toast from 'react-hot-toast';
+import { useVerificationStore } from '@/stores/useVerificationStore';
 
 export default function RegisterForm() {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
@@ -14,8 +15,9 @@ export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const setToken = useAuthStore((state) => state.setToken);
-  const setUserData = useAuthStore((state) => state.setUserData);
+  // const setToken = useAuthStore((state) => state.setToken);
+  // const setUserData = useAuthStore((state) => state.setUserData);
+const setFormData = useAuthStore((state) => state.setFormData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,53 +61,67 @@ export default function RegisterForm() {
         .oneOf([Yup.ref('password')], 'Passwords must match')
         .required('Password confirmation is required'),
     }),
-    onSubmit: async (values) => {
-      setLoading(true);
-      toast.dismiss();
+   onSubmit: async (values) => {
+  setLoading(true);
+  toast.dismiss();
 
-      try {
-        const payload = {
-          full_name: values.full_name,
-          email: values.email,
-          phone_code: values.phone_code,
-          phone: values.phone,
-          password: values.password,
-          password_confirmation: values.password_confirmation,
-          device_type: 'web',
-        };
+  try {
+    const payload = {
+      full_name: values.full_name,
+      email: values.email,
+      phone_code: values.phone_code,
+      phone: values.phone,
+      password: values.password,
+      password_confirmation: values.password_confirmation,
+      device_type: "web",
+    };
+ console.log('Register Payload:', payload); 
 
-        const data = await register(payload) as {
-          token: string;
-          user: {
-            phone: string;
-            name?: string;
-            email?: string;
-          };
-        };
+const data = await register(payload);
 
-        setToken(data.token);
-        setUserData(data.user);
-        toast.success('Registration successful!');
-        // router.push('/');
-         router.push(`/auth/verify`);
-      } catch (err: any) {
-        console.error(err);
-        const resData = err.response?.data;
-        if (resData?.messages) {
-          Object.values(resData.messages).forEach((msgs: string[]) => {
-            msgs.forEach((msg) => toast.error(msg));
-          });
-        } else if (resData?.message) {
-          toast.error(resData.message);
-        } else if (err instanceof Error) {
-          toast.error(err.message);
-        } else {
-          toast.error('Registration failed');
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
+  
+
+setFormData({
+  full_name: values.full_name,
+  email: values.email,
+  phone_code: values.phone_code,
+  phone: values.phone,
+  password: values.password,
+  password_confirmation: values.password_confirmation,
+  device_type: 'web',
+});
+
+    toast.success('Registration successful!');
+
+useVerificationStore.getState().setVerificationData({
+  phone: values.phone,
+  phoneCode: values.phone_code,
+  verificationType: 'register',
+});
+
+    router.push('/auth/verify');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    console.error(err);
+console.log('Register error response:', err.response?.data);
+    console.error(err);
+    const resData = err.response?.data;
+    if (resData?.messages) {
+      Object.values(resData.messages).forEach((msgs) => {
+        (msgs as string[]).forEach((msg) => toast.error(msg));
+      });
+    } else if (resData?.message) {
+      toast.error(resData.message);
+    } else if (err instanceof Error) {
+      toast.error(err.message);
+    } else {
+      toast.error('Registration failed');
+    }
+  } finally {
+    setLoading(false);
+  }
+}
+
   });
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -139,7 +155,7 @@ export default function RegisterForm() {
 
       <div className="flex gap-2">
         <select
-          className="p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 w-18"
+          className="p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 w-18 bg-none appearance-none" 
           value={formik.values.phone_code}
           onChange={handleCountryChange}
         >

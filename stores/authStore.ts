@@ -21,29 +21,38 @@
 //   setUserData: (user) => set({ userData: user }),
 //   logout: () => set({ token: null, userData: null }),
 // }));
-import { create } from 'zustand';
+import {create} from 'zustand';
 
-type User = {
-  name?: string;
-  phone: string;
-};
-
-type AuthStore = {
+interface AuthStore {
   token: string | null;
-  user: User | null;
+  userData: unknown | null;
+  formData: {
+    full_name?: string;
+    email?: string;
+    phone_code?: string;
+    phone?: string;
+    password?: string;
+    password_confirmation?: string;
+    device_type?: string;
+  };
   setToken: (token: string) => void;
-  setUserData: (user: User) => void;
-  logout: () => void;
-};
+  setUserData: (data: unknown) => void;
+  setFormData: (data: Partial<AuthStore['formData']>) => void; // هنعرفها هنا
+}
 
 export const useAuthStore = create<AuthStore>((set) => ({
   token: null,
-  user: null,
+  userData: null,
+  formData: {},
   setToken: (token) => set({ token }),
-  setUserData: (user) => set({ user }),
-  logout: () => set({ token: null, user: null }),
+  setUserData: (userData) => set({ userData }),
+  setFormData: (data) => set((state) => ({
+    formData: {
+      ...state.formData,
+      ...data,
+    },
+  })),
 }));
-
 
 // {
 //     "phone_code":"658",

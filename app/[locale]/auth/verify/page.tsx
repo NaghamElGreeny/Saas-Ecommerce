@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { useVerificationStore } from '@/stores/useVerificationStore';
+import { verifyCode } from "@/services/ClientApiHandler";
 
 export default function VerifyPage() {
     const [code, setCode] = useState<string[]>(['', '', '', '']);
@@ -15,11 +16,12 @@ export default function VerifyPage() {
 
     const verificationType = useVerificationStore(state => state.verificationType);
     const phone = useVerificationStore(state => state.phone);
+    const phoneCode = useVerificationStore(state => state.phoneCode);
 
     useEffect(() => {
         if (!verificationType || !phone) {
             toast.error("Verification info missing, please try again.");
-            router.push(`/${locale}/`); // ارجع للصفحة الرئيسية أو المناسبة
+            router.push(`/${locale}/`);
         }
     }, [verificationType, phone, router, locale]);
 
@@ -53,68 +55,54 @@ export default function VerifyPage() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  e.preventDefault();
 
-        if (!verificationType) {
-            toast.error('Verification type not specified');
-            return;
-        }
+  if (!verificationType) {
+    toast.error('Verification type not specified');
+    return;
+  }
 
-        const fullCode = code.join('');
+  const fullCode = code.join('');
 
-        let url = '';
-        if (verificationType === 'register') {
-            url = '/auth/verify_phone';
-        } else if (verificationType === 'forgot_password') {
-            url = '/auth/verify_forgot_password_code';
-        }
-
-        try {
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    phone,
-                    code: fullCode,
-                }),
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                toast.error(errorData.message || 'Verification failed');
-                return;
-            }
-
-            const data = await res.json();
-console.log('Verification response:', data);
-            toast.success('Phone verified successfully!');
-
-            // تحديث حالة المستخدم في الـ store أو أي مكان آخر حسب تصميمك
-            // مثلاً، ممكن تحط حالة verified في store لو حابب
-
-            router.push(`/${locale}/`);
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            toast.error(error.message || 'Something went wrong');
-        }
-    };
+  try {
+    // const data = await verifyCode({
+    //   phoneCode,
+    //   phone,
+    //   code: fullCode,
+    //   verificationType,
+    // });
+    const data = await verifyCode({
+      phone_code: phoneCode,
+      phone,
+      verification_code: fullCode,
+      verificationType,
+    });
+    console.log('Verification response:', data);
+    toast.success('Phone verified successfully!');
+    router.push(`/${locale}/`);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    toast.error(error.message || 'Something went wrong');
+  }
+};
 
     return (
         <div className="bg-white flex w-full h-screen overflow-hidden">
-            <div className="w-1/2 hidden md:block">
+            {/* Left Image Section */}
+            <div className="w-1/2 hidden md:block relative">
                 <Image
                     src="/assets/images/auth-image.png"
                     alt="login"
                     fill
-                    className="h-full w-full object-cover"
-                    style={{ objectFit: 'cover' }}
+                    className="object-cover"
                     priority
                 />
             </div>
 
-            <div className="bg-red w-full md:w-1/2 relative">
+            {/* Right Form Section */}
+            <div className="bg-white w-full md:w-1/2 relative flex items-center justify-center">
                 <div className="rtl:left-3.5 ltr:right-3.5 absolute w-full h-full px-[120px] py-[320px] rounded-2xl z-20 bg-white flex flex-col justify-center">
+                    <div className="flex mb-6">
                         <Image
                             src="/assets/images/mea-logo.png"
                             alt="Logo"
@@ -123,10 +111,13 @@ console.log('Verification response:', data);
                             className="w-[154px] h-[115px]"
                             priority
                         />
-                        {/* <img src="/assets/images/mea-logo.png" alt="Logo" className="w-[154px] h-[115px]" /> */}
                     </div>
+
                     <h2 className="text-xl font-bold mb-4">Enter Verification Code</h2>
-                    <p className="text-sm mb-6">We&apos;ve sent a code to your phone number: <strong>{phone}</strong></p>
+                    <p className="text-sm mb-6">
+                        We&apos;ve sent a code to your phone number: <strong>{phone}</strong>
+                    </p>
+
                     <form onSubmit={handleSubmit} className="mb-6">
                         <div className="flex justify-center gap-8 w-full mb-8 p-8">
                             {code.map((digit, index) => (
@@ -148,11 +139,17 @@ console.log('Verification response:', data);
 
                         <div className="flex justify-between">
                             <p className="text-center text-gray-500 mb-8">
-                                Didn&apos;t receive code? <span className="text-blue-600 cursor-pointer" onClick={() => {
-                                    toast.success('Code resent!');
-                                    setTimeLeft(96);
-                                    // هنا ممكن تعمل إعادة إرسال كود بالapi حسب verificationType
-                                }}>Resend</span>
+                                Didn&apos;t receive code?{' '}
+                                <span
+                                    className="text-blue-600 cursor-pointer"
+                                    onClick={() => {
+                                        toast.success('Code resent!');
+                                        setTimeLeft(96);
+                                        // هنا ممكن تبعت كود جديد باستخدام API لو حبيت
+                                    }}
+                                >
+                                    Resend
+                                </span>
                             </p>
                             <p className="text-center text-black mb-8">{formattedTime}</p>
                         </div>
@@ -166,6 +163,6 @@ console.log('Verification response:', data);
                     </form>
                 </div>
             </div>
-        // </div>
+        </div>
     );
 }

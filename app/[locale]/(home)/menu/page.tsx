@@ -1,6 +1,6 @@
 import Filter from '@/components/Filter';
 // import Menu from '@/components/Menu';
-import Menu from '@/components/Menu';
+import Menu from '@/components/menu';
 import HeroSection from '@/components/shared/HeroSection';
 import React from 'react'
 // type Category = {
