@@ -8,14 +8,13 @@ import { useAuthStore } from '@/stores/authStore';
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 import { ChevronDown, Eye, EyeOff } from 'lucide-react';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
-
 
   const router = useRouter();
   const setToken = useAuthStore((state) => state.setToken);
@@ -86,15 +85,14 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full mx-auto p-4">
-     <div className="phone-dev flex gap-2 items-center">
-      {/* Select with Chevron */}
-      <div className="relative w-24">
+     <div className="phone-dev gap-2 items-center">
+     <div className="phone-inputs flex gap-1">
+       {/* Select with Chevron */}
+      <div className="relative w-26">
         <select
-          className="p-3 border rounded-xl appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
+          className="p-3 border rounded-xl appearance-none w-full"
           value={formik.values.phone_code}
           onChange={handleCountryChange}
-          onClick={() => setIsOpen(!isOpen)}
-          onBlur={() => setIsOpen(false)}
         >
           {countryCodes.map((country) => (
             <option key={country.id} value={country.phone_code}>
@@ -105,9 +103,7 @@ export default function LoginForm() {
 
         {/* Chevron Icon */}
         <div
-          className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500`}
         >
           <ChevronDown size={18} />
         </div>
@@ -120,17 +116,18 @@ export default function LoginForm() {
         className="border p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
         {...formik.getFieldProps("phone")}
       />
-    </div>
+     </div>
       {formik.touched.phone && formik.errors.phone && (
         <div className="text-red-500 text-sm">{formik.errors.phone}</div>
       )}
+    </div>
 
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
           placeholder='Password'
           {...formik.getFieldProps('password')}
-          className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md "
         />
         <button
           type="button"
@@ -145,15 +142,27 @@ export default function LoginForm() {
         <div className="text-red-500 text-sm">{formik.errors.password}</div>
       )}
 
-      <label className="flex items-center space-x-2 text-sm">
-        <input
-          type="checkbox"
-          checked={formik.values.rememberMe}
-          onChange={() => formik.setFieldValue('rememberMe', !formik.values.rememberMe)}
-          className="w-4 h-4"
-        />
-        <span className="select-none">Remember me</span>
-      </label>
+<div className="flex items-center justify-between w-full text-sm">
+  <label className="flex text-gray-700 gap-2">
+    <input
+      type="checkbox"
+      checked={formik.values.rememberMe}
+      onChange={() =>
+        formik.setFieldValue('rememberMe', !formik.values.rememberMe)
+      }
+      className="!w-4 h-4 accent-blue-600"
+    />
+    <span className="ml-[4px] select-none">Remember me</span>
+  </label>
+
+  <Link
+    href="/forgot-password"
+    className="text-blue-600 hover:underline"
+  >
+    Forgot password?
+  </Link>
+</div>
+
 
       <button
         type="submit"
