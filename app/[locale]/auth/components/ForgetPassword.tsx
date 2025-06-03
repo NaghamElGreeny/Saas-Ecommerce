@@ -16,8 +16,6 @@ export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  // const setToken = useAuthStore((state) => state.setToken);
-  // const setUserData = useAuthStore((state) => state.setUserData);
 const setFormData = useAuthStore((state) => state.setFormData);
 
   useEffect(() => {
@@ -61,6 +59,10 @@ const setFormData = useAuthStore((state) => state.setFormData);
       phone_code: values.phone_code,
       phone: values.phone,
       device_type: "web",
+      password: '',
+      full_name: '',
+      password_confirmation: '',
+      email: ''
     };
  console.log('Register Payload:', payload); 
 

@@ -47,6 +47,24 @@ export const getCountryCodes = async (): Promise<BrandCountry[]> => {
   return res.data.data;
 };
 
+
+//   "phone_code":"658",
+//    "phone":"23457689874789589389",
+//    "reset_code":"1111",
+//    "password":"123456",
+//    "password_confirmation":"123456"
+export interface ResetPasswordPayload {
+  phone: string;
+  phone_code: string;
+  reset_code: string;
+  password: string;
+  password_confirmation: string;
+  device_type?: 'web' | 'ios' | 'android';}
+export const ResetPassword = async  (payload: ResetPasswordPayload) => {
+          const res = await axiosClient.post('auth/reset_password', payload);
+          return res.data;
+        };
+
 export const verifyCode = async ({
   phone_code,
   phone,
@@ -57,7 +75,8 @@ export const verifyCode = async ({
   phone_code?: string;
   phone?: string;
   verification_code: string;
-  verificationType: 'register' | 'forgot_password';
+  reset_code?: string;
+  verificationType: 'register' | 'forgot_password'|null;
 }) => {
   
 

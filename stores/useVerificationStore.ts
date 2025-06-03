@@ -2,16 +2,18 @@
 import { create } from 'zustand';
 
 type VerificationState = {
-  phone: string;
-  phoneCode: string; // ← أضفنا ده
-  verificationType: 'register' | 'forgot_password' | null;
-  setVerificationData: (data: { phone: string; phoneCode: string; verificationType: 'register' | 'forgot_password' }) => void;
+  phone?: string;
+  phoneCode?: string; 
+  verification_code?: string;
+  verificationType: 'register' | 'forgot_password';
+  setVerificationData: (data: { phone?: string; phoneCode?: string; verificationType: 'register' | 'forgot_password'; verification_code?:string }) => void;
 };
 
 export const useVerificationStore = create<VerificationState>((set) => ({
   phone: '',
   phoneCode: '',
-  verificationType: null,
-  setVerificationData: ({ phone, phoneCode, verificationType }) =>
-    set({ phone, phoneCode, verificationType }),
+  verificationType: 'forgot_password',
+  verification_code: '',
+  setVerificationData: ({ phone, phoneCode, verificationType,verification_code }) =>
+    set({ phone, phoneCode, verificationType ,verification_code}),
 }));

@@ -3,23 +3,22 @@
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { BrandCountry, register, getCountryCodes, RegisterPayload } from '@/services/ClientApiHandler';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/authStore';
+import { BrandCountry, getCountryCodes} from '@/services/ClientApiHandler';
+// import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useVerificationStore } from '@/stores/useVerificationStore';
 import { ChevronDown } from 'lucide-react';
+import { useAuthStore } from '@/stores/authStore';
 
-export default function RegisterForm() {
+export default function PhoneInput({setStatus}: { setStatus: (status: 'phone' | 'verify') => void }) {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
-  // const setToken = useAuthStore((state) => state.setToken);
-  // const setUserData = useAuthStore((state) => state.setUserData);
-const setFormData = useAuthStore((state) => state.setFormData);
-const setVerificationData = useVerificationStore((state) => state.setVerificationData);
+  const setFormData = useAuthStore((state) => state.setFormData);
+  const setVerificationData = useVerificationStore((state) => state.setVerificationData);
+
+  // const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,72 +38,36 @@ const setVerificationData = useVerificationStore((state) => state.setVerificatio
 
   const formik = useFormik({
     initialValues: {
-      full_name: '',
-      email: '',
       phone_code: '',
       phone: '',
-      password: '',
-      password_confirmation: '',
     },
     validationSchema: Yup.object({
-      full_name: Yup.string().required('Full name is required'),
-      email: Yup.string()
-        .email('Invalid email format')
-        .required('Email is required'),
       phone_code: Yup.string().required('Phone code is required'),
       phone: Yup.string()
         .required('Phone is required')
         .matches(/^\d+$/, 'Phone must be digits only')
         .max(selectedCountry?.phone_limit || 10, `Max ${selectedCountry?.phone_limit || 10} digits`),
-      password: Yup.string()
-        .min(6, 'Password must be at least 6 characters')
-        .required('Password is required'),
-      password_confirmation: Yup.string()
-        .oneOf([Yup.ref('password')], 'Passwords must match')
-        .required('Password confirmation is required'),
     }),
    onSubmit: async (values) => {
   setLoading(true);
   toast.dismiss();
 
-  try {
-    const payload: RegisterPayload = {
-      full_name: values.full_name,
-      email: values.email,
-      phone_code: values.phone_code,
-      phone: values.phone,
-      password: values.password,
-      password_confirmation: values.password_confirmation,
-      device_type: "web",
-    };
- console.log('Register Payload:', payload); 
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const data = await register(payload);
-
 setFormData({
-  full_name: values.full_name,
-  email: values.email,
   phone_code: values.phone_code,
   phone: values.phone,
-  password: values.password,
-  password_confirmation: values.password_confirmation,
   device_type: 'web',
 });
 
-    toast.success('Registration successful!');
-
-// useVerificationStore.getState().setVerificationData({
-//   phone: values.phone,
-//   phoneCode: values.phone_code,
-//   verificationType: 'register',
-// });
+  try {
 setVerificationData({
   phone: values.phone,
   phoneCode: values.phone_code,
-  verificationType: 'register',
+  verificationType: 'forgot_password',
 });
-    router.push('/auth/verify');
+
+    // router.push('/auth/verify');
+    setStatus('verify');
+    //STATE 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error(err);
@@ -137,29 +100,14 @@ console.log('Register error response:', err.response?.data);
   };
 
   return (
+    <>
+       <h2 className="font-bold lg:text-4xl text-3xl mb-4">Verify Code</h2>
+         <p className="text-sub mb-3">
+please enter your phone number below to recovery your password.
+        </p>
+   
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full mx-auto p-4 max-w-md">
-   <div className="name ">
-       <input
-        type="text"
-        placeholder="Full Name"
-        {...formik.getFieldProps('full_name')}
-        className="border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      {formik.touched.full_name && formik.errors.full_name && (
-        <div className="text-red-500 text-sm">{formik.errors.full_name}</div>
-      )}
-   </div>
-<div className="email">
-      <input
-        type="email"
-        placeholder="Email"
-        {...formik.getFieldProps('email')}
-        className="border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      {formik.touched.email && formik.errors.email && (
-        <div className="text-red-500 text-sm">{formik.errors.email}</div>
-      )}
-</div>
+
         <div className="phone-dev gap-2 items-center">
      <div className="phone-inputs flex gap-1">
        {/* Select with Chevron */}
@@ -196,29 +144,7 @@ console.log('Register error response:', err.response?.data);
         <div className="text-red-500 text-sm">{formik.errors.phone}</div>
       )}
     </div>
-    {/* password */}
-<div className="password">
-      <input
-        type="password"
-        placeholder="Password"
-        {...formik.getFieldProps('password')}
-        className="border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      {formik.touched.password && formik.errors.password && (
-        <div className="text-red-500 text-sm">{formik.errors.password}</div>
-      )}
-</div>
-<div className="confirm-password">
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        {...formik.getFieldProps('password_confirmation')}
-        className="border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      {formik.touched.password_confirmation && formik.errors.password_confirmation && (
-        <div className="text-red-500 text-sm">{formik.errors.password_confirmation}</div>
-      )}
-</div>
+
       <button
         type="submit"
         disabled={loading}
@@ -226,8 +152,9 @@ console.log('Register error response:', err.response?.data);
           loading ? 'opacity-60 cursor-not-allowed' : ''
         }`}
       >
-        {loading ? 'Registering...' : 'Register'}
+        {loading ? 'Sending...' : 'Send'}
       </button>
     </form>
+     </>
   );
 }

@@ -48,6 +48,7 @@ const EmailSubscription = ({ apiEndpoint = '/api/subscribe' }: EmailSubscription
                 } else {
                     setSubscriptionStatus({ success: false, message: data.error || 'Subscription failed. Please try again.' });
                 }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
                 setSubscriptionStatus({ success: false, message: 'An error occurred. Please try again later.' });
             } finally {
@@ -68,7 +69,7 @@ const EmailSubscription = ({ apiEndpoint = '/api/subscribe' }: EmailSubscription
                     value={formik.values.email}
                     placeholder="Enter your email"
                     disabled={isSubmitting}
-                    className={`w-full h-17 px-4 py-4 rounded-full focus:outline-none focus:ring-2 bg-white ${formik.touched.email && formik.errors.email
+                    className={`w-full h-17 px-4 py-4 !rounded-full focus:outline-none focus:ring-2 bg-white ${formik.touched.email && formik.errors.email
                         ? ' ring-red-500 focus:ring-red-200'
                         : 'border-gray-300 focus:ring-indigo-200'
                         }`}

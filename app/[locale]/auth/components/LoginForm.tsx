@@ -8,13 +8,15 @@ import { useAuthStore } from '@/stores/authStore';
 import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 import { ChevronDown, Eye, EyeOff } from 'lucide-react';
-import Link from 'next/link';
+// import Link from 'next/link';
+import { useVerificationStore } from '@/stores/useVerificationStore';
 
 export default function LoginForm() {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
+const setVerificationData = useVerificationStore((state) => state.setVerificationData);
 
   const router = useRouter();
   const setToken = useAuthStore((state) => state.setToken);
@@ -36,6 +38,12 @@ export default function LoginForm() {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+const handleForget=() => {
+  setVerificationData({
+      verificationType: 'forgot_password',
+});
+    router.push('/auth/verify');
+}
 
   const formik = useFormik({
     initialValues: {
@@ -122,7 +130,8 @@ export default function LoginForm() {
       )}
     </div>
 
-      <div className="relative">
+  <div className="pass">
+        <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
           placeholder='Password'
@@ -141,6 +150,7 @@ export default function LoginForm() {
       {formik.touched.password && formik.errors.password && (
         <div className="text-red-500 text-sm">{formik.errors.password}</div>
       )}
+  </div>
 
 <div className="flex items-center justify-between w-full text-sm">
   <label className="flex text-gray-700 gap-2">
@@ -155,12 +165,15 @@ export default function LoginForm() {
     <span className="ml-[4px] select-none">Remember me</span>
   </label>
 
-  <Link
+  {/* <Link
     href="/forgot-password"
     className="text-blue-600 hover:underline"
-  >
+  > */}
+  <button  className="text-blue-600 hover:underline" onClick={handleForget}>
     Forgot password?
-  </Link>
+  </button>
+    
+  {/* </Link> */}
 </div>
 
 

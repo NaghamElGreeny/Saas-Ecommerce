@@ -1,26 +1,3 @@
-// import { create } from 'zustand';
-
-// interface User {
-//   phone: string;
-//   name?: string;
-//   [key: string]: unknown;
-// }
-
-// interface AuthState {
-//   token: string | null;
-//   userData: User | null;
-//   setToken: (token: string) => void;
-//   setUserData: (user: User) => void;
-//   logout: () => void;
-// }
-
-// export const useAuthStore = create<AuthState>((set) => ({
-//   token: null,
-//   userData: null,
-//   setToken: (token) => set({ token }),
-//   setUserData: (user) => set({ userData: user }),
-//   logout: () => set({ token: null, userData: null }),
-// }));
 import {create} from 'zustand';
 
 interface AuthStore {
@@ -37,7 +14,7 @@ interface AuthStore {
   };
   setToken: (token: string) => void;
   setUserData: (data: unknown) => void;
-  setFormData: (data: Partial<AuthStore['formData']>) => void; // هنعرفها هنا
+  setFormData: (data: Partial<AuthStore['formData']>) => void; 
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
