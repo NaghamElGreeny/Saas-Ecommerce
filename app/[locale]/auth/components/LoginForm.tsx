@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 import { ChevronDown, Eye, EyeOff } from 'lucide-react';
 // import Link from 'next/link';
+import  Cookies  from 'js-cookie';
 import { useVerificationStore } from '@/stores/useVerificationStore';
 
 export default function LoginForm() {
@@ -20,8 +21,8 @@ const setVerificationData = useVerificationStore((state) => state.setVerificatio
 
   const router = useRouter();
   const setToken = useAuthStore((state) => state.setToken);
-  const setUserData = useAuthStore((state) => state.setUserData);
-
+  // const setUserData = useAuthStore((state) => state.setUserData);
+const setFormData = useAuthStore((state) => state.setFormData);
   // Fetch country codes
   useEffect(() => {
     const fetchData = async () => {
@@ -68,10 +69,20 @@ const handleForget=() => {
         const data = await login({
           ...values,
           device_type: 'web',
-        }) as { token: string; user: { phone: string; name?: string } };
+        }) as { token: string; user: { phone: string; name?: string ; email:string; } };
 
-        setToken(data.token);
-        setUserData(data.user);
+        setToken(data.data.token);
+        Cookies.set('token', data.data.token, { expires: 30 }); // Store token in cookies for 7 days
+        console.log('Login data:', data.data);
+       setFormData({
+  // phone: data.user.phone,
+  // full_name: data.user.name || '', 
+  // phone_code: values.phone_code,
+  // email:data.user.email, 
+  // password: values.password,
+}
+ 
+);
         toast.success('Login successful!');
         router.push('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

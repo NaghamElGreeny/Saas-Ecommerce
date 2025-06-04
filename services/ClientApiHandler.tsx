@@ -8,6 +8,10 @@ export interface LoginPayload {
   device_type: 'web' | 'ios' | 'android';
   device_token?: string;
 }
+export interface LogoutPayload {
+  device_type: 'web' | 'ios' | 'android';
+  device_token?: string;
+}
 
 export interface RegisterPayload {
   phone_code: string;
@@ -28,31 +32,24 @@ export interface RegisterPayload {
             flag: string;
         }
  
-        export const register = async (payload: RegisterPayload) => {
-          const res = await axiosClient.post('/auth/register', payload);
-          return res.data;
-        };
+export const register = async (payload: RegisterPayload) => {
+  const res = await axiosClient.post('/auth/register', payload);
+  return res.data;
+};
 export const login = async (payload: LoginPayload) => {
   const res = await axiosClient.post('/auth/login', payload);
   return res.data;
 };
+export const logout = async (payload: LogoutPayload) => {
+  const res = await axiosClient.post('/auth/logout', payload);
+  return res.data;
+};
 
-
-// export const getCountryCodes = async (): Promise<BrandCountry[]> => {
-//   const res = await axiosClient.get('/brand_country');
-//   return (res.data as { data: BrandCountry[] }).data;
-// };
 export const getCountryCodes = async (): Promise<BrandCountry[]> => {
   const res = await axiosClient.get<{ status: boolean; message: string; data: BrandCountry[] }>('/brand_country');
   return res.data.data;
 };
 
-
-//   "phone_code":"658",
-//    "phone":"23457689874789589389",
-//    "reset_code":"1111",
-//    "password":"123456",
-//    "password_confirmation":"123456"
 export interface ResetPasswordPayload {
   phone: string;
   phone_code: string;
@@ -103,12 +100,3 @@ export const verifyCode = async ({
     throw new Error(error?.response?.data?.message || 'Verification failed');
   }
 };
-
-//هستخدمه وانا رايحه ال verify page 
-  // let url;
-
-  // if (dataToVerify.value.type == "register") {
-  //   url = "auth/verify_phone";
-  // } else {
-  //   url = "auth/verify_forgot_password_code";
-  // }

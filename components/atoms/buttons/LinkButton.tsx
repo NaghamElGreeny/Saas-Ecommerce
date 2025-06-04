@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
+import  Link  from "next/link"
 import { tv, type VariantProps } from "tailwind-variants"
 
 const linkButton = tv({

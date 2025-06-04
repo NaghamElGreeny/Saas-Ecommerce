@@ -2,26 +2,42 @@
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation';
+// import { useRouter, usePathname } from 'next/navigation';
 import { FiMenu, FiX } from 'react-icons/fi';
 import LocationSelector from '../ui/LocationSelector';
 import '@/styles/Navbar.css';
+import { useAuthStore } from '@/stores/authStore';
+import cookies from 'js-cookie';
+
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
+import { logout, LogoutPayload } from '@/services/ClientApiHandler';
+import toast from 'react-hot-toast';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [logged, setLogged] = useState(false);
     const t = useTranslations('NAV');
     const locale = useLocale();
-    const router = useRouter();
-    const pathname = usePathname();
+    // const router = useRouter();
+    // const pathname = usePathname();
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const toggleLocale = () => {
-        const newLocale = locale === 'en' ? 'ar' : 'en';
-        const segments = pathname.split('/').filter(Boolean);
-        segments[0] = newLocale;
-        const newPath = `/${segments.join('/')}`;
-        router.push(newPath);
-    };
+    // const toggleLocale = () => {
+    //     const newLocale = locale === 'en' ? 'ar' : 'en';
+    //     const segments = pathname.split('/').filter(Boolean);
+    //     segments[0] = newLocale;
+    //     const newPath = `/${segments.join('/')}`;
+    //     router.push(newPath);
+    // };
 
     const toggleMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
@@ -43,7 +59,42 @@ export default function Navbar() {
         return () => document.removeEventListener('pointerdown', handleClickOutside);
     }, [isOpen]);
 
-    const logged = false;
+    // const logged = false;
+    useEffect(() => {
+        const token = cookies.get('token');
+        if (token) {
+            setLogged(true);
+            useAuthStore.getState().setToken(token);
+            // useLoggedStore.getState().setLogged(true);
+        } else {
+            setLogged(false);
+            useAuthStore.getState().setToken('');
+            // useLoggedStore.getState().setLogged(false);
+        }
+    }, []);
+const Logout = async () => {
+    const payload:LogoutPayload = {
+        device_type: 'web',
+        device_token: useAuthStore.getState().token,
+    };
+
+    try {
+        const data = await logout(payload);  
+        if (data) {
+            cookies.remove('token');
+            useAuthStore.getState().setToken('');
+            setLogged(false);
+            toast.success('Logged out successfully');
+        }
+    } catch (error) {
+        toast.error('Failed to logout');
+        console.error('Logout error:', error);
+    }
+};
+
+   
+    
+
 
     return (
         <nav className="navBar w-full h-28 px-4 md:px-10 lg:px-14 bg-bgPrimary flex items-center justify-between relative z-50">
@@ -68,7 +119,34 @@ export default function Navbar() {
                 <Link href="#"><img src="/assets/icons/cart.png" alt="cart" /></Link>
                 <Link href="#"><img src="/assets/icons/notifications.png" alt="notifications" /></Link>
                 {logged ? (
-                    <LocationSelector active={true} />
+
+                    <>
+
+
+                        <Sheet>
+                            <SheetTrigger><img src="/assets/icons/profile.png" alt="profile" className='cursor-pointer' /></SheetTrigger>
+                            <SheetContent>
+                                <SheetHeader>
+                                    <SheetTitle>Are you absolutely sure?</SheetTitle>
+                                    <SheetDescription>
+                                        This action cannot be undone. This will permanently delete your account
+                                        and remove your data from our servers.
+                                    </SheetDescription>
+                                </SheetHeader>
+                                <SheetFooter className='flex flex-col items-center justify-center'>
+                                    <button onClick={Logout}  className="mt-4 rounded-full w-[80%] h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
+                                        <span>Log out</span>
+                                    </button>
+                                    <SheetClose asChild>
+                                        {/* <Button variant="outline">Close</Button> */}
+                                    </SheetClose>
+                                </SheetFooter>
+                            </SheetContent>
+                        </Sheet>
+
+                        {/* <Link href="#"><img src="/assets/icons/profile.png" alt="profile" /></Link> */}
+                        <LocationSelector active={true} />
+                    </>
                 ) : (
                     <Link href={`/${locale}/auth`} className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
                         {/* <button className="rounded-full w-32 h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2"> */}
@@ -103,7 +181,9 @@ export default function Navbar() {
                         <img src="/assets/icons/notifications.png" alt="notifications" />
                         <span>Notifications</span>
                     </Link>
-                    {!logged && (
+                    {logged ? (<button onClick={Logout} className="mt-4 rounded-full w-full h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
+                        <span>Log out</span>
+                    </button>) : (
                         <Link href={`/${locale}/auth`} className="mt-4 rounded-full w-full h-10 bg-[#5A6AE8] text-white flex items-center justify-center gap-2">
                             <img src="/assets/icons/login.png" alt="login" />
                             <span>Log In</span>

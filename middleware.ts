@@ -14,7 +14,10 @@ export function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
-
+  const token = request.cookies.get("token");
+  if (token && pathname.startsWith("/auth")) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
   const pathnameParts = pathname.split("/").filter(Boolean);
   const hasLocale = locales.includes(pathnameParts[0]);
 

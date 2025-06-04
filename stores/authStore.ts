@@ -30,11 +30,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
     },
   })),
 }));
-
-// {
-//     "phone_code":"658",
-//     "phone":"23457689874789589389",
-//     "password":"123456",
-//     "device_type":"web"
-//     // "device_token":"345asdasd"
+// interface LoggedStore {
+//   logged: boolean;
+//   setLogged: (logged: boolean) => void;
 // }
+// export const useLoggedStore = create<LoggedStore>((set) => ({
+//   logged: false,
+//   setLogged: (logged: boolean) => set({ logged }),
+// }));
+

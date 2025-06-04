@@ -16,7 +16,11 @@ axiosInstance.interceptors.request.use(
 
 
         const locale = Cookies.get('NEXT_LOCALE') || 'en';
+        const token = Cookies.get('token');
 
+if (token) {    
+            config.headers['Authorization'] = `Bearer ${token}`;
+}
         if (!config.headers) {
             config.headers = {};
         }

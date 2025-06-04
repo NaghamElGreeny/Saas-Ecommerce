@@ -259,10 +259,10 @@ export default async function Home() {
 
 
 
-  const handleReservationClick = () => {
-    console.log('reseerve')
-  };
-  const div = `<h2 className='bg-red-500'>Hey</h2>`
+  // const handleReservationClick = () => {
+  //   console.log('reseerve')
+  // };
+  // const div = `<h2 className='bg-red-500'>Hey</h2>`
 
   return (
     <div className="space-y-12 overflow-hidden">
