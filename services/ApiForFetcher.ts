@@ -3,11 +3,12 @@ import { fetcher } from "./ClientFetcher";
 export const getHomeData = () =>
   fetcher("/home", "Failed to fetch home");
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const postContactForm = (payload: any) =>
   fetcher("/contact", "Failed to submit form", {
     method: "POST",
     data: payload,
-    withAuth: true, // لو محتاج توكن
+    withAuth: true, 
   });
 
 export const deleteUser = (userId: string) =>

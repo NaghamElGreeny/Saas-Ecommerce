@@ -1,31 +1,33 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
-
-interface Store {
-    id: number;
-    name: string;
-    location: string;
-}
+import { getStores } from '@/services/ClientApiHandler';
+import toast from 'react-hot-toast';
+import { Store } from '@/services/ClientApiHandler';
 
 export default function LocationSelector(active: { active?: boolean }) {
     const [open, setOpen] = useState(active ? active : false);
     const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+const [stores, setStores] = useState([]);
 
-    const stores: Store[] = [
-        {
-            id: 1,
-            name: 'Abu Shakra',
-            location: 'Dallas Mall: Avc Adjacent To Buy (Youtube, Governorate 7625586)'
-        },
-        {
-            id: 2,
-            name: 'Abu Shakra',
-            location: 'Dubai Mall: Avc Adjacent To Buy (Youtube, Governorate 7625586)'
-        },
+ 
+    useEffect(() => {
+        const fetchStores = async () => {
+            try {
+                const stores = await getStores();
+                setStores(stores);
+                // setSelectedStore(stores[0]); // default selected store
+            } catch (err) {
+                toast.error('Failed to load stores');
+                console.error(err);
+            }
+        };
+ 
+        fetchStores();
+         }, []);
+    
 
-    ];
     return (
         <>
             {/* Trigger */}
@@ -46,7 +48,7 @@ export default function LocationSelector(active: { active?: boolean }) {
                     <span className="text-sm font-semibold text-black">Abu Shakra</span>
                     <div className="flex items-center space-x-1" onClick={() => setOpen(true)}>
                         <span className="text-sm text-gray-400 truncate max-w-[160px]">
-                            {selectedStore ? selectedStore.location : ''}
+                            {selectedStore ? selectedStore.location_description : ''}
                         </span>
                         <ChevronDown className="w-4 h-4 text-gray-400" />
 
@@ -78,7 +80,7 @@ export default function LocationSelector(active: { active?: boolean }) {
                                     onClick={() => setSelectedStore(store)}
                                 >
                                     <h3 className="font-medium">{store.name}</h3>
-                                    <p className="text-gray-600 text-sm mt-1">{store.location}</p>
+                                    <p className="text-gray-600 text-sm mt-1">{store.location_description}</p>
                                 </div>
                             ))}
                         </div>

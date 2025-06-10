@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
 @import 'tailwindcss';
 @import "tw-animate-css";
-
+@import "react-datepicker/dist/react-datepicker.css";
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-primary: #5A6AE8;
@@ -74,12 +74,21 @@ body{
       border-color: var(--color-sub);
       @apply p-3 w-full border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 ;
     }
-  .reserve{
+  }
+  .reserve-form{
+     input,select{
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid #d1d5db; 
+      border-style: solid;
+      outline: none;
+    }
+      .reserve{
     border: 0;
     border-bottom:1px solid #0b173c ;
    }
-  }
-
+    }
 }
 /* @utility container {
   margin-inline: auto;

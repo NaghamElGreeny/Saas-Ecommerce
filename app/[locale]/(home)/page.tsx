@@ -291,10 +291,7 @@ export default async function Home() {
         section='subscribe'
       />
       <FollowusSection />
-      <ReservationForm
-      // reservationHref="/reservation" // Pass the route instead
-      // className="my-12"
-      />
+      <ReservationForm show={true} className={'w-[80%] relative min-h-screen flex flex-col  justify-center my-5'}  />
     </div>
   );
 }
