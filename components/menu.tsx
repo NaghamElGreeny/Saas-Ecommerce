@@ -1,8 +1,9 @@
 "use client";
 import { useState } from 'react';
-import { items } from "@/app/[locale]/(home)/page";
+// import { items } from "@/app/[locale]/(home)/page";
 import Card from "./shared/Card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 
 const ITEMS_PER_PAGE = 6;
 
@@ -87,7 +88,7 @@ const Menu: React.FC = () => {
   return (
     <div className="min-h-screen p-4 col-span-3">
       {/* Categories */}
-      <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide whitespace-nowrap">
+      {/* <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide whitespace-nowrap">
         {categories.map((category) => (
           <button
             key={category}
@@ -101,7 +102,7 @@ const Menu: React.FC = () => {
             {category}
           </button>
         ))}
-      </div>
+      </div> */}
 
       {/* Cards Grid */}
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-center gap-3">

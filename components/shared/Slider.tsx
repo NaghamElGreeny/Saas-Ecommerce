@@ -7,8 +7,8 @@ import { ArrowRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import Card from './Card';
-import { CardItem } from '@/utils/types';
 import Link from 'next/link';
+import { CardItem } from '@/services/types';
 // Import Swiper styles
 
 
@@ -42,37 +42,20 @@ export default function Slider({ title, items }: SliderProps) {
 
             {/* Items Slider */}
             <div className="relative h-full">
-                <div className="container flex h-full  scrollbar-hide  ">
-                    <Swiper
-                        slidesPerView={3.5}
-                        spaceBetween={10}
-                        loop
-                        pagination={{
-                            clickable: true,
-                        }}
-                        breakpoints={
-                            {    // when window width is >= 320px
-                                320: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 10
-                                },
-
-                                // when window width is >= 640px
-                                640: {
-                                    slidesPerView: 2.5,
-                                    spaceBetween: 20
-                                },
-                                992: {
-                                    slidesPerView: 3.5,
-                                    spaceBetween: 30
-                                }, 1024: {
-                                    slidesPerView: 3.5,
-                                    spaceBetween: 30
-                                }
-                            }
-                        }
-                        className="mySwiper"
-                    >
+                <div className="container w-full flex h-full  overflow-x-visible scrollbar-hide  ">
+       <Swiper
+//   dir="rtl"
+  slidesPerView={3.5}
+  spaceBetween={10}
+  loop
+  breakpoints={{
+    320: { slidesPerView: 1, spaceBetween: 10 },
+    640: { slidesPerView: 2.5, spaceBetween: 20 },
+    992: { slidesPerView: 3.5, spaceBetween: 30 },
+    1024: { slidesPerView: 3.5, spaceBetween: 30 },
+  }}
+  className="w-full"
+>
                         {items.map((item) => (
                             <SwiperSlide key={item.id}>
                                 <Card

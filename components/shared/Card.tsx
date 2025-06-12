@@ -11,6 +11,7 @@ type CardProps = {
     width?:string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Card({ item, offer,width}: CardProps) {
     const likedItems = useLikedStore(state => state.likedItems);
     const toggleLike = useLikedStore(state => state.toggleLike);
@@ -22,7 +23,8 @@ function Card({ item, offer,width}: CardProps) {
     return (
         <div
             onClick={handlePress}
-            className={`flex-shrink-0 h-[509px] w-[${width}] pt-2.5 pb-6 px-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer`}
+            style={{ width }}
+            className={`flex-shrink-0 h-[509px] pt-2.5 pb-6 px-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow cursor-pointer`}
         >
             <div className="img relative mb-4">
                 <img

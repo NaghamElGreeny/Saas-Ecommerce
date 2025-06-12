@@ -1,5 +1,4 @@
 "use client";
-import type { TimePickerProps } from 'antd';
 import { Space, TimePicker } from 'antd';
 import dayjs from "dayjs";
 import {
@@ -10,7 +9,7 @@ import {
   ReservationPayload,
   Store,
 } from "@/services/ClientApiHandler";
-import { useFormik, validateYupSchema } from "formik";
+import { useFormik } from "formik";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -24,7 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { time } from 'console';
+// import { time } from 'console';
 
 export default function ReservationForm({
   show,
@@ -67,7 +66,7 @@ export default function ReservationForm({
       name: "",
       phone: "",
       phone_code: "",
-      store_id: "", //مؤقتا عشان الداتا فضيت 
+      store_id: "",
       date: "",
       timeFrom: "",
       timeTo: "",
@@ -133,12 +132,12 @@ export default function ReservationForm({
   if (!time) return "";
   
   // Parse the time string with dayjs to ensure consistent formatting
-  const timeFormat = "h:mm A";
+  const timeFormat = "hh:mm A";
   const parsedTime = dayjs(time, timeFormat);
   
   if (parsedTime.isValid()) {
     // Return in "h:i A" format (e.g., "2:30 PM")
-    return parsedTime.format("h:mm A").replace("mm", "i");
+    return parsedTime.format("hh:mm A").replace("mm", "i");
   }
   
   // Fallback to original time if parsing fails
@@ -147,7 +146,7 @@ export default function ReservationForm({
         const payload: ReservationPayload = {
           name: values.name,
           date: values.date,
-          store_id: parseInt(values.store_id, 10)||8 ,
+          store_id: parseInt(values.store_id, 10) ,
           phone_code: values.phone_code,
           phone: values.phone,
          from_time: formatTime(values.timeFrom),
@@ -155,8 +154,8 @@ export default function ReservationForm({
           guests_number: Number(values.guest_number), 
         };
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const data = await makeReservation(payload);
-        console.log("Reservation Data:", data,"format",format(data.from_time) );
         toast.success("Reservation successful!");
         router.push("/");
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

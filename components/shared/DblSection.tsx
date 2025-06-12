@@ -48,20 +48,6 @@ export function DblSection({
                 <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
 
                     {/* Image Section */}
-                    {/* <div className={`
-                        relative h-80 md:h-96 lg:h-[700px] lg:w-[560px]
-                        rounded-full overflow-hidden shadow-lg mx-auto
-                        ${imageFirst ? 'order-1 lg:order-1' : 'order-1 lg:order-2'}
-                    `}>
-                        <Image
-                            src={imageSrc}
-                            alt={imageAlt}
-                            fill
-                            className="object-cover"
-                            priority
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                        />
-                    </div> */}
                     <Image
                         src={imageSrc}
                         alt={imageAlt}

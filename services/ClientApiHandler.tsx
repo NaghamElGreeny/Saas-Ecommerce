@@ -1,65 +1,14 @@
 "use client";
 import axiosClient from "./axiosClient";
-
-export interface LoginPayload {
-  phone_code: string;
-  phone: string;
-  password: string;
-  device_type: "web" | "ios" | "android";
-  device_token?: string;
-}
-export interface LogoutPayload {
-  device_type: "web" | "ios" | "android";
-  device_token?: string;
-}
-
-export interface RegisterPayload {
-  phone_code: string;
-  phone: string;
-  password: string;
-  full_name: string;
-  password_confirmation: string;
-  email: string;
-  device_type: "web" | "ios" | "android";
-  device_token?: string;
-}
-export interface BrandCountry {
-  id: number;
-  name: string;
-  phone_code: string;
-  phone_limit: number;
-  flag: string;
-}
-export interface Store {
-  id: number;
-  image: string;
-  name: string;
-  phone: string;
-  phone_code: string;
-  lat: number;
-  lng: number;
-  location_description: string;
-}
-
-
-export interface ResetPasswordPayload {
-  phone: string;
-  phone_code: string;
-  reset_code: string;
-  password: string;
-  password_confirmation: string;
-  device_type?: "web" | "ios" | "android";
-}
-export interface ReservationPayload {
-  name: string;
-  phone: string;
-  phone_code: string;
-  store_id: number;
-  date: string;
-  from_time: string;
-  to_time: string;
-  guests_number: number;
-}
+import {
+  BrandCountry,
+  LoginPayload,
+  LogoutPayload,
+  RegisterPayload,
+  ReservationPayload,
+  ResetPasswordPayload,
+  Store,
+} from "./types";
 export const register = async (payload: RegisterPayload) => {
   const res = await axiosClient.post("/auth/register", payload);
   return res.data;

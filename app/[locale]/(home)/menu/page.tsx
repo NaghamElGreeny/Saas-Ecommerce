@@ -2,6 +2,7 @@ import Filter from '@/components/Filter';
 // import Menu from '@/components/Menu';
 import Menu from '@/components/menu';
 import HeroSection from '@/components/shared/HeroSection';
+import { getMenu } from '@/services/ApiHandler';
 import React from 'react'
 // type Category = {
 //   id: string;
@@ -11,8 +12,10 @@ import React from 'react'
 //   id: string;
 //   name: string;
 // };
-function MenuPage
+async function MenuPage
   () {
+  const MenuItems = await getMenu();
+console.log("Menu Items:", MenuItems);
     const categories = [
       {
         id: '1',
