@@ -11,7 +11,7 @@ interface Item {
   id: string;
   name: string;
   slug: string;
-  category: string;
+  category?: string;
   lat?: number;
   lng?: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +22,7 @@ interface MenuProps {
   items: Item[];
 }
 
-const Menu: React.FC<MenuProps> = ( items ) => {
+const Menu: React.FC<MenuProps> = ( {items} ) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const categories = [
