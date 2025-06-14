@@ -1,42 +1,24 @@
 // components/AppButtons.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+// import { useEffect, useState } from 'react';
 
-interface ButtonData {
-    label: string;
-    image: string;
-    link: string;
-}
 
-export default function DownloadButtons() {
-    // const [buttons, setButtons] = useState<ButtonData[]>([]);
+export default function DownloadButtons({ googlePlay, appStore }: {
+    googlePlay: string;
+    appStore: string;
+}) {
 
-    // useEffect(() => {
-    //     async function fetchButtons() {
-    //         try {
-    //             const res = await fetch('/api/buttons');
-    //             const data = await res.json();
-    //             setButtons(data.buttons);
-    //         } catch (err) {
-    //             console.error('Error fetching buttons:', err);
-    //         }
-    //     }
-
-    //     fetchButtons();
-    // }, []);
     const buttons =
         [
             {
                 "label": "App Store",
                 "image": "/assets/icons/google-play.png",
-                "link": "https://apps.apple.com/app"
-            },
-            {
+                "link": `${appStore}`,
+            },{
                 "label": "Google Play",
                 "image": "/assets/icons/app-store.png",
-                "link": "https://play.google.com/store"
+                "link": `${googlePlay}`
             }
         ]
         ;

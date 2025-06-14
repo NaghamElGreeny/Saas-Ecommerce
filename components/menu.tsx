@@ -1,33 +1,48 @@
 "use client";
+
 import { useState } from 'react';
-// import { items } from "@/app/[locale]/(home)/page";
+import Link from 'next/link';
 import Card from "./shared/Card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-
 const ITEMS_PER_PAGE = 6;
 
-const categories = [
-  'All',
-  'Breakfast',
-  'Lunch',
-  'Dinner',
-  'Mexican',
-  'Italian',
-  'Desserts',
-  'Drinks',
-];
+interface Item {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  lat?: number;
+  lng?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any; // لأي بيانات إضافية مثل الصورة، السعر، إلخ.
+}
 
-const Menu: React.FC = () => {
+interface MenuProps {
+  items: Item[];
+}
+
+const Menu: React.FC<MenuProps> = ( items ) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const categories = [
+    'All',
+    ...Array.from(
+      new Set(
+        items.map(item => item.food_icon?.[0]?.name).filter(Boolean)
+    )
+  ),
+];
+console.log('itemsss',items)
+  // const categories = ['All', ...Array.from(new Set(items.map(item => item.category)))];
+
+  
 
   const filteredItems = selectedCategory === 'All'
     ? items
     : items.filter(item => item.category === selectedCategory);
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentItems = filteredItems.slice(startIndex, endIndex);
@@ -40,7 +55,7 @@ const Menu: React.FC = () => {
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
-    setCurrentPage(1); // إعادة تعيين الصفحة عند تغيير الفئة
+    setCurrentPage(1);
   };
 
   const renderPageNumbers = () => {
@@ -88,7 +103,7 @@ const Menu: React.FC = () => {
   return (
     <div className="min-h-screen p-4 col-span-3">
       {/* Categories */}
-      {/* <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide whitespace-nowrap">
+      <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide whitespace-nowrap">
         {categories.map((category) => (
           <button
             key={category}
@@ -102,16 +117,21 @@ const Menu: React.FC = () => {
             {category}
           </button>
         ))}
-      </div> */}
+      </div>
 
       {/* Cards Grid */}
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-center gap-3">
         {currentItems.map((item, index) => (
-          <Card key={index} item={item} width="full" />
+          <Link
+            key={item.id}
+            href={`/product/${item.slug}?lat=${item.lat || 0}&lng=${item.lng || 0}`}
+          >
+            <Card item={item} width="full" />
+          </Link>
         ))}
       </div>
 
-      {/* Smart Pagination */}
+      {/* Pagination */}
       <div className="flex justify-center mt-6 space-x-2 flex-wrap items-center">
         <button
           onClick={() => handlePageClick(currentPage - 1)}

@@ -1,8 +1,7 @@
 import Filter from '@/components/Filter';
-// import Menu from '@/components/Menu';
 import Menu from '@/components/menu';
 import HeroSection from '@/components/shared/HeroSection';
-import { getMenu } from '@/services/ApiHandler';
+import { getMenuItem } from '@/services/ApiHandler';
 import React from 'react'
 // type Category = {
 //   id: string;
@@ -14,8 +13,12 @@ import React from 'react'
 // };
 async function MenuPage
   () {
-  const MenuItems = await getMenu();
-console.log("Menu Items:", MenuItems);
+  const MenuItem = await getMenuItem('شيش-كباب');
+  // const MenuItems = await getMenu();
+  const items = [MenuItem];
+  console.log(Array.isArray(items))
+
+console.log("Menu Items:", items);
     const categories = [
       {
         id: '1',
@@ -59,10 +62,8 @@ console.log("Menu Items:", MenuItems);
     <main className="min-h-screen  bg-gray-50 ">
       <HeroSection title='Menu' />
       <div className="grid grid-cols-4 container py-5">
-        <Filter
-          categories={categories}
-        />
-        <Menu />
+        <Filter categories={categories} />
+        <Menu items={items} />
       </div>
     </main>
   );

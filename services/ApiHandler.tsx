@@ -18,9 +18,19 @@ const fetchData = async (endpoint: string, errorMsg: string, config = {}) => {
 };
 
 
-export const getMenu = () => fetchData("/product", "Failed to fetch Products");
-export const getHome = () => fetchData("/home", "Failed to fetch Products");
+// export const getMenu = () => fetchData("/product", "Failed to fetch Products");
+// export const getHome = () => fetchData("/home", "Failed to fetch Products");
 
+export const getHome = async () => {
+  try {
+    const res = await axiosInstance.get<{ data: any }>('/home');
+    console.log(" home data fetched", res.data.data);
+    return res.data.data;
+  } catch (error) {
+    console.error("Fetch error at: cms-pages", error);
+    throw error;
+  }
+};
 export const getPagesBySlug = async (slug: string): Promise<CmsPage> => {
   try {
     const res = await axiosInstance.get<{ data: CmsPage }>(`/cms-pages/${slug}`);
@@ -37,6 +47,28 @@ export const getAllPages = async () => {
     console.log("CMS pages fetched successfully", res.data);  
   } catch (error) {
     console.error("Fetch error at: cms-pages", error);
+    throw error;
+  }
+};
+export const getMenuItem = async (slug: string) => {
+  try {
+    // const res = await axiosInstance.get(`/product/${encodeURIComponent(slug)}`);
+    // const res = await axiosInstance.get<{ data: any }>(`/en/product/${encodeURIComponent(slug)}`);
+    const res = await axiosInstance.get<{ data: any }>(`/product/${encodeURIComponent(slug)}`);
+    // console.log("Fetching from:", res.data);
+    return res.data.data;
+  } catch (error) {
+    console.error("Fetch error at: product", error);
+    throw error;
+  }
+};
+
+export const getMenu = async () => {
+  try {
+    const res = await axiosInstance.get(`product/شيش-كباب`); 
+    return res.data; 
+  } catch (error) {
+    console.error("Fetch error at: productsss", error);
     throw error;
   }
 };

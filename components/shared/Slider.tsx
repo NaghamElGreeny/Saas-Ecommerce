@@ -56,15 +56,15 @@ export default function Slider({ title, items }: SliderProps) {
   }}
   className="w-full"
 >
-                        {items.map((item) => (
+                        {items&&items.map((item) => (
                             <SwiperSlide key={item.id}>
-                                <Card
+                                {/* <Card
                                     item={item}
                                     width='408px'
                                     // onPress={handleItemPress}
                                     // toggleLike={toggleLike}
                                     // isLiked={isLiked}
-                                />
+                                /> */}
                             </SwiperSlide>
                         ))}
                     </Swiper>

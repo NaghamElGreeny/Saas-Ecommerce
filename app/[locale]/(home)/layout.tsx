@@ -12,8 +12,8 @@ export default async function LocaleLayout({
 }) {
     let cmsPages = null;
     try {
-        cmsPages = await getAllPages(); // بدون slug
-        console.log("CMS pages fetched successfully", cmsPages);
+        cmsPages = await getAllPages(); 
+        // console.log("CMS pages fetched successfully", cmsPages);
     } catch (err) {
         console.error("Failed to fetch CMS pages", err);
     }

@@ -13,7 +13,7 @@ type Props = {
 export default async function DynamicCmsPage({ params }: Props) {
   const slug = (await params).slug;
   const pageData: CmsPage = await getPagesBySlug(slug);
-  console.log("CMS page data:", pageData);
+  // console.log("CMS page data:", pageData);
   return (
       <>
           <HeroSection title={pageData.slug} />

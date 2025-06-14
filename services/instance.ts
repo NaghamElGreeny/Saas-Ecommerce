@@ -4,7 +4,9 @@ import { redirect } from 'next/navigation';
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
+          'os': 'web',
+
   },
   // هنا ممكن تضيفي headers زي Authorization لو عندك cookies أو token من السيرفر
   withCredentials: true,
