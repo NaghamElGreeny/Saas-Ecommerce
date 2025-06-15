@@ -5,7 +5,7 @@ import Image from "next/image";
 import EmailSubscription from "../ui/SubscribeBtn";
 import DownloadButtons from "../ui/Download";
 import Btn from "../ui/Btn";
-import { WebContent } from "@/services/types";
+import { WebContent } from "@/utils/types";
 
 export function DblSection({
   topMsg,

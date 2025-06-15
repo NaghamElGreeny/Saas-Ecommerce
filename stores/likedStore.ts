@@ -1,9 +1,9 @@
 import {create} from 'zustand';
 
 type LikedStore = {
-  likedItems: string[];
-  toggleLike: (itemId: string) => void;
-  isLiked: (itemId: string) => boolean;
+  likedItems: number[];
+  toggleLike: (itemId: number) => void;
+  isLiked: (itemId: number) => boolean;
 };
 
 export const useLikedStore = create<LikedStore>((set, get) => ({

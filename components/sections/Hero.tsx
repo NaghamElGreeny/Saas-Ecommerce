@@ -1,39 +1,39 @@
 "use client";
-import { Slider } from "@/services/types";
+import { Slider } from "@/utils/types";
 import "@/styles/hero.css";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState, useEffect, useRef } from "react";
 
-export default function Hero({sliders}: { sliders: Slider[] }) {
+export default function Hero({ sliders }: { sliders: Slider[] }) {
   const socials = ["facebook", "twitter", "messenger", "instagram"];
   const [current, setCurrent] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-//   const images = [
-//     "url('/assets/images/img1.jpg')",
-//     "url('/assets/images/img2.jpg')",
-//     "url('/assets/images/img3.jpg')",
-//     "url('/assets/images/img4.jpg')",
-//   ];
-const images = sliders.map((s) => `url(${s.image})`);
+  //   const images = [
+  //     "url('/assets/images/img1.jpg')",
+  //     "url('/assets/images/img2.jpg')",
+  //     "url('/assets/images/img3.jpg')",
+  //     "url('/assets/images/img4.jpg')",
+  //   ];
+  const images = sliders.map((s) => `url(${s.image})`);
 
-//   useEffect(() => {
-//     // startAutoSlide();
-//     return () => stopAutoSlide();
-//   }, []);
+  //   useEffect(() => {
+  //     // startAutoSlide();
+  //     return () => stopAutoSlide();
+  //   }, []);
 
-//   const startAutoSlide = () => {
-//     stopAutoSlide();
-//     intervalRef.current = setInterval(() => {
-//       setCurrent((prev) => (prev + 1) % images.length);
-//     }, 3000);
-//   };
+  //   const startAutoSlide = () => {
+  //     stopAutoSlide();
+  //     intervalRef.current = setInterval(() => {
+  //       setCurrent((prev) => (prev + 1) % images.length);
+  //     }, 3000);
+  //   };
 
-//   const stopAutoSlide = () => {
-//     if (intervalRef.current) clearInterval(intervalRef.current);
-//   };
+  //   const stopAutoSlide = () => {
+  //     if (intervalRef.current) clearInterval(intervalRef.current);
+  //   };
 
   const handleNext = () => {
     setCurrent((prev) => (prev + 1) % images.length);
@@ -54,24 +54,25 @@ const images = sliders.map((s) => `url(${s.image})`);
       style={style}
     >
       <div className="h-full w-full bg-black/50 px-16 sm:px-6 lg:px-32">
-        <div className="max-w-2xl mx-auto text-center h-4/5 flex flex-col justify-center items-center">
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-[Allura] text-white mb-4">
-                        Exotic and Delicious
-                    </h1>
+        <div className="mx-auto flex h-4/5 max-w-2xl flex-col items-center justify-center text-center">
+          <h1 className="mb-4 font-[Allura] text-4xl text-white md:text-6xl lg:text-7xl">
+            Exotic and Delicious
+          </h1>
 
-                    <p className="text-white mb-6">
-                        Food is the foundation of true happiness, lorem ipsum<br />
-                        dolor sit amet, consectetur adipiscing elit aenean.
-                    </p>
+          <p className="mb-6 text-white">
+            Food is the foundation of true happiness, lorem ipsum
+            <br />
+            dolor sit amet, consectetur adipiscing elit aenean.
+          </p>
 
-                    <Link
-                        href="/discover"
-                        className="text-white font-medium md:text-xl flex rtl:flex-row-reverse"
-                    >
-                        <p className='underline'> Discover More </p>
-                        <ArrowUpRight />
-                    </Link>
-                </div>
+          <Link
+            href="/discover"
+            className="flex font-medium text-white md:text-xl rtl:flex-row-reverse"
+          >
+            <p className="underline"> Discover More </p>
+            <ArrowUpRight />
+          </Link>
+        </div>
         {/* {sliders &&
                   sliders.map((slider) => {
               return(

@@ -6,7 +6,7 @@ import ReservationForm from "@/components/sections/Reservation";
 import { DblSection } from "@/components/shared/DblSection";
 import Slider from "@/components/shared/Slider";
 import { getHome } from "@/services/ApiHandler";
-import { CardItem, HomePageData } from "@/services/types";
+import { CardItem, HomePageData } from "@/utils/types";
 
 // export const items = [
 //   {
@@ -70,7 +70,7 @@ export default async function Home() {
         sectionType="discover"
       />
       <Slider title="Popular Items" items={products} />
-            <ReservationForm
+      <ReservationForm
         show={true}
         className={
           "relative my-5 flex min-h-screen w-[80%] flex-col justify-center"
@@ -81,12 +81,11 @@ export default async function Home() {
         sectionType="download"
         reverse={true}
       />
-   <FollowusSection />
+      <FollowusSection />
       {/* <DblSection
    sectionData={followSection}
         sectionType='subscribe'
       /> */}
-
     </div>
   );
 }

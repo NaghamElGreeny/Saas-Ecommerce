@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import axiosClient from "./axiosClient";
 import {
   BrandCountry,
+  Category,
   LoginPayload,
   LogoutPayload,
   RegisterPayload,
   ReservationPayload,
   ResetPasswordPayload,
   Store,
-} from "./types";
+} from "../utils/types";
 export const register = async (payload: RegisterPayload) => {
   const res = await axiosClient.post("/auth/register", payload);
   return res.data;
@@ -25,8 +27,8 @@ export const logout = async (payload: LogoutPayload) => {
 export const makeReservation = async (payload: ReservationPayload) => {
   const res = await axiosClient.post("/reservations", payload, {
     params: {
-      store_id: payload.store_id
-    }
+      store_id: payload.store_id,
+    },
   });
   return res.data;
 };
@@ -46,7 +48,6 @@ export const getStores = async (): Promise<Store[]> => {
   }>("/stores");
   return res.data.data;
 };
-
 
 export const ResetPassword = async (payload: ResetPasswordPayload) => {
   const res = await axiosClient.post("auth/reset_password", payload);
@@ -88,5 +89,27 @@ export const verifyCode = async ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(error?.response?.data?.message || "Verification failed");
+  }
+};
+export const getCategorie = async (): Promise<Category[]> => {
+  try {
+    const res = await axiosClient.get<{ data: { content: any[] } }>(
+      "/get-filter",
+    );
+    const raw = res.data?.data?.content;
+
+    if (!Array.isArray(raw)) return [];
+
+    return raw.map((item) => ({
+      id: item.id,
+      name: item.name,
+      subCategories: item.subcategories?.map((sub: any) => ({
+        id: sub.id,
+        name: sub.name,
+      })),
+    }));
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
   }
 };

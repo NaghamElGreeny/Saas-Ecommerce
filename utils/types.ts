@@ -85,13 +85,7 @@ export interface CmsPage extends CmsPages {
     created_at: string;
   }>;
 }
-// export interface Slider {
-//   id: number;
-//   title: string;
-//   desc: string;
-//   image: string;
-//   link: string | null;
-// }
+
 export interface CardItem {
   id: number;
   name: string;
@@ -100,51 +94,6 @@ export interface CardItem {
   image: string;
   rating: number;
 }
-
-// export interface HomePageData {
-//   content: Product[];
-//   type: string;
-//   text: string;
-// search_by?:string;
-// }
-// export interface Product {
-//   id: number;
-//   name: string;
-//   slug: string;
-//   desc: string;
-//   type: string;
-//   image: string;
-//   food_icon: FoodIcon[];
-//   rating: number;
-//   review_count: number;
-//   rate: number;
-//   is_favourite: boolean;
-//   favourite_id: number | null;
-//   price: ProductPrice;
-// }
-
-// export interface FoodIcon {
-//   id: number;
-//   name: string;
-//   image: string;
-// }
-
-// export interface ProductPrice {
-//   price: number;
-//   currency: string;
-//   percentage: number;
-//   discount_value: number;
-//   price_after: number;
-//   offer: ProductOffer;
-// }
-
-// export interface ProductOffer {
-//   id: number;
-//   from_day: string | null;
-//   to_day: string | null;
-//   from_time: string | null;
-//   to_time: string | null;
-// }
 export interface Slider {
   id: number;
   title: string;
@@ -162,23 +111,34 @@ export interface WebContent {
   app_store?: string;
 }
 
-// export interface WebContentLink {
-//   id: number;
-//   title: string;
-//   desc: string;
-//   google_play: string;
-//   app_store: string;
-//   image: string;
-// }
-
 export interface HomePageData {
   address: string | null;
   sliders: Slider[];
   web_content: WebContent;
   popular_products: any[]; 
-  // web_content_link: WebContentLink;
   web_content_link: WebContent;
   products: any[]; 
   subscription_content: any | null; 
   offers: any[];
+}
+
+
+export interface Category  {
+  id: number;
+  name: string;
+  subCategories?: SubCategory[];
+};
+
+export interface SubCategory  {
+  id: number;
+  name: string;
+};
+
+export interface ApiCategories{
+  subCategories: any;
+  id: number;
+  name: string;
+  desc: string;
+  image: string;
+  icon: string;
 }

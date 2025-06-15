@@ -35,7 +35,7 @@ import { getStores, logout } from "@/services/ClientApiHandler";
 
 import ReservationForm from "../sections/Reservation";
 import LocationSelector from "../ui/LocationSelector";
-import { CmsPages, Store } from "@/services/types";
+import { CmsPages, Store } from "@/utils/types";
 
 const NAV_LINKS = [
   // { href: "/", labelKey: "home" },
@@ -43,7 +43,6 @@ const NAV_LINKS = [
   { href: "/menu", labelKey: "menu" },
   // { href: "/contact", labelKey: "contact" },
 ];
-
 
 const cmsTranslationMap: Record<string, { en: string; ar: string }> = {
   "تواصل معنا": {
@@ -63,7 +62,6 @@ const cmsTranslationMap: Record<string, { en: string; ar: string }> = {
     ar: "سياسة الخصوصية",
   },
 };
-
 
 export default function Navbar({ cms }: { cms: CmsPages[] }) {
   const t = useTranslations("NAV");
@@ -140,7 +138,7 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
 
   const renderReservationDialog = () => (
     <Dialog>
-      <DialogTrigger className="hover:opacity-80 text-start">
+      <DialogTrigger className="text-start hover:opacity-80">
         {t("reservation")}
       </DialogTrigger>
       <DialogContent className="mx-auto flex w-[80%] items-center justify-center rounded-[20px] p-0">
@@ -185,24 +183,23 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
       </SheetContent>
     </Sheet>
   );
-const renderCmsPages = () => {
-  return cms.map((page) => {
-    const translatedTitle =
-      cmsTranslationMap[page.title]?.[locale] || page.title;
+  const renderCmsPages = () => {
+    return cms.map((page) => {
+      const translatedTitle =
+        cmsTranslationMap[page.title]?.[locale] || page.title;
 
-    return (
-      <Link
-        key={page.id}
-        href={`/pages/${page.slug}`}
-        className="hover:opacity-80"
-        onClick={() => setIsOpen(false)}
-      >
-        {translatedTitle}
-      </Link>
-    );
-  });
-};
-
+      return (
+        <Link
+          key={page.id}
+          href={`/pages/${page.slug}`}
+          className="hover:opacity-80"
+          onClick={() => setIsOpen(false)}
+        >
+          {translatedTitle}
+        </Link>
+      );
+    });
+  };
 
   return (
     <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-between px-4 md:px-10 lg:px-14">

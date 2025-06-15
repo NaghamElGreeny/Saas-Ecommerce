@@ -1,7 +1,7 @@
 import { DblSection } from "@/components/shared/DblSection";
 import HeroSection from "@/components/shared/HeroSection";
 import { getPagesBySlug } from "@/services/ApiHandler";
-import { CmsPage } from "@/services/types";
+import { CmsPage } from "@/utils/types";
 // import Image from "next/image";
 
 type Props = {
@@ -15,18 +15,18 @@ export default async function DynamicCmsPage({ params }: Props) {
   const pageData: CmsPage = await getPagesBySlug(slug);
   // console.log("CMS page data:", pageData);
   return (
-      <>
-          <HeroSection title={pageData.slug} />
-          <div className="container mx-auto py-10">
-          <h1 className="text-3xl font-bold mb-4">{pageData.title}</h1>
-          <div dangerouslySetInnerHTML={{ __html: pageData.desc }} />
-      <DblSection
-        title={pageData.title}
-        description={pageData.desc}
-        imageSrc={pageData.image}
-      />
-    </div>
-      </>
+    <>
+      <HeroSection title={pageData.slug} />
+      <div className="container mx-auto py-10">
+        <h1 className="mb-4 text-3xl font-bold">{pageData.title}</h1>
+        <div dangerouslySetInnerHTML={{ __html: pageData.desc }} />
+        <DblSection
+          title={pageData.title}
+          description={pageData.desc}
+          imageSrc={pageData.image}
+        />
+      </div>
+    </>
   );
 }
 // <div className="container mx-auto py-10">

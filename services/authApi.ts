@@ -6,7 +6,7 @@ import {
   LogoutPayload,
   RegisterPayload,
   ResetPasswordPayload,
-} from "./types";
+} from "../utils/types";
 
 export const login = (payload: LoginPayload) =>
   handleResponse(axiosInstance.post("/auth/login", payload));
@@ -46,4 +46,3 @@ export const verifyCode = async ({
 
   return handleResponse(axiosInstance.post(url, dataToSend));
 };
-
