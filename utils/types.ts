@@ -142,3 +142,27 @@ export interface ApiCategories{
   image: string;
   icon: string;
 }
+export interface Review {
+  id: number;
+  rate: number;
+  review: string;
+  note: string;
+  created_at: string;
+  user: {
+    id: number;
+    full_name: string;
+    avatar: string;
+  };
+}
+
+export interface ReviewResponse {
+  status: string;
+  message: string;
+  data: Review[];
+  rate: number;
+  review_count: number;
+  star_rate: {
+    key: string;
+    value: number;
+  }[];
+}

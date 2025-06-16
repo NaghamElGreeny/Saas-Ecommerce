@@ -9,6 +9,7 @@ import {
   RegisterPayload,
   ReservationPayload,
   ResetPasswordPayload,
+  ReviewResponse,
   Store,
 } from "../utils/types";
 export const register = async (payload: RegisterPayload) => {
@@ -112,4 +113,20 @@ export const getCategorie = async (): Promise<Category[]> => {
     console.error("Error fetching categories:", error);
     return [];
   }
+};
+
+// export const getProductReviews = async (productId: number) => {
+//   try {
+//     const res = await axiosClient.get(`/products/${productId}/reviews`);
+//     console.log(res.data)
+//     return res.data;
+//   } catch (error) {
+//     console.error("Error fetching product reviews:", error);
+//     throw error;
+//   }
+// };
+
+export const getProductReviews = async (productId: number): Promise<ReviewResponse> => {
+  const res = await axiosClient.get<ReviewResponse>(`/products/${productId}/reviews`);
+  return res.data;
 };

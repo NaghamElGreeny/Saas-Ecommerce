@@ -1,11 +1,11 @@
-// "use client";
-// import React, { useState } from "react";
-import { Star, Plus, Minus } from "lucide-react";
-// import { Button } from '@/components/ui/button';
-// import { Badge } from '@/components/ui/badge';
+/* eslint-disable @next/next/no-img-element */
+
+import { Star } from "lucide-react";
+
 import { Textarea } from "@/components/ui/textarea";
-import ToppingItem from "@/components/ui/ToppingItem";
 import { getMenuItem } from "@/services/ApiHandler";
+import Modifier from "@/components/Modifiers";
+import ProductReview from "@/components/ProductReview";
 // interface Review {
 //   id: number;
 //   userName: string;
@@ -15,57 +15,68 @@ import { getMenuItem } from "@/services/ApiHandler";
 //   avatar: string;
 // }
 
-// interface ProductDetailsProps {
-//   product?: {
-//     id: number;
-//     name: string;
-//     image: string;
-//     rating: number;
-//     reviewCount: number;
-//     description: string;
-//     sizes: { name: string; price: number }[];
-//     toppings: { name: string; price: number }[];
-//     reviews: Review[];
-//   };
-// }
 type Props = {
   params: Promise<{
     slug: string;
   }>;
 };
 
-const  ProductDetails: React.FC = async ({ params }: Props) => {
-   const slug = (await params).slug;
-    // const [selectedSize, setSelectedSize] = useState(0);
-//   const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
-//   const [quantity, setQuantity] = useState(1);
+const ProductDetails: React.FC = async ({ params }: Props) => {
+  const slug = (await params).slug;
+  //   const [quantity, setQuantity] = useState(1);
 
-    const   sizes= [
+  const product = await getMenuItem(decodeURIComponent(slug));
+  console.log("producttt", product);
+  // Default product data if none provided
+  const defaultProduct = {
+    id: 1,
+    name: "Pepperoni pizza",
+    image: "/lovable-uploads/8faa2050-86be-4163-a0a1-3453388182e6.png",
+    rating: 4.5,
+    reviewCount: 1205,
+    description:
+      "Fresh and crispy pizza loaded with our special cheese recipe with cheese and filled, Italian and olive pepperoni and chicken stuffed with excellent taste and original taste.",
+    sizes: [
       { name: "Small", price: 200 },
       { name: "Double", price: 350 },
       { name: "Triple", price: 500 },
-    ]
-  // Default product data if none provided
-
-  console.log(decodeURIComponent(slug),'sss')
-    const product =await getMenuItem(decodeURIComponent(slug));
-    console.log('producttt', product)
+    ],
+    toppings: [
+      { name: "Onions", price: 25 },
+      { name: "Pepper", price: 30 },
+      { name: "Pepper Green", price: 25 },
+      { name: "Tomato", price: 20 },
+    ],
+    reviews: [
+      {
+        id: 1,
+        userName: "Hector Self",
+        rating: 5,
+        comment: "This pizza has amazing big quality. We loved it!",
+        daysAgo: 4,
+        avatar: "👨‍💼",
+      },
+      {
+        id: 2,
+        userName: "Nada Ayman",
+        rating: 5,
+        comment: "This pizza has amazing big quality. We loved it!",
+        daysAgo: 5,
+        avatar: "👩‍💼",
+      },
+    ],
+  };
   const currentProduct = product || defaultProduct;
 
-  const toggleTopping = (index: number) => {
-    setSelectedToppings((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
-    );
-  };
-
-  const calculateTotalPrice = () => {
-    const basePrice = currentProduct.sizes[selectedSize].price;
-    const toppingsPrice = selectedToppings.reduce(
-      (sum, index) => sum + currentProduct.toppings[index].price,
-      0,
-    );
-    return (basePrice + toppingsPrice) * quantity;
-  };
+  //total price
+  // const calculateTotalPrice = () => {
+  //   const basePrice = currentProduct.sizes[selectedSize].price;
+  //   const toppingsPrice = selectedToppings.reduce(
+  //     (sum, index) => sum + currentProduct.toppings[index].price,
+  //     0,
+  //   );
+  //   return (basePrice + toppingsPrice) * quantity;
+  // };
 
   const renderStars = (rating: number, className?: string) => {
     return (
@@ -85,10 +96,7 @@ const  ProductDetails: React.FC = async ({ params }: Props) => {
   };
   const spicy = true;
 
-  function setQty(arg0: number) {
-    throw new Error("Function not implemented.");
-  }
-
+  console.log(product.sub_modifiers);
   return (
     <section className="flex w-full justify-center bg-[#FBFAFC]">
       <div className="mt-16 flex w-4/5 flex-col gap-10 sm:w-11/12">
@@ -142,82 +150,12 @@ const  ProductDetails: React.FC = async ({ params }: Props) => {
           <h3 className="mb-6 text-2xl font-bold">Note</h3>
           <Textarea placeholder="Write notes here." className="!h-20" />
         </div>
-
-        {/* Size Selection */}
-        <div className="size">
-          <h3 className="mb-3 text-2xl font-bold text-gray-900">
-            Size&nbsp; &nbsp;
-            <span className="text-[16px] font-normal text-[#FCC230]">
-              Select 2 sizes*
-            </span>
-          </h3>
-          <div className="flex gap-3">
-            {/* {sizes.map((size, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedSize(index)}
-                className={`w-42 rounded-lg border p-3 text-center transition-colors ${
-                  selectedSize === index
-                    ? "border-blue-500 bg-blue-50 text-blue-700"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                <div className="font-medium">{size.name}</div>
-                <div className="text-sm text-gray-500">{size.price} EGP</div>
-              </button>
-            ))} */}
-          </div>
-        </div>
-
-        {/* Toppings */}
-        {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="section1">
-            <h3 className="mb-3 text-2xl font-bold text-gray-900">
-              Topping&nbsp; &nbsp;
-              <span className="text-[16px] font-normal text-[#FCC230]">
-                Select 2 Topping*
-              </span>
-            </h3>
-            <div className="flex flex-col gap-4">
-              {currentProduct.toppings.map((topping, index) => (
-                <ToppingItem
-                  key={index}
-                  name={topping.name}
-                  price={topping.price}
-                  unit="70 gm"
-                  quantity={1}
-                  onAdd={() => setQty(quantity + 1)}
-                  onRemove={() => setQty(Math.max(0, quantity - 1))}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="section2">
-            <h3 className="mb-3 text-2xl font-bold text-gray-900">
-              Topping&nbsp; &nbsp;
-              <span className="text-[16px] font-normal text-[#FCC230]">
-                Select 2 Topping*
-              </span>
-            </h3>
-            <div className="flex flex-col gap-4">
-              {currentProduct.toppings.map((topping, index) => (
-                <ToppingItem
-                  key={index}
-                  name={topping.name}
-                  price={topping.price}
-                  unit="70 gm"
-                  quantity={1}
-                  onAdd={() => setQty(quantity + 1)}
-                  onRemove={() => setQty(Math.max(0, quantity - 1))}
-                />
-              ))}
-            </div>
-          </div>
-        </div> */}
+        {/* Toppings(modifiers) */}
+        <Modifier modifiers={product.sub_modifiers} />
 
         {/* Quantity and Add to Cart */}
-        <div className="p-6">
-          {/* <div className="flex h-12 items-center justify-end gap-2">
+        {/* <div className="p-6">
+          <div className="flex h-12 items-center justify-end gap-2">
             <div className="flex h-full items-center space-x-3 rounded-lg border border-[#F1F1FF]">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -236,60 +174,12 @@ const  ProductDetails: React.FC = async ({ params }: Props) => {
             <button className="bg-primary hover:bg-primary/85 h-full rounded-lg px-8 text-white">
               Add to cart - {calculateTotalPrice()} EGP
             </button>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
 
         {/* Customer Reviews */}
-          <h3 className="mb-6 text-4xl font-bold">customer review</h3>
-        <div className="p-6 grid grid-cols-1 gap-6 sm:grid-cols-2 rounded-2xl border mb-16 min-h-96">
-          {/* <div className="mb-6 h-[282px] flex flex-col space-y-4">
-            <div className="text-center my-8">
-              <div className="text-2xl font-bold text-gray-900">
-                {currentProduct.rating}
-              </div>
-              {renderStars(currentProduct.rating, "justify-center")}
-            </div>
-
-            <div className="flex-1">
-              {[5, 4, 3, 2, 1].map((rating) => (
-                <div key={rating} className="mb-1 flex items-center space-x-2">
-                  <span className="w-2 text-sm text-gray-600">{rating}</span>
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200">
-                    <div
-                      className="h-full rounded-full bg-yellow-400"
-                      style={{
-                        width:
-                          rating === 5 ? "80%" : rating === 4 ? "60%" : "20%",
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {currentProduct.reviews.map((review) => (
-              <div key={review.id} className="flex items-center space-x-3 border-t border-gray-300 h-40">
-                <div className="flex  h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm ">
-                  {review.avatar}
-                </div>
-                <div className="flex-1">
-                  <div className="mb-1 flex items-center justify-between">
-                    <h4 className="font-medium text-gray-900">
-                      {review.userName}
-                    </h4>
-                    <span className="text-sm text-gray-500">
-                      {review.daysAgo} days ago
-                    </span>
-                  </div>
-                  {renderStars(review.rating, "mb-2")}
-                  <p className="text-sm text-gray-600">{review.comment}</p>
-                </div>
-              </div>
-            ))}
-          </div> */}
-        </div>
+        <h3 className="mb-6 text-4xl font-bold">customer review</h3>
+        <ProductReview productId={product.id} />
       </div>
     </section>
   );

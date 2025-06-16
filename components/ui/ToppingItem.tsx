@@ -1,36 +1,71 @@
-import { Button } from "@/components/ui/Button";
-import { Minus, Plus } from "lucide-react";
+type ToppingItemProps = {
+  name: string;
+  price: { price: number; currency: string } | null;
+  unit?: string;
+  quantity: number;
+  onAdd: () => void;
+  onRemove: () => void;
+  disableAdd?: boolean;
+  disableRemove?: boolean;
+};
 
-export default function ToppingItem({ name, price, quantity, onAdd, onRemove, unit }) {
+const ToppingItem = ({
+  name,
+  price,
+  unit = "",
+  quantity,
+  onAdd,
+  onRemove,
+  disableAdd = false,
+  disableRemove = false,
+}: ToppingItemProps) => {
   return (
-    <div className="flex items-center justify-between rounded-xl border px-4 py-3 ">
-      {/* Left side */}
-      <div>
-        <p className="text-sm font-semibold text-gray-900">
-          {name} <span className="text-[13px] font-normal text-gray-500">(+{price} EGP)</span>
-        </p>
-        <p className="text-xs text-muted-foreground mt-0.5">{unit}</p>
+    <div className="flex items-center justify-between rounded-xl border border-[#F0F0F0] bg-white px-4 py-3 shadow-sm">
+      <div className="flex flex-col">
+        <div className="font-semibold text-black text-[15px]">
+          {name}
+          {price && (
+            <span className="font-semibold text-black">
+              &nbsp;(+{price.price} {price.currency})
+            </span>
+          )}
+        </div>
+        {unit && (
+          <div className="text-sm text-gray-400 mt-1">
+            ({unit})
+          </div>
+        )}
       </div>
 
-      {/* Counter */}
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-7 w-7 text-xs"
+        <button
           onClick={onRemove}
+          disabled={disableRemove}
+          className={`w-8 h-8 rounded-md text-center text-xl font-bold transition-colors ${
+            disableRemove
+              ? "bg-[#F5F5F5] text-gray-300 cursor-not-allowed"
+              : "bg-white text-black border border-gray-200"
+          }`}
         >
-          <Minus className="h-3 w-3" />
-        </Button>
-        <span className="w-4 text-center text-sm">{quantity}</span>
-        <Button
-          size="icon"
-          className="h-7 w-7 bg-primary text-white"
+          –
+        </button>
+
+        <span className="w-5 text-center text-black font-medium">{quantity}</span>
+
+        <button
           onClick={onAdd}
+          disabled={disableAdd}
+          className={`w-8 h-8 rounded-[6px] text-center text-xl font-bold transition-colors ${
+            disableAdd
+              ? "bg-[#F5F5F5] text-gray-300 cursor-not-allowed"
+              : "bg-primary text-white"
+          }`}
         >
-          <Plus className="h-3 w-3" />
-        </Button>
+          +
+        </button>
       </div>
     </div>
   );
-}
+};
+
+export default ToppingItem;
