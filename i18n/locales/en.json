@@ -20,6 +20,10 @@
   },
   "TEXT": {},
   "LABELS": {
+    "selectItem": "Select {value} {name}",
+    "Topping": "Topping",
+    "Combo": "Combo",
+
     "contactUs": "Contact Us",
     "location": "Location",
     "subject": "Subject",

@@ -65,7 +65,7 @@ export const getMenuItem = async (slug: string) => {
 
 export const getMenu = async () => {
   try {
-    const res = await axiosInstance.get(`product/شيش-كباب`);
+    const res = await axiosInstance.get(`/product`);
     return res.data;
   } catch (error) {
     console.error("Fetch error at: productsss", error);
@@ -81,3 +81,8 @@ export const getCategories = async () => {
     throw error;
   }
 };
+// export const AddToCart = async (payload: any) => {
+//   const res = await axiosInstance.post("carts", payload);
+//   console.log(res.data)
+//   return res.data;
+// };

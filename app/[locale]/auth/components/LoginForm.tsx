@@ -2,7 +2,7 @@
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getCountryCodes, login, BrandCountry } from '@/services/ClientApiHandler';
+import { getCountryCodes, login } from '@/services/ClientApiHandler';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/authStore';
 import toast from 'react-hot-toast';
@@ -11,9 +11,10 @@ import { ChevronDown, Eye, EyeOff } from 'lucide-react';
 // import Link from 'next/link';
 import  Cookies  from 'js-cookie';
 import { useVerificationStore } from '@/stores/useVerificationStore';
+import { BrandCountry } from '@/utils/types';
 
 export default function LoginForm() {
-  const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
+  const [countryCodes, setCountryCodes] = useState < BrandCountry[] > ([]);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);

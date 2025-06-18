@@ -4,7 +4,9 @@ import { ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
 import { getStores } from '@/services/ClientApiHandler';
 import toast from 'react-hot-toast';
-import { Store } from '@/services/ClientApiHandler';
+
+import Cookies from 'js-cookie';
+import { Store } from '@/utils/types';
 
 export default function LocationSelector(active: { active?: boolean }) {
     const [open, setOpen] = useState(active ? active : false);
@@ -77,7 +79,12 @@ const [stores, setStores] = useState([]);
                                         ? 'border-blue-500 bg-blue-50'
                                         : 'border-gray-200 hover:bg-gray-50'
                                         }`}
-                                    onClick={() => setSelectedStore(store)}
+                                    onClick={() => {
+                                        setSelectedStore(store)
+                                        Cookies.set('store_id', String(store.id));
+                                    }
+                                        
+                                    }
                                 >
                                     <h3 className="font-medium">{store.name}</h3>
                                     <p className="text-gray-600 text-sm mt-1">{store.location_description}</p>

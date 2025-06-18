@@ -17,7 +17,7 @@ type SliderProps = {
 };
 
 export default function Slider({ title, items }: SliderProps) {
-  // const likedItems = useLikedStore(state => state.likedItems);
+  const likedItems = useLikedStore((state) => state.likedItems);
   const toggleLike = useLikedStore((state) => state.toggleLike);
   const isLiked = useLikedStore((state) => state.isLiked);
 
@@ -26,7 +26,7 @@ export default function Slider({ title, items }: SliderProps) {
   };
 
   return (
-    <div className="sliderr container my-6 h-[450px] min-h-screen px-10">
+    <div className="sliderr container my-6  min-h-screen px-10">
       {/* Header */}
       <div className="mb-10 flex items-center justify-between px-28">
         <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">{title}</h2>
@@ -39,31 +39,34 @@ export default function Slider({ title, items }: SliderProps) {
       </div>
 
       {/* Items Slider */}
-      <div className="relative h-full">
-        <div className="scrollbar-hide container flex h-full w-full overflow-x-visible">
+      <div className="relative w-full">
+        <div className="scrollbar-hide flex w-full overflow-x-visible">
           <Swiper
-            //   dir="rtl"
             slidesPerView={3.5}
-            spaceBetween={10}
+            spaceBetween={20}
             loop
             breakpoints={{
               320: { slidesPerView: 1, spaceBetween: 10 },
-              640: { slidesPerView: 2.5, spaceBetween: 20 },
-              992: { slidesPerView: 3.5, spaceBetween: 30 },
-              1024: { slidesPerView: 3.5, spaceBetween: 30 },
+              640: { slidesPerView: 2.2, spaceBetween: 15 },
+              768: { slidesPerView: 2.5, spaceBetween: 20 },
+              992: { slidesPerView: 3.2, spaceBetween: 25 },
+              1200: { slidesPerView: 3.5, spaceBetween: 30 },
             }}
-            className="w-full"
+            className="w-full h-full"
           >
             {items &&
               items.map((item) => (
-                <SwiperSlide key={item.id}>
-                  {/* <Card
-                                    item={item}
-                                    width='408px'
-                                    // onPress={handleItemPress}
-                                    // toggleLike={toggleLike}
-                                    // isLiked={isLiked}
-                                /> */}
+                <SwiperSlide key={item.id}
+                style={{width:'400px'}}
+                >
+                  <Card
+                    item={item}
+                    // width="350px"
+                    width="100%"
+                    onPress={handleItemPress}
+                    toggleLike={toggleLike}
+                    isLiked={isLiked}
+                  />
                 </SwiperSlide>
               ))}
           </Swiper>

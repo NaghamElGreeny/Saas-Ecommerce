@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ToppingItem from "./ui/ToppingItem";
+import { useTranslations } from "next-intl";
 
 type Modifier = {
   id: number;
@@ -17,18 +18,28 @@ type Modifier = {
   }[];
 };
 
-type Props = {
-  modifiers: Modifier[];
+type SubModifier = {
+  item_modifier_id: number;
+  sub_modifier_id: number;
+  quantity: number;
 };
 
-export default function ModifierSection({ modifiers }: Props) {
-  const [selectedSizes, setSelectedSizes] = useState<{
+type Props = {
+  modifiers: Modifier[];
+  onGetCurrentResult: (fn: () => SubModifier[]) => void;
+};
+
+export default function ModifierSection({
+  modifiers,
+  onGetCurrentResult,
+}: Props) {
+  const [selectedModifiers, setSelectedModifiers] = useState<{
     [key: number]: number | null;
   }>({});
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 
   const handleSizeSelect = (modifierId: number, index: number) => {
-    setSelectedSizes((prev) => ({ ...prev, [modifierId]: index }));
+    setSelectedModifiers((prev) => ({ ...prev, [modifierId]: index }));
   };
 
   const getTotalQuantityForModifier = (modifier: Modifier) => {
@@ -58,73 +69,119 @@ export default function ModifierSection({ modifiers }: Props) {
     }));
   };
 
+  const modifiersResults = useCallback((): SubModifier[] => {
+    const result: SubModifier[] = [];
+
+    modifiers.forEach((modifier) => {
+      if (modifier.selections_type === "exact") {
+        const selectedIndex = selectedModifiers[modifier.id];
+        if (
+          selectedIndex !== undefined &&
+          selectedIndex !== null &&
+          modifier.item_modifiers[selectedIndex]
+        ) {
+          const item = modifier.item_modifiers[selectedIndex];
+          result.push({
+            item_modifier_id: item.id,
+            sub_modifier_id: modifier.id,
+            quantity: 1,
+          });
+        }
+      } else {
+        modifier.item_modifiers.forEach((item) => {
+          const qty = quantities[item.id] || 0;
+          if (qty > 0) {
+            result.push({
+              item_modifier_id: item.id,
+              sub_modifier_id: modifier.id,
+              quantity: qty,
+            });
+          }
+        });
+      }
+    });
+
+    return result;
+  }, [modifiers, selectedModifiers, quantities]);
+
+  useEffect(() => {
+    onGetCurrentResult(modifiersResults);
+  }, [modifiersResults]); // ✅ دا التعديل المهم
+
+  const t = useTranslations();
+
   return (
-    <div className="flex flex-col gap-12">
+    <div className="mmm">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {modifiers.map((modifier) => {
           const isExact = modifier.selections_type === "exact";
 
-          return isExact ? (
-            <div className="size col-span-2" key={modifier.id}>
+          return (
+            <div className="has-[.exact]:col-span-2" key={modifier.id}>
               <h3 className="mb-3 text-2xl font-bold text-gray-900">
                 {modifier.name}&nbsp;&nbsp;
                 <span className="text-[16px] font-normal text-[#FCC230]">
-                  Select {modifier.max_num_of_selection} sizes*
+                  {t("LABELS.selectItem", {
+                    value: isExact ? modifier.max_num_of_selection : `(02)`,
+                    name: t("LABELS.Topping"),
+                  })}
+                  {/* Select {modifier.max_num_of_selection} {modifier.name}* */}
                 </span>
               </h3>
 
-              <div className="flex flex-wrap gap-3">
-                {modifier.item_modifiers.map((item, index) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleSizeSelect(modifier.id, index)}
-                    className={`w-42 rounded-lg border p-3 text-center transition-colors ${
-                      selectedSizes[modifier.id] === index
-                        ? "border-blue-500 bg-blue-50 text-blue-700"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="font-medium">{item.name}</div>
-                    <div className="text-sm text-gray-500">
-                      {item.price
-                        ? `${item.price.price} ${item.price.currency}`
-                        : "Free"}
+              <div className="max-h-[250px] overflow-y-auto">
+                {isExact ? (
+                  <div>
+                    <div
+                      className={`flex flex-wrap gap-3 ${modifier.selections_type}`}
+                    >
+                      {modifier.item_modifiers.map((item, index) => (
+                        <button
+                          type="button"
+                          key={item.id}
+                          onClick={() => handleSizeSelect(modifier.id, index)}
+                          className={`rounded-lg border p-3 text-center transition-colors ${
+                            selectedModifiers[modifier.id] === index
+                              ? "border-blue-500 bg-blue-50 text-blue-700"
+                              : "border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          <div className="font-medium">{item.name}</div>
+                          <div className="text-sm text-gray-500">
+                            {item.price
+                              ? `${item.price.price} ${item.price.currency}`
+                              : "Free"}
+                          </div>
+                        </button>
+                      ))}
                     </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="section" key={modifier.id}>
-              <h3 className="mb-3 text-2xl font-bold text-gray-900">
-                {modifier.name}&nbsp;&nbsp;
-                <span className="text-[16px] font-normal text-[#FCC230]">
-                  Select {modifier.max_num_of_selection} Topping*
-                </span>
-              </h3>
+                  </div>
+                ) : (
+                  <div className="space-y-4 pe-2">
+                    {modifier.item_modifiers.map((item) => {
+                      const quantity = quantities[item.id] || 0;
+                      const totalSelected =
+                        getTotalQuantityForModifier(modifier);
+                      const maxReached =
+                        modifier.max_num_of_selection !== null &&
+                        totalSelected >= modifier.max_num_of_selection;
 
-              <div className="flex flex-col gap-4">
-                {modifier.item_modifiers.map((item) => {
-                  const quantity = quantities[item.id] || 0;
-                  const totalSelected = getTotalQuantityForModifier(modifier);
-                  const maxReached =
-                    modifier.max_num_of_selection !== null &&
-                    totalSelected >= modifier.max_num_of_selection;
-
-                  return (
-                    <ToppingItem
-                      key={item.id}
-                      name={item.name}
-                      price={item.price}
-                      unit="70 gm"
-                      quantity={quantity}
-                      onAdd={() => handleAdd(item.id, modifier)}
-                      onRemove={() => handleRemove(item.id)}
-                      disableAdd={maxReached}
-                      disableRemove={quantity === 0}
-                    />
-                  );
-                })}
+                      return (
+                        <ToppingItem
+                          key={item.id}
+                          name={item.name}
+                          price={item.price}
+                          unit="70 gm"
+                          quantity={quantity}
+                          onAdd={() => handleAdd(item.id, modifier)}
+                          onRemove={() => handleRemove(item.id)}
+                          disableAdd={maxReached}
+                          disableRemove={quantity === 0}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           );

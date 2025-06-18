@@ -125,8 +125,13 @@ export const getCategorie = async (): Promise<Category[]> => {
 //     throw error;
 //   }
 // };
-
+export const AddToCart = async (payload: any) => {
+  const res = await axiosClient.post("carts", payload);
+  console.log(res.data)
+  return res.data;
+};
 export const getProductReviews = async (productId: number): Promise<ReviewResponse> => {
   const res = await axiosClient.get<ReviewResponse>(`/products/${productId}/reviews`);
   return res.data;
 };
+// export const updateQuantity=

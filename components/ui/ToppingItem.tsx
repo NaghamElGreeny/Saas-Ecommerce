@@ -39,6 +39,7 @@ const ToppingItem = ({
 
       <div className="flex items-center gap-2">
         <button
+          type="button"
           onClick={onRemove}
           disabled={disableRemove}
           className={`w-8 h-8 rounded-md text-center text-xl font-bold transition-colors ${
@@ -53,6 +54,7 @@ const ToppingItem = ({
         <span className="w-5 text-center text-black font-medium">{quantity}</span>
 
         <button
+          type="button"
           onClick={onAdd}
           disabled={disableAdd}
           className={`w-8 h-8 rounded-[6px] text-center text-xl font-bold transition-colors ${

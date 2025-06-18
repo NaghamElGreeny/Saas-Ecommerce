@@ -3,6 +3,7 @@ import Link from "next/link";
 import Head from "next/head";
 import { cookies } from "next/headers";
 import "@/styles/globals.css"
+import Image from "next/image";
 
 export default async function NotFoundPage() {
   const cookieStore =await cookies();
@@ -20,7 +21,7 @@ export default async function NotFoundPage() {
         className="min-h-screen flex items-center justify-center bg-gray-50 px-4"
       >
         <div className="text-center max-w-md">
-          <img
+          <Image
             src="/assets/images/cuate.png"
             alt="404 Not Found"
             className="mx-auto mb-8 w-4/5"

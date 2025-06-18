@@ -30,12 +30,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
     },
   })),
 }));
-// interface LoggedStore {
-//   logged: boolean;
-//   setLogged: (logged: boolean) => void;
-// }
-// export const useLoggedStore = create<LoggedStore>((set) => ({
-//   logged: false,
-//   setLogged: (logged: boolean) => set({ logged }),
-// }));
+interface LoggedStore {
+  logged: boolean;
+  setLogged: (logged: boolean) => void;
+}
+export const useLoggedStore = create<LoggedStore>((set) => ({
+  logged: false,
+  setLogged: (logged: boolean) => set({ logged }),
+}));
 

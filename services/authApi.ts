@@ -1,5 +1,5 @@
-// import axiosInstance from "./axiosInstance";
-import axiosInstance from "./axiosInstance";
+"use client";
+import axiosClient from "./axiosClient";
 import { handleResponse } from "./helpers";
 import {
   LoginPayload,

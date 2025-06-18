@@ -2,6 +2,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { FiMenu, FiX } from "react-icons/fi";
 import cookies from "js-cookie";
@@ -30,12 +31,14 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import "@/styles/Navbar.css";
-import { useAuthStore } from "@/stores/authStore";
-import { getStores, logout } from "@/services/ClientApiHandler";
+import { useAuthStore, useLoggedStore } from "@/stores/authStore";
+import { logout } from "@/services/ClientApiHandler";
 
 import ReservationForm from "../sections/Reservation";
 import LocationSelector from "../ui/LocationSelector";
-import { CmsPages, Store } from "@/utils/types";
+import { CmsPages } from "@/utils/types";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import ProfileSheet from "./ProfileSheet";
 
 const NAV_LINKS = [
   // { href: "/", labelKey: "home" },
@@ -68,9 +71,9 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
   const locale = useLocale();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [logged, setLogged] = useState(false);
-  const [stores, setStores] = useState([]);
-  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  // const [logged, setLogged] = useState(false);
+  const logged = useLoggedStore((state) => state.logged);
+    const setLogged = useLoggedStore((state) => state.setLogged);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -94,18 +97,6 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
     const token = cookies.get("token");
     setLogged(!!token);
     useAuthStore.getState().setToken(token || "");
-
-    const fetchStores = async () => {
-      try {
-        const fetchedStores = await getStores();
-        setStores(fetchedStores);
-        setSelectedStore(fetchedStores[0]);
-      } catch (err) {
-        toast.error("Failed to load stores");
-      }
-    };
-
-    fetchStores();
   }, []);
 
   useEffect(() => {
@@ -141,49 +132,14 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
       <DialogTrigger className="text-start hover:opacity-80">
         {t("reservation")}
       </DialogTrigger>
-      <DialogContent className="mx-auto flex w-[80%] items-center justify-center rounded-[20px] p-0">
-        <ReservationForm show={false} className="w-full p-0" />
+      <DialogTitle></DialogTitle>
+      <DialogContent className="mx-auto flex w-full items-center justify-center rounded-[20px] p-0">
+        <ReservationForm show={false} className="!w-full p-0" />
       </DialogContent>
     </Dialog>
   );
 
-  const renderProfileMenu = () => (
-    <Sheet>
-      <SheetTrigger>
-        <img
-          src="/assets/icons/profile.png"
-          alt="profile"
-          className="cursor-pointer"
-        />
-      </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Profile</SheetTitle>
-        </SheetHeader>
-        <SheetFooter className="flex flex-col items-center justify-center">
-          <AlertDialog>
-            <AlertDialogTrigger className="mt-4 flex h-10 w-[80%] items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white">
-              Log Out
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will log you out.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={Logout}>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <SheetClose asChild />
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
-  );
-  const renderCmsPages = () => {
+   const renderCmsPages = () => {
     return cms.map((page) => {
       const translatedTitle =
         cmsTranslationMap[page.title]?.[locale] || page.title;
@@ -205,10 +161,13 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
     <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-between px-4 md:px-10 lg:px-14">
       {/* Logo */}
       <Link href="/" className="flex items-center">
-        <img
+        <Image
           src="/assets/logo/logo.svg"
+          width={80}
+          height={56}
           className="h-14 w-20"
           alt="shebl-logo"
+          priority
         />
       </Link>
 
@@ -222,15 +181,16 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
       {/* Desktop Icons */}
       <div className="hidden items-center gap-4 md:flex">
         <Link href="#">
-          <img src="/assets/icons/cart.png" alt="cart" />
+          <Image src="/assets/icons/cart.png" alt="cart" width={60} height={60} />
         </Link>
         <Link href="#">
-          <img src="/assets/icons/notifications.png" alt="notifications" />
+          <Image src="/assets/icons/notifications.png" alt="notifications" width={60} height={60} />
         </Link>
 
         {logged ? (
           <>
-            {renderProfileMenu()}
+            {/* {renderProfileMenu()} */}
+            <ProfileSheet />
             <LocationSelector active />
           </>
         ) : (
@@ -246,7 +206,7 @@ export default function Navbar({ cms }: { cms: CmsPages[] }) {
 
       {/* Mobile Menu Toggle */}
       <div className="flex items-center gap-4 md:hidden">
-        {logged && renderProfileMenu()}
+        {logged && <ProfileSheet />}
 
         <button id="toggleBtn" onClick={toggleMenu} className="z-50 md:hidden">
           <div className="border-primary hover:bg-primary/20 active:bg-primary/40 flex h-10 w-10 items-center justify-center rounded-full border-2">

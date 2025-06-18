@@ -166,3 +166,16 @@ export interface ReviewResponse {
     value: number;
   }[];
 }
+export interface Modifier {
+  id: number;
+  name: string;
+  selections_type: "exact" | "min_max";
+  min_num_of_selection: number | null;
+  max_num_of_selection: number | null;
+  item_modifiers: {
+    id: number;
+    name: string;
+    image: string;
+    price: { price: number; currency: string } | null;
+  }[];
+};

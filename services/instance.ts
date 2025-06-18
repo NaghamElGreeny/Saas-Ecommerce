@@ -1,29 +1,42 @@
-import axios from 'axios';
-import cookies from 'js-cookie';
-import { redirect } from 'next/navigation';
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponseConfig,
+  AxiosError,
+} from "axios";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
-      'Content-Type': 'application/json',
-          'os': 'web',
-
+    "Content-Type": "application/json",
+    os: "web",
   },
-  // هنا ممكن تضيفي headers زي Authorization لو عندك cookies أو token من السيرفر
   withCredentials: true,
 });
 
-
+axiosInstance.interceptors.request.use(async (config: AxiosRequestConfig) => {
+  const cookieStore = await cookies();
+  const storeId = cookieStore.get("store_id")?.value;
+  if (storeId) {
+    config.params = {
+      ...config.params,
+      store_id: storeId,
+    };
+  }
+  return config;
+});
 axiosInstance.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async (error) => {
-        if (error.response && error.response.status === 401) {
-            const locale = cookies.get('NEXT_LOCALE');
-            redirect(locale === 'ar' ? '/ar/auth/login' : '/auth/login');
-        }
-        return Promise.reject(error);
+  (response: AxiosResponseConfig) => {
+    return response;
+  },
+  async (error: AxiosError) => {
+    if (error.response && error.response.status === 401) {
+      const cookieStore = await cookies();
+      const locale = cookieStore.get("NEXT_LOCALE").value;
+      redirect(locale === "ar" ? "/ar/auth/login" : "/auth/login");
     }
+    return Promise.reject(error);
+  },
 );
 
 export default axiosInstance;
