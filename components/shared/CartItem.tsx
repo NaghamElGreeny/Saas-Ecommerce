@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import React from "react";
-import { CartProduct, ItemModifier, SubModifier } from "@/utils/cartTypes";
+import { CartProduct, ItemModifier } from "@/utils/cartTypes";
+import { deleteItem } from "@/services/ClientApiHandler";
+import toast from "react-hot-toast";
 
 // type Modifier = {
 //   id: number;
@@ -10,65 +13,86 @@ import { CartProduct, ItemModifier, SubModifier } from "@/utils/cartTypes";
 // };
 
 type Props = {
-  cartProduct: CartProduct
+  cartProduct: CartProduct;
 };
 
 export default function CartItemCard({ cartProduct }: Props) {
-    // استخراج جميع الـ modifiers في مصفوفة واحدة
-    const product = cartProduct.product;
-    console.log(cartProduct)
+  // استخراج جميع الـ modifiers في مصفوفة واحدة
+  const product = cartProduct.product;
+//   console.log(cartProduct);
   // Assuming each group is of type SubModifier and has an 'item_modifiers' property (adjust as needed)
-  const modifiers: ItemModifier[] = cartProduct.sub_modifiers
-    ?.flatMap((group: any) =>
+  const modifiers: ItemModifier[] =
+    cartProduct.sub_modifiers?.flatMap((group: any) =>
       (group.item_modifiers ?? []).map((mod: ItemModifier) => ({
         id: mod.id,
         name: mod.name,
-          quantity: mod.quantity,
-        price:mod.price
-      }))
+        quantity: mod.quantity,
+        price: mod.price,
+      })),
     ) ?? [];
-console.log('product :',product)
+  console.log("product :", product);
   return (
-    <div className="flex w-[590px] h-[136px] products-center justify-between rounded-xl bg-white p-4 shadow-sm">
+    <div className="products-center flex h-[160px] justify-between rounded-xl bg-white p-4 shadow-sm mb-4">
       {/* صورة المنتج */}
       <Image
         src={product.image}
         alt={product.name}
-        width={90}
+        width={130}
         height={90}
         className="rounded-2xl object-cover"
       />
 
       {/* محتوى المنتج */}
-      <div className="flex flex-col justify-between h-full flex-grow px-4">
+      <div className="flex h-full w-full flex-col justify-between px-4">
         {/* الاسم والحذف */}
-        <div className="flex products-start justify-between">
-          <h2 className="text-lg font-semibold line-clamp-1">{product.name}</h2>
-          <Trash2 className="text-red-500 cursor-pointer" />
+        <div className="name-delete flex justify-between ">
+          <div className="products-start">
+            <h2 className="line-clamp-1 text-lg font-semibold">
+              {product.name}
+            </h2>
+            <div className="mt-.5 line-clamp-2 max-w-[60%] text-sm text-indigo-400">
+              {modifiers.map((mod, index) => (
+                <span key={mod.id}>
+                  {mod.quantity}x {mod.name} ({mod.price.price}
+                  {mod.price.currency}){index !== modifiers.length - 1 && ", "}
+                </span>
+              ))}
+            </div>
+          </div>
+                  <button className="w-[20%]"
+                      onClick={async () => {
+                        try {
+                          await deleteItem(cartProduct.id);
+                          toast('item deleted successfully');
+                        } catch {
+                          toast.error('Failed to delete item');
+                        }
+                      }}
+                  >
+                    <Trash2 className="grow-0 cursor-pointer w-full text-red-500" />
+                  </button>
         </div>
-
-        {/* modifiers */}
-        <div className="text-sm text-indigo-400 mt-1 line-clamp-1">
-          {modifiers.map((mod, index) => (
-            <span key={mod.id}>
-              {mod.quantity}x {mod.name} ({mod.price.price}{mod.price.price})
-              {index !== modifiers.length - 1 && ", "}
+        {/*m السعر  عداد الكمية */}
+        <div className="counter-price flex justify-between items-center">
+          <div className="mt-auto text-lg font-bold">
+            <div className="pricebefore text-sm text-indigo-400 line-through">
+              {product.price.price.toFixed(2)}
+              <span className="ml-1 text-xs font-normal">EGP</span>
+            </div>
+            <div className="priceafter">
+              {" "}
+              {product.price.price_after.toFixed(2)}
+              <span className="ml-1 text-xs font-normal">EGP</span>
+            </div>
+          </div>
+                  <div className="counter flex items-center gap-4 rounded-full border p-1 h-[70%]  text-gray-500">
+            <Minus className="size-4 cursor-pointer" />
+            <span className="font-semibold text-black">
+              {cartProduct.quantity}
             </span>
-          ))}
+            <Plus className="size-4 cursor-pointer" />
+          </div>
         </div>
-
-        {/* السعر */}
-        <div className="font-bold text-lg mt-auto">
-          {/* {product.total_price.toFixed(2)} */}
-          <span className="text-xs font-normal ml-1">EGP</span>
-        </div>
-      </div>
-
-      {/* عداد الكمية */}
-      <div className="flex products-center border rounded-full px-4 py-2 text-gray-500 gap-4">
-        <Minus className="cursor-pointer" />
-        <span className="text-black font-semibold">{cartProduct.quantity}</span>
-        <Plus className="cursor-pointer" />
       </div>
     </div>
   );

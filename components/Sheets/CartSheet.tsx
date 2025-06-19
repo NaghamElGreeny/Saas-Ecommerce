@@ -47,7 +47,7 @@ export default function CartSheet() {
             className="size-[60px]"
           />
         </SheetTrigger>
-        <SheetContent className="rounded-l-2xl bg-bg items-center ">
+        <SheetContent className="rounded-l-2xl bg-bg items-center md:min-w-[600px] w-[100%] ">
           <SheetHeader className="bg-white w-full">
             <SheetTitle className="text-2xl font-bold ">
               My Cart
@@ -56,12 +56,12 @@ export default function CartSheet() {
               </span>
             </SheetTitle>
           </SheetHeader>
-          <ScrollArea className="h-[200px] w-[97%] rounded-md p-4 overflow-y-auto ">
+          <ScrollArea className="h-1/2  w-[97%] rounded-md p-4 overflow-y-auto ">
             {cart?.products?.map((product) => (
-              <div className="card" key={product.id} >
-              <CartItemCard cartProduct={product} />
-                </div>
-            ))}
+              // <div className="card" >
+              <CartItemCard cartProduct={product}  key={product.id}/>
+                // </div>
+            ))} 
           </ScrollArea>
           <SheetFooter className="flex flex-col items-center justify-center">
             <SheetClose asChild />

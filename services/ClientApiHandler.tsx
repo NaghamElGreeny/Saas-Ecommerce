@@ -117,6 +117,7 @@ export const getCategorie = async (): Promise<Category[]> => {
   }
 };
 
+
 export const AddToCart = async (payload: any) => {
   const res = await axiosClient.post("carts", payload);
   console.log(res.data)
@@ -133,4 +134,9 @@ export const getCart = async () => {
   const res = await axiosClient.get<CartResponse>('carts');
   // console.log(res);
   return res.data;
+}
+export const deleteItem = async (id: any) => {
+  const res = await axiosClient.delete(`carts/delete-item/${id}`);
+  console.log('delete',res)
+
 }
