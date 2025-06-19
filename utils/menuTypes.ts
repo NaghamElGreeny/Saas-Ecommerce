@@ -5,15 +5,15 @@ export interface ProductResponse {
 }
 
 export interface Product {
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
   id: number;
   name: string;
-  slug: string;
+  slug?: string;
   desc: string;
   type: string;
   image: string;
-  images: Image[];
+  images?: Image[];
   food_icon: FoodIcon[];
   rating: number;
   review_count: number;

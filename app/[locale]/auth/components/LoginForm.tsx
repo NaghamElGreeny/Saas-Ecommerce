@@ -23,7 +23,8 @@ const setVerificationData = useVerificationStore((state) => state.setVerificatio
   const router = useRouter();
   const setToken = useAuthStore((state) => state.setToken);
   // const setUserData = useAuthStore((state) => state.setUserData);
-const setFormData = useAuthStore((state) => state.setFormData);
+  const setFormData = useAuthStore((state) => state.setFormData);
+  // const setLogged = useLoggedStore((state) => state.setLogged);
   // Fetch country codes
   useEffect(() => {
     const fetchData = async () => {
@@ -73,8 +74,9 @@ const handleForget=() => {
         }) as { token: string; user: { phone: string; name?: string ; email:string; } };
 
         setToken(data.data.token);
-        Cookies.set('token', data.data.token, { expires: 30 }); // Store token in cookies for 7 days
+        Cookies.set('token', data.data.token, { expires: 300 }); // Store token in cookies for 7 days
         console.log('Login data:', data.data);
+        // setLogged(true);
        setFormData({
   // phone: data.user.phone,
   // full_name: data.user.name || '', 
@@ -85,6 +87,7 @@ const handleForget=() => {
  
 );
         toast.success('Login successful!');
+        // setLogged(true);
         router.push('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {

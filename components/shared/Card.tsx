@@ -28,7 +28,7 @@ function Card({
       //  router.push(`/product/${item.slug}?lat=${item.lat || 0}&lng=${item.lng || 0}`);
        router.push(`/product/${item.slug}`);
   };
-  console.log(item);
+  // console.log(item);
   return (
     <div
       onClick={handlePress}

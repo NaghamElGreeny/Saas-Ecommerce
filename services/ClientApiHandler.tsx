@@ -12,6 +12,8 @@ import {
   ReviewResponse,
   Store,
 } from "../utils/types";
+import { CartResponse } from "@/utils/cartTypes";
+// import { useAuthStore } from "@/stores/authStore";
 export const register = async (payload: RegisterPayload) => {
   const res = await axiosClient.post("/auth/register", payload);
   return res.data;
@@ -115,16 +117,6 @@ export const getCategorie = async (): Promise<Category[]> => {
   }
 };
 
-// export const getProductReviews = async (productId: number) => {
-//   try {
-//     const res = await axiosClient.get(`/products/${productId}/reviews`);
-//     console.log(res.data)
-//     return res.data;
-//   } catch (error) {
-//     console.error("Error fetching product reviews:", error);
-//     throw error;
-//   }
-// };
 export const AddToCart = async (payload: any) => {
   const res = await axiosClient.post("carts", payload);
   console.log(res.data)
@@ -135,3 +127,10 @@ export const getProductReviews = async (productId: number): Promise<ReviewRespon
   return res.data;
 };
 // export const updateQuantity=
+// const token = useAuthStore.getState().token;
+export const getCart = async () => {
+
+  const res = await axiosClient.get<CartResponse>('carts');
+  // console.log(res);
+  return res.data;
+}

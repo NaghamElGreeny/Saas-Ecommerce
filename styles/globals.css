@@ -6,6 +6,7 @@
 @theme inline {
   --color-primary: #5A6AE8;
   --color-sub: #828ABA;
+  --color-bg:#f8f8f3;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -76,11 +77,11 @@ body{
     }
   }
   .reserve-form{
-     input,select{
+     input,select,.time-picker{
       border-radius: 0;
       background: transparent;
       border: 0;
-      border-bottom: 2px solid #d1d5db; 
+      border-bottom: 1px solid  #0b173c; 
       border-style: solid;
       outline: none;
     }

@@ -47,7 +47,7 @@ const [stores, setStores] = useState([]);
                     />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-black">Abu Shakra</span>
+                    <span className="text-sm font-semibold text-black whitespace-nowrap">Abu Shakra</span>
                     <div className="flex items-center space-x-1" onClick={() => setOpen(true)}>
                         <span className="text-sm text-gray-400 truncate max-w-[160px]">
                             {selectedStore ? selectedStore.location_description : ''}

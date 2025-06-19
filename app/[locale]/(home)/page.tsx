@@ -15,7 +15,7 @@ export default async function Home() {
   const popularProducts = data?.popular_products;
   const web_content_link = data?.web_content_link;
   const products = data?.products || [];
-
+  const offers = data?.offers || [];
   return (
     <div className="space-y-12 overflow-hidden">
       <Hero sliders={sliders} />
@@ -26,11 +26,11 @@ export default async function Home() {
         sectionData={webContent}
         sectionType="discover"
       />
-      <Slider title="Popular Items" items={popularProducts} />
+      <Slider title="Offers" items={offers} />
       <ReservationForm
         show={true}
         className={
-          "relative my-5 flex min-h-screen w-[80%] flex-col justify-center"
+          "container-custom relative my-5 flex min-h-screen w-[80%] flex-col justify-center"
         }
       />
       <DblSection
@@ -39,10 +39,12 @@ export default async function Home() {
         reverse={true}
       />
       <FollowusSection />
+       <Slider title="Popular Items" items={popularProducts} />
       {/* <DblSection
    sectionData={followSection}
         sectionType='subscribe'
       /> */}
+
     </div>
   );
 }

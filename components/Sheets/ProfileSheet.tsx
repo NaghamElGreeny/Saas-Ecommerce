@@ -24,16 +24,16 @@ import Image from 'next/image';
 import cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { logout } from "@/services/ClientApiHandler";
-import { useAuthStore, useLoggedStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 export default function ProfileSheet() {
-    //  const logged = useLoggedStore((state) => state.logged);
-  const setLogged = useLoggedStore((state) => state.setLogged);
+
+
       const Logout = async () => {
     try {
       await logout({ device_type: "web" });
       cookies.remove("token");
       useAuthStore.getState().setToken("");
-      setLogged(false);
+      // setLogged(false);
       toast.success("Logged out successfully");
     } catch {
       toast.error("Failed to logout");
@@ -58,7 +58,8 @@ export default function ProfileSheet() {
         <SheetFooter className="flex flex-col items-center justify-center">
           <AlertDialog>
             <AlertDialogTrigger className="mt-4 flex h-10 w-[80%] items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white">
-              Log Out
+                  <Image src="/assets/icons/login.png" alt="login" width={24} height={24} className='scale-x-[-1]'/>
+                Log Out
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

@@ -20,7 +20,7 @@ const fetchData = async (endpoint: string, errorMsg: string, config = {}) => {
 export const getHome = async () => {
   try {
     const res = await axiosInstance.get<{ data: any }>("/home");
-    console.log(" home data fetched", res.data.data);
+    // console.log(" home data fetched", res.data.data);
     return res.data.data;
   } catch (error) {
     console.error("Fetch error at: cms-pages", error);

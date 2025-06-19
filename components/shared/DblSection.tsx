@@ -15,7 +15,7 @@ export function DblSection({
 }: {
   topMsg?: string;
   sectionData: WebContent;
-  sectionType: string;
+  sectionType?: string;
   reverse?: boolean;
 }) {
   const [isRTL, setIsRTL] = useState(false);

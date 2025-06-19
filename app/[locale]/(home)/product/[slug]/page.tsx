@@ -52,7 +52,7 @@ const ProductDetails: React.FC = async ({ params }: Props) => {
                 </div>
 
                 {/* Product Info */}
-                <div className="mb-2 flex items-center justify-between">
+                <div className="mb-2 flex items-center justify-between px-3">
                   <h2 className="flex items-center gap-1 text-3xl font-bold text-gray-900">
                     {product.name}
                     <span>
@@ -63,11 +63,12 @@ const ProductDetails: React.FC = async ({ params }: Props) => {
                   </h2>
                   <div className="flex items-center space-x-2">
                     <span className="cursor-pointer text-gray-400">
-                      <img src="/assets/icons/share.png" alt="share" />
+                      <img src="/assets/icons/share.svg" alt="share" className="bg-[#F6F6FD] rounded-full"/>
                     </span>
-                    <span className="cursor-pointer text-blue-500">
-                      <img src="/assets/icons/love.png" alt="like" />
-                    </span>
+                    <button className="cursor-pointer text-blue-500 bg-[red] rounded-full">
+                {/* <img src="/assets/icons/love.png" alt="like" /> */}
+                      <img src="/assets/icons/heart.svg" alt="like" className=""/>
+                    </button>
                   </div>
                 </div>
 

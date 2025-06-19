@@ -21,9 +21,10 @@ export default async function DynamicCmsPage({ params }: Props) {
         <h1 className="mb-4 text-3xl font-bold">{pageData.title}</h1>
         <div dangerouslySetInnerHTML={{ __html: pageData.desc }} />
         <DblSection
-          title={pageData.title}
-          description={pageData.desc}
-          imageSrc={pageData.image}
+          // title={pageData.title}
+          sectionData={pageData}
+          // description={pageData.desc}
+          // imageSrc={pageData.image}
         />
       </div>
     </>

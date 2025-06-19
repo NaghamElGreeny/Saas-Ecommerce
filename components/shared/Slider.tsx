@@ -17,7 +17,7 @@ type SliderProps = {
 };
 
 export default function Slider({ title, items }: SliderProps) {
-  const likedItems = useLikedStore((state) => state.likedItems);
+  // const likedItems = useLikedStore((state) => state.likedItems);
   const toggleLike = useLikedStore((state) => state.toggleLike);
   const isLiked = useLikedStore((state) => state.isLiked);
 

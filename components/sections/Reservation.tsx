@@ -1,5 +1,5 @@
 "use client";
-import { Space, TimePicker } from 'antd';
+import { Space, TimePicker } from "antd";
 import dayjs from "dayjs";
 import {
   BrandCountry,
@@ -92,7 +92,7 @@ export default function ReservationForm({
           return value ? value.length <= (country?.phone_limit || 15) : false;
         }),
       phone_code: Yup.string().required("Country code is required"),
-    //   store_id: Yup.string().required("Please select a branch"),
+      //   store_id: Yup.string().required("Please select a branch"),
       date: Yup.date()
         .required("Date is required")
         .min(new Date(), "Date cannot be in the past"),
@@ -122,36 +122,36 @@ export default function ReservationForm({
         .max(20, "Maximum 20 guests allowed")
         .typeError("Please enter a valid number"),
     }),
-     onSubmit: async (values) => {
+    onSubmit: async (values) => {
       setLoading(true);
       toast.dismiss();
 
-         try {
-           // Format the time with AM/PM
-       const formatTime = (time: string) => {
-  if (!time) return "";
-  
-  // Parse the time string with dayjs to ensure consistent formatting
-  const timeFormat = "hh:mm A";
-  const parsedTime = dayjs(time, timeFormat);
-  
-  if (parsedTime.isValid()) {
-    // Return in "h:i A" format (e.g., "2:30 PM")
-    return parsedTime.format("hh:mm A").replace("mm", "i");
-  }
-  
-  // Fallback to original time if parsing fails
-  return time;
-};
+      try {
+        // Format the time with AM/PM
+        const formatTime = (time: string) => {
+          if (!time) return "";
+
+          // Parse the time string with dayjs to ensure consistent formatting
+          const timeFormat = "hh:mm A";
+          const parsedTime = dayjs(time, timeFormat);
+
+          if (parsedTime.isValid()) {
+            // Return in "h:i A" format (e.g., "2:30 PM")
+            return parsedTime.format("hh:mm A").replace("mm", "i");
+          }
+
+          // Fallback to original time if parsing fails
+          return time;
+        };
         const payload: ReservationPayload = {
           name: values.name,
           date: values.date,
-          store_id: parseInt(values.store_id, 10) ,
+          store_id: parseInt(values.store_id, 10),
           phone_code: values.phone_code,
           phone: values.phone,
-         from_time: formatTime(values.timeFrom),
+          from_time: formatTime(values.timeFrom),
           to_time: formatTime(values.timeTo),
-          guests_number: Number(values.guest_number), 
+          guests_number: Number(values.guest_number),
         };
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -190,9 +190,9 @@ export default function ReservationForm({
       formik.setFieldValue("timeTo", formattedTime);
     }
   };
-    
+
   return (
-    <div className={`container-custom ${className}`}>
+    <div className={`${className}`}>
       {show ? (
         <>
           <div className={`mb-4 flex w-full items-center`}>
@@ -274,12 +274,6 @@ export default function ReservationForm({
               <option value="3">3 People</option>
               <option value="4+">4+ People</option>
             </select>
-            {/* <input
-              type="text"
-              placeholder="Branch"
-              {...formik.getFieldProps("branch")}
-              className="reserve w-full p-3"
-                      /> */}
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <button type="button" className="reserve w-full p-3 text-left">
@@ -346,25 +340,21 @@ export default function ReservationForm({
             </Dialog>
           </div>
 
-          <div className="flex flex-col gap-4 md:flex-row">
-        
-          <Space wrap className="w-full">
-              <TimePicker
-                use12Hours
-                format="h:mm A"
-                onChange={handleTimeFromChange}
-                placeholder="Start Time"
-                className="w-full"
-              />
-              <TimePicker
-                use12Hours
-                format="h:mm A"
-                onChange={handleTimeToChange}
-                placeholder="End Time"
-                className="w-full"
-              />
-            </Space>
-        
+          <div className="flex w-full flex-col gap-4 md:flex-row">
+            <TimePicker
+              use12Hours
+              format="h:mm A"
+              onChange={handleTimeFromChange}
+              placeholder="From Time"
+              className="time-picker w-1/2"
+            />
+            <TimePicker
+              use12Hours
+              format="h:mm A"
+              onChange={handleTimeToChange}
+              placeholder="To Time"
+              className="time-picker w-1/2"
+            />
           </div>
 
           <input
@@ -375,7 +365,7 @@ export default function ReservationForm({
 
           <button
             type="submit"
-            className="mr-5 w-[20%] rounded-full bg-blue-500 py-5 font-medium text-white transition hover:bg-blue-600"
+            className="mr-5 w-[230px] rounded-full bg-blue-500 py-5 font-medium text-white transition hover:bg-blue-600"
             disabled={loading}
             // onClick={() => {
             //   console.log(formik.values);
