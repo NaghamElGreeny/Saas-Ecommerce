@@ -179,3 +179,4 @@ export interface Modifier {
     price: { price: number; currency: string } | null;
   }[];
 };
+

@@ -3,14 +3,8 @@ import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import React from "react";
 import { CartProduct, ItemModifier } from "@/utils/cartTypes";
-import { deleteItem } from "@/services/ClientApiHandler";
+import { deleteItem, updateCount } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
-
-// type Modifier = {
-//   id: number;
-//   name: string;
-//   quantity: number;
-// };
 
 type Props = {
   cartProduct: CartProduct;
@@ -19,7 +13,7 @@ type Props = {
 export default function CartItemCard({ cartProduct }: Props) {
   // استخراج جميع الـ modifiers في مصفوفة واحدة
   const product = cartProduct.product;
-//   console.log(cartProduct);
+  //   console.log(cartProduct);
   // Assuming each group is of type SubModifier and has an 'item_modifiers' property (adjust as needed)
   const modifiers: ItemModifier[] =
     cartProduct.sub_modifiers?.flatMap((group: any) =>
@@ -32,8 +26,8 @@ export default function CartItemCard({ cartProduct }: Props) {
     ) ?? [];
   console.log("product :", product);
   return (
-    <div className="products-center flex h-[160px] justify-between rounded-xl bg-white p-4 shadow-sm mb-4">
-      {/* صورة المنتج */}
+    <div className="products-center mb-4 flex h-[160px] justify-between rounded-xl bg-white p-4 shadow-sm">
+      {/* product image */}
       <Image
         src={product.image}
         alt={product.name}
@@ -42,10 +36,9 @@ export default function CartItemCard({ cartProduct }: Props) {
         className="rounded-2xl object-cover"
       />
 
-      {/* محتوى المنتج */}
+      {/* product content */}
       <div className="flex h-full w-full flex-col justify-between px-4">
-        {/* الاسم والحذف */}
-        <div className="name-delete flex justify-between ">
+        <div className="name-delete flex justify-between">
           <div className="products-start">
             <h2 className="line-clamp-1 text-lg font-semibold">
               {product.name}
@@ -59,21 +52,22 @@ export default function CartItemCard({ cartProduct }: Props) {
               ))}
             </div>
           </div>
-                  <button className="w-[20%]"
-                      onClick={async () => {
-                        try {
-                          await deleteItem(cartProduct.id);
-                          toast('item deleted successfully');
-                        } catch {
-                          toast.error('Failed to delete item');
-                        }
-                      }}
-                  >
-                    <Trash2 className="grow-0 cursor-pointer w-full text-red-500" />
-                  </button>
+          <button
+            className="w-[20%]"
+            onClick={async () => {
+              try {
+                await deleteItem(cartProduct.id);
+                toast.success("item deleted successfully");
+              } catch {
+                toast.error("Failed to delete item");
+              }
+            }}
+          >
+            <Trash2 className="w-full grow-0 cursor-pointer text-red-500" />
+          </button>
         </div>
-        {/*m السعر  عداد الكمية */}
-        <div className="counter-price flex justify-between items-center">
+
+        <div className="counter-price flex items-center justify-between">
           <div className="mt-auto text-lg font-bold">
             <div className="pricebefore text-sm text-indigo-400 line-through">
               {product.price.price.toFixed(2)}
@@ -85,12 +79,41 @@ export default function CartItemCard({ cartProduct }: Props) {
               <span className="ml-1 text-xs font-normal">EGP</span>
             </div>
           </div>
-                  <div className="counter flex items-center gap-4 rounded-full border p-1 h-[70%]  text-gray-500">
-            <Minus className="size-4 cursor-pointer" />
+          <div className="counter flex h-[70%] items-center gap-4 rounded-full border p-1 text-gray-500">
+            <Minus
+              className="size-4 cursor-pointer"
+              onClick={async () => {
+                if (cartProduct.quantity === 1) return;
+                try {
+                  await updateCount({
+                    cart_product_id: cartProduct.id,
+                    quantity: cartProduct.quantity - 1,
+                    _method: "put",
+                  });
+                  toast.success("Quantity decreased");
+                } catch {
+                  toast.error("Failed to update quantity");
+                }
+              }}
+            />
             <span className="font-semibold text-black">
               {cartProduct.quantity}
             </span>
-            <Plus className="size-4 cursor-pointer" />
+            <Plus
+              className="size-4 cursor-pointer"
+              onClick={async () => {
+                try {
+                  await updateCount({
+                    cart_product_id: cartProduct.id,
+                    quantity: cartProduct.quantity + 1,
+                    _method: "put",
+                  });
+                  toast("Quantity decreased");
+                } catch {
+                  toast.error("Failed to update quantity");
+                }
+              }}
+            />
           </div>
         </div>
       </div>

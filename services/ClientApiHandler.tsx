@@ -140,3 +140,14 @@ export const deleteItem = async (id: any) => {
   console.log('delete',res)
 
 }
+interface UpdateQuantityPayload {
+  cart_product_id: number;
+  quantity: number;
+  _method: "put";
+}
+
+export const updateCount = async(payload: UpdateQuantityPayload) => {
+  const res = await axiosClient.put("carts/update-count", payload);
+  console.log(res.data)
+  return res.data;
+};
