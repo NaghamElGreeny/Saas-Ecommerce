@@ -1,20 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
 import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import React from "react";
+// import { Spinner } from "@heroui/spinner";
 import { CartProduct, ItemModifier } from "@/utils/cartTypes";
-import { deleteItem, updateCount } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
+import { useCartStore } from "@/stores/cartStore";
 
 type Props = {
   cartProduct: CartProduct;
 };
 
 export default function CartItemCard({ cartProduct }: Props) {
-  // استخراج جميع الـ modifiers في مصفوفة واحدة
+  const { updateProductQuantity, removeProduct, actionLoading } =
+    useCartStore();
+
   const product = cartProduct.product;
-  //   console.log(cartProduct);
-  // Assuming each group is of type SubModifier and has an 'item_modifiers' property (adjust as needed)
+
   const modifiers: ItemModifier[] =
     cartProduct.sub_modifiers?.flatMap((group: any) =>
       (group.item_modifiers ?? []).map((mod: ItemModifier) => ({
@@ -24,10 +26,37 @@ export default function CartItemCard({ cartProduct }: Props) {
         price: mod.price,
       })),
     ) ?? [];
-  console.log("product :", product);
+
+  const handleRemove = async () => {
+    try {
+      await removeProduct(cartProduct.id);
+      toast.success("Item deleted successfully");
+    } catch {
+      toast.error("Failed to delete item");
+    }
+  };
+
+  const handleDecrease = async () => {
+    if (cartProduct.quantity === 1) return;
+    try {
+      await updateProductQuantity(cartProduct.id, cartProduct.quantity - 1);
+      toast.success("Quantity decreased");
+    } catch {
+      toast.error("Failed to update quantity");
+    }
+  };
+
+  const handleIncrease = async () => {
+    try {
+      await updateProductQuantity(cartProduct.id, cartProduct.quantity + 1);
+      toast.success("Quantity increased");
+    } catch {
+      toast.error("Failed to update quantity");
+    }
+  };
+
   return (
     <div className="products-center mb-4 flex h-[160px] justify-between rounded-xl bg-white p-4 shadow-sm">
-      {/* product image */}
       <Image
         src={product.image}
         alt={product.name}
@@ -36,14 +65,13 @@ export default function CartItemCard({ cartProduct }: Props) {
         className="rounded-2xl object-cover"
       />
 
-      {/* product content */}
       <div className="flex h-full w-full flex-col justify-between px-4">
-        <div className="name-delete flex justify-between">
-          <div className="products-start">
+        <div className="flex justify-between">
+          <div>
             <h2 className="line-clamp-1 text-lg font-semibold">
               {product.name}
             </h2>
-            <div className="mt-.5 line-clamp-2 max-w-[60%] text-sm text-indigo-400">
+            <div className="mt-0.5 line-clamp-2 max-w-[60%] text-sm text-indigo-400">
               {modifiers.map((mod, index) => (
                 <span key={mod.id}>
                   {mod.quantity}x {mod.name} ({mod.price.price}
@@ -54,67 +82,40 @@ export default function CartItemCard({ cartProduct }: Props) {
           </div>
           <button
             className="w-[20%]"
-            onClick={async () => {
-              try {
-                await deleteItem(cartProduct.id);
-                toast.success("item deleted successfully");
-              } catch {
-                toast.error("Failed to delete item");
-              }
-            }}
+            onClick={handleRemove}
+            disabled={actionLoading}
           >
-            <Trash2 className="w-full grow-0 cursor-pointer text-red-500" />
+            {/*actionLoading ? (
+              <Spinner size="sm" className="text-red-500" />
+            ) : (
+            )*/}
+            <Trash2 className="w-full cursor-pointer text-red-500" />
           </button>
         </div>
 
-        <div className="counter-price flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="mt-auto text-lg font-bold">
-            <div className="pricebefore text-sm text-indigo-400 line-through">
+            <div className="text-sm text-indigo-400 line-through">
               {product.price.price.toFixed(2)}
               <span className="ml-1 text-xs font-normal">EGP</span>
             </div>
-            <div className="priceafter">
-              {" "}
+            <div>
               {product.price.price_after.toFixed(2)}
               <span className="ml-1 text-xs font-normal">EGP</span>
             </div>
           </div>
-          <div className="counter flex h-[70%] items-center gap-4 rounded-full border p-1 text-gray-500">
-            <Minus
-              className="size-4 cursor-pointer"
-              onClick={async () => {
-                if (cartProduct.quantity === 1) return;
-                try {
-                  await updateCount({
-                    cart_product_id: cartProduct.id,
-                    quantity: cartProduct.quantity - 1,
-                    _method: "put",
-                  });
-                  toast.success("Quantity decreased");
-                } catch {
-                  toast.error("Failed to update quantity");
-                }
-              }}
-            />
+          <div
+            className={`counter flex h-[70%] items-center gap-4 rounded-full border p-1 text-gray-500 transition-opacity ${
+              actionLoading ? "pointer-events-none opacity-50" : ""
+            }`}
+          >
+       <Minus className="size-4 cursor-pointer" onClick={handleDecrease} />
             <span className="font-semibold text-black">
               {cartProduct.quantity}
             </span>
-            <Plus
-              className="size-4 cursor-pointer"
-              onClick={async () => {
-                try {
-                  await updateCount({
-                    cart_product_id: cartProduct.id,
-                    quantity: cartProduct.quantity + 1,
-                    _method: "put",
-                  });
-                  toast("Quantity decreased");
-                } catch {
-                  toast.error("Failed to update quantity");
-                }
-              }}
-            />
+            <Plus className="size-4 cursor-pointer" onClick={handleIncrease} />
           </div>
+         
         </div>
       </div>
     </div>
