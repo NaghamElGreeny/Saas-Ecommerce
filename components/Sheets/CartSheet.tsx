@@ -15,13 +15,9 @@ import Image from "next/image";
 import { getCart } from "@/services/ClientApiHandler";
 import { CartData, CartResponse } from "@/utils/cartTypes";
 import CartItemCard from "../shared/CartItem";
-import Btn from "../ui/Btn";
 import Link from "next/link";
-// import { getCart } from "@/services/ClientApiHandler";
-// import { useCartStore } from "@/stores/cartStore";
 export default function CartSheet() {
   const [cart, setCart] = useState<CartData>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [CartResponse, setCartResponse] = useState<CartResponse>();
 
   useEffect(() => {
@@ -58,62 +54,78 @@ export default function CartSheet() {
               </span>
             </SheetTitle>
           </SheetHeader>
-          <ScrollArea className="mb-0 h-2/5 w-[97%] overflow-y-auto rounded-md p-4">
+          <ScrollArea className="h-3/5 w-[97%] overflow-y-auto rounded-md p-4">
             {cart?.products?.map((product) => (
-              // <div className="card" >
               <CartItemCard cartProduct={product} key={product.id} />
-              // </div>
             ))}
           </ScrollArea>
-          <SheetTitle className="mt-0 w-[90%] text-2xl">
+          <SheetTitle className="m-0 w-[90%] p-0 text-2xl">
             Order Summary
           </SheetTitle>
-          {cart &&
-            <div className="order-summary  h-fit w-[90%] rounded-2xl bg-white p-4 space-y-4">
-            <div className="subTotal flex w-full justify-between">
-              <h3>
-                Subtotal <span> ({cart?.products.length} items)</span>
-              </h3>
-              <h3>
-               
-                {CartResponse.price.sun_total}{" "}
-                <span>{CartResponse.currency}</span>
-              </h3>
-            </div>
-            <div className="VAT flex w-full flex justify-between">
-              <h3>VAT</h3>
-              <h3>
-                {CartResponse.price.coupon_price}{" "}
-                <span>{CartResponse.currency}</span>
-              </h3>
-            </div>
-            <div className="Surcharge w-full flex justify-between">
-                <h3>Surcharge</h3>
-              <h3>
-                {CartResponse.price.surcharge}{" "}
-                <span>{CartResponse.currency}</span>
-              </h3>
-            </div>
-            <div className="totalAmount w-full flex justify-between">      <h3>Total Amount</h3>
-              <h3>
-                {CartResponse.price.total}{" "}
-                <span>{CartResponse.currency}</span>
-              </h3></div>
-            </div>}
-          {/* {CartResponse &&
-            CartResponse?.price?.Array.map((key) => {
-            
-            })} */}
-          <SheetFooter className="flex flex-col items-center w-[70%] justify-center">
-            <SheetClose asChild />
-           <Link
-            href={`/`}
-            className="flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white"
-          >
-            <Image src="" alt="checkout" width={24} height={24} />
-            <span>Checkout</span>
-          </Link>
-          </SheetFooter>
+{cart ? (
+  <>
+    <div className="order-summary h-fit w-[90%] space-y-4 rounded-2xl bg-white p-4">
+      <div className="subTotal flex w-full justify-between">
+        <h3>
+          Subtotal{" "}
+          <span className="ms-1 text-sm text-gray-300">
+            {" "}
+            ({cart?.products.length} items)
+          </span>
+        </h3>
+        <h3>
+          {CartResponse.price.sun_total}{" "}
+          <span>{CartResponse.currency}</span>
+        </h3>
+      </div>
+      <div className="VAT flex w-full justify-between">
+        <h3>VAT</h3>
+        <h3>
+          {CartResponse.price.coupon_price}{" "}
+          <span>{CartResponse.currency}</span>
+        </h3>
+      </div>
+      <div className="Surcharge flex w-full justify-between">
+        <h3>Surcharge</h3>
+        <h3>
+          {CartResponse.price.surcharge}{" "}
+          <span>{CartResponse.currency}</span>
+        </h3>
+      </div>
+      <hr />
+      <div className="totalAmount flex w-full justify-between font-bold">
+        <h3>Total Amount</h3>
+        <h3>
+          {CartResponse.price.total}{" "}
+          <span className="font-normal">{CartResponse.currency}</span>
+        </h3>
+      </div>
+    </div>
+    {/* {CartResponse &&
+      CartResponse?.price?.Array.map((key) => {
+      })} */}
+    <SheetFooter className="flex w-[70%] flex-col items-center justify-center">
+      <SheetClose asChild />
+      <Link
+        href={`/`}
+        className="flex h-16 w-full items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white"
+      >
+        <span className="text-2xl">Checkout</span>
+        <Image
+          src="/assets/icons/arrow.svg"
+          alt="checkout"
+          width={24}
+          height={24}
+        />
+      </Link>
+    </SheetFooter>
+  </>
+) : (
+  <div className="no-items text-center">
+    <h2>No products</h2>
+    <p>You don&#39;t have any products yet in your cart</p>
+  </div>
+)}
         </SheetContent>
       </Sheet>
     </>
