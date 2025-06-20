@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import {Spinner} from "@heroui/spinner";
 import {
   Sheet,
   SheetClose,
@@ -12,29 +13,25 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import Image from "next/image";
-import { getCart } from "@/services/ClientApiHandler";
-import { CartData, CartResponse } from "@/utils/cartTypes";
 import CartItemCard from "../shared/CartItem";
 import Link from "next/link";
+import TotalOrder from "../shared/TotalOrder";
+import { useCartStore } from "@/stores/cartStore";
 export default function CartSheet() {
-  const [cart, setCart] = useState<CartData>();
-  const [CartResponse, setCartResponse] = useState<CartResponse>();
+  // const { actionLoading, updateProductQuantity } = useCartStore();
+  const { cart, fetchCart, loading, error, actionLoading, updateProductQuantity } = useCartStore();
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const data = await getCart();
-        setCartResponse(data);
-        setCart(data.data);
-      } catch (error) {
-        console.error("Failed to fetch cart:", error);
-      }
-    };
     fetchCart();
-  }, []);
-  // console.log("cart prices:", CartResponse.price);
+
+  }, [fetchCart]);
+  // if (loading) return <p>جار تحميل السلة...</p>;
+  // if (error) return <p style={{ color: 'red' }}>{error}</p>;
+console.log(cart)
+
   return (
     <>
+      {/* <Spinner classNames={{label: "text-foreground mt-4"}} label="wave" variant="wave" /> */}
       <Sheet>
         <SheetTrigger className="cursor-pointer">
           <Image
@@ -50,64 +47,63 @@ export default function CartSheet() {
             <SheetTitle className="text-2xl font-bold">
               My Cart
               <span className="text-primary ms-2 text-sm font-medium">
-                ({cart?.products.length} items)
+                ({cart?.data?.products.length} items)
               </span>
             </SheetTitle>
           </SheetHeader>
           <ScrollArea className="h-3/5 w-[97%] overflow-y-auto rounded-md p-4">
-            {cart?.products?.map((product) => (
+            {cart?.data?.products?.map((product) => (
               <CartItemCard cartProduct={product} key={product.id} />
             ))}
           </ScrollArea>
           <SheetTitle className="m-0 w-[90%] p-0 text-2xl">
             Order Summary
           </SheetTitle>
-{cart ? (
-  <>
-    <div className="order-summary h-fit w-[90%] space-y-4 rounded-2xl bg-white p-4">
+          {cart?.data?.products ? (
+            <>
+              <TotalOrder CartResponse={cart} />
+    {/* <div className="order-summary h-fit w-[90%] space-y-4 rounded-2xl bg-white p-4">
       <div className="subTotal flex w-full justify-between">
         <h3>
           Subtotal{" "}
           <span className="ms-1 text-sm text-gray-300">
             {" "}
-            ({cart?.products.length} items)
+            ({cart?.data?.products.length} items)
           </span>
         </h3>
         <h3>
-          {CartResponse.price.sun_total}{" "}
-          <span>{CartResponse.currency}</span>
+          {cart.price.sun_total}{" "}
+          <span>{cart.currency}</span>
         </h3>
       </div>
       <div className="VAT flex w-full justify-between">
         <h3>VAT</h3>
         <h3>
-          {CartResponse.price.coupon_price}{" "}
-          <span>{CartResponse.currency}</span>
+          {cart.price.coupon_price}{" "}
+          <span>{cart.currency}</span>
         </h3>
       </div>
       <div className="Surcharge flex w-full justify-between">
         <h3>Surcharge</h3>
         <h3>
-          {CartResponse.price.surcharge}{" "}
-          <span>{CartResponse.currency}</span>
+          {cart.price.surcharge}{" "}
+          <span>{cart.currency}</span>
         </h3>
       </div>
       <hr />
       <div className="totalAmount flex w-full justify-between font-bold">
         <h3>Total Amount</h3>
         <h3>
-          {CartResponse.price.total}{" "}
-          <span className="font-normal">{CartResponse.currency}</span>
+          {cart.price.total}{" "}
+          <span className="font-normal">{cart.currency}</span>
         </h3>
       </div>
-    </div>
-    {/* {CartResponse &&
-      CartResponse?.price?.Array.map((key) => {
-      })} */}
+    </div> */}
+  
     <SheetFooter className="flex w-[70%] flex-col items-center justify-center">
       <SheetClose asChild />
       <Link
-        href={`/`}
+        href="/"
         className="flex h-16 w-full items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white"
       >
         <span className="text-2xl">Checkout</span>

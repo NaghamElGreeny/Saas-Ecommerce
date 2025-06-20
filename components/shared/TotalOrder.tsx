@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function TotalOrder(CartResponse) {
+  console.log(CartResponse)
   return (
       <>
             <h2 className="m-0 w-[90%] p-0 text-2xl">
@@ -12,7 +13,7 @@ export default function TotalOrder(CartResponse) {
           Subtotal{" "}
           <span className="ms-1 text-sm text-gray-300">
             {" "}
-            ({cart?.products.length} items)
+            ({CartResponse?.data?.products.length} items)
           </span>
         </h3>
         <h3>

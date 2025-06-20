@@ -138,7 +138,10 @@ export const getCart = async () => {
 export const deleteItem = async (id: any) => {
   const res = await axiosClient.delete(`carts/delete-item/${id}`);
   console.log('delete',res)
-
+}
+export const ClearCart= async () => {
+  const res = await axiosClient.delete(`carts/delete`);
+  console.log('Clear Cart',res)
 }
 interface UpdateQuantityPayload {
   cart_product_id: number;
