@@ -13,6 +13,7 @@ async function MenuPage() {
 
   const categories = getCategories();
   const categoriesArr=[categories]
+console.log('menu items api',categories)
 console.log('categories api',categories)
   return (
     <main className="min-h-screen bg-gray-50">

@@ -69,7 +69,7 @@ export default function CartSheet() {
             <SheetFooter className="flex w-[70%] flex-col items-center justify-center">
               <SheetClose asChild />
               <Link
-                href="/"
+                href="/checkout"
                 className="flex h-16 w-full items-center justify-center gap-2 rounded-full bg-primary text-white"
               >
                 <span className="text-2xl">Checkout</span>
