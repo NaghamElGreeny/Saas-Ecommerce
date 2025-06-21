@@ -35,7 +35,7 @@ export default function CartSheet() {
           alt="cart"
           width={60}
           height={60}
-          className="size-[60px]"
+          className="size-[60px] shrink-0"
         />
       </SheetTrigger>
 

@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useRef, useState } from "react";
 import ProfileSheet from "../Sheets/ProfileSheet";
 import { FiMenu, FiX } from "react-icons/fi";
@@ -137,8 +138,9 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
     <>
       {/* Mobile Menu Toggle */}
       <div className="flex items-center gap-4 lg:hidden">
+        <CartSheet />
+        <NotificationSheet />
         {logged && <ProfileSheet />}
-
         <button id="toggleBtn" onClick={toggleMenu} className="z-50 lg:hidden">
           <div className="border-primary hover:bg-primary/20 active:bg-primary/40 flex h-10 w-10 items-center justify-center rounded-full border-2">
             {isOpen ? (
@@ -158,14 +160,6 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
           {renderNavLinks()}
           {renderReservationDialog()}
           {renderCmsPages()}
-          <hr />
-
-          <div className="flex items-center gap-5">
-            <CartSheet /> <span>Cart</span>
-          </div>
-          <div className="flex items-center gap-5">
-            <NotificationSheet /> <span>Notifications</span>
-          </div>
           {logged ? (
             <button
               onClick={Logout}
