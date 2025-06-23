@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Modifier } from "@/utils/types";
 import Cookies from "js-cookie";
 import { useRef } from "react";
+import toast from "react-hot-toast";
 
 const ProductForm = ({ productId, modifiers }: {
   productId: number;
@@ -42,7 +43,8 @@ const ProductForm = ({ productId, modifiers }: {
     };
 
     console.log("payload", payload);
-    await AddToCart(payload);
+ const res=   await AddToCart(payload);
+    toast.success('added to cart')
   };
 
   return (

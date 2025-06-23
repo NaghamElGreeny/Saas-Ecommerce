@@ -29,14 +29,14 @@ export default function ChecoutPage() {
   </Formik> */}
     
           {/* promo */}
-          {/* <BaseInputField
-            label={t(`Promo Code`)}
+          <label htmlFor="promo" className="block mb-1">Promo Code</label>
+          <input
             name={'promocode'}
             id={'promo'}
             type="text"
             className="border"
             placeholder={'Enter Promo Code'}
-          /> */}
+          />
 
           <TotalOrder />
         </div>
