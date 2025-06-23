@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import { deleteAddress, getAddress } from "@/services/ClientApiHandler";
 import { useAddressStore } from "@/stores/addressStore";
 
-export default function AddressItem(addr) {
-    const address = addr.addr;
+export default function AddressItem({ addr, onEdit }) {
+  const address = addr;
  const { setAddresses } = useAddressStore();
 
   const handleRemove = async () => {
@@ -20,9 +20,9 @@ export default function AddressItem(addr) {
       toast.error('Failed to delete address');
     }
   };
-  const handleUpdate  = async () => {
-  //update address data
-  };
+  // const handleUpdate  = async () => {
+  // //update address data
+  // };
 
 
   return (
@@ -43,7 +43,7 @@ export default function AddressItem(addr) {
             <p>{address.desc}</p>
           </div>
           <div className="btns flex items-center w-1/5 justify-around">
-            <button className="" onClick={handleUpdate}>
+            <button className="" onClick={() => onEdit(address)}>
               <Edit className="w-full cursor-pointer text-primary" />
             </button>
             <button className="" onClick={handleRemove}>

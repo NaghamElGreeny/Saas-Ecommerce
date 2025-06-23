@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 // import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { addAddress } from "@/services/ClientApiHandler";
+import { addAddress, updateAddress } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
 // import GoogleMapComponent from "../shared/GoogleMap";
 import GoogleMapSelector from "../shared/GoogleMap";
@@ -19,9 +19,17 @@ const validationSchema = Yup.object({
   apartment: Yup.number().required("Required"),
 });
 
-const AddressForm = ({ isUpdate = false }: { isUpdate?: boolean }) => {
+const AddressForm = ({
+  isUpdate = false,
+  initialData,
+  onSuccess,
+}: {
+  isUpdate?: boolean;
+  initialData?: any;
+  onSuccess?: () => void;
+}) => {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
-    null,
+    initialData ? { lat: initialData.lat, lng: initialData.lng } : null
   );
   const searchInputRef = useRef<HTMLInputElement>(null);
   // const mapRef = useRef<GoogleMap>(null);
@@ -33,51 +41,56 @@ const AddressForm = ({ isUpdate = false }: { isUpdate?: boolean }) => {
     <div className="h-full w-full space-y-6 overflow-y-auto rounded-3xl bg-white p-6">
       <h2 className="mb-4 text-xl font-semibold">Add New Address</h2>
 
-      <Formik
-        initialValues={{
-          isDefault: false,
-          address: "",
-          title: "",
-          building: "",
-          floorNo: "",
-          apartment: "",
-        }}
+<Formik
+  initialValues={{
+    isDefault: initialData?.is_default ?? false,
+    address: initialData?.desc ?? "",
+    title: initialData?.title ?? "",
+    building: initialData?.building ?? "",
+    floorNo: initialData?.floor ?? "",
+    apartment: initialData?.apartment ?? "",
+  }}
+
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
-          if (!location) {
-            toast.error("Please select a location on the map");
-            return;
-          }
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+  if (!location) {
+    toast.error("Please select a location on the map");
+    return;
+  }
 
-          const payload = {
-            title: values.title,
-            lat: location.lat,
-            lng: location.lng,
-            desc: values.address,
-            is_default: values.isDefault,
-            building: values.building,
-            floor: values.floorNo,
-            apartment: values.apartment,
-          };
-          if (values.isDefault == false) {
-            delete payload.is_default;
-          }
-          try {
-            if (isUpdate) {
+  const payload = {
+    title: values.title,
+    lat: location.lat,
+    lng: location.lng,
+    desc: values.address,
+    is_default: values.isDefault,
+    building: values.building,
+    floor: values.floorNo,
+    apartment: values.apartment,
+  };
 
-             } else { 
-              await addAddress(payload);
-              toast.success("Address saved successfully!");
-              resetForm();
-              setLocation(null);
-            }
-          } catch (error) {
-            toast.error("Failed to save address");
-            console.error(error);
-          } finally {
-            setSubmitting(false);
-          }
-        }}
+  if (!values.isDefault) delete payload.is_default;
+
+  try {
+    if (isUpdate && initialData?.id) {
+      await updateAddress(initialData.id, payload); 
+      toast.success("Address updated successfully!");
+    } else {
+      await addAddress(payload); // ← ريكويست الإضافة
+      toast.success("Address saved successfully!");
+      resetForm();
+      setLocation(null);
+    }
+
+    if (onSuccess) onSuccess(); // عشان نقفل المودال مثلاً أو نعمل تحديث للبيانات
+  } catch (error) {
+    toast.error("Failed to save address");
+    console.error(error);
+  } finally {
+    setSubmitting(false);
+  }
+}}
+
       >
         {({ setFieldValue, isSubmitting }) => (
           <Form className="space-y-4">
