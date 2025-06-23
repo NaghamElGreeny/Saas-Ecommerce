@@ -90,6 +90,7 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
     try {
       await logout({ device_type: "web" });
       cookies.remove("token");
+      cookies.remove('store_selected_once');
       useAuthStore.getState().setToken("");
       // setLogged(false);
       toast.success("Logged out successfully");

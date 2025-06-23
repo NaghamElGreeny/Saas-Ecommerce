@@ -15,7 +15,7 @@ export default function NotificationSheet() {
   return (
     <>
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger className="relative cursor-pointer">
           <Image
             src="/assets/icons/notifications.png"
             alt="notifications"
@@ -23,6 +23,11 @@ export default function NotificationSheet() {
             height={60}
             className="size-[60px]"
           />
+            <span
+    className="absolute top-4 right-4.5 flex size-2 items-center justify-center rounded-full bg-primary text-[8px] font-semibold text-white"
+  >
+    
+  </span>
         </SheetTrigger>
         <SheetContent className="rounded-l-2xl">
           <SheetHeader>

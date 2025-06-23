@@ -1,107 +1,172 @@
 'use client';
+
 import { useEffect, useState } from 'react';
-import { ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
-import { getStores } from '@/services/ClientApiHandler';
+import { Dialog } from '@headlessui/react';
+import { ChevronDown, X } from 'lucide-react';
+import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
-import Cookies from 'js-cookie';
-import { Store } from '@/utils/types';
+import { getStores } from '@/services/ClientApiHandler';
+import { useStore } from '@/stores/useStore';
 
-export default function LocationSelector(active: { active?: boolean }) {
-    const [open, setOpen] = useState(active ? active : false);
-    const [selectedStore, setSelectedStore] = useState<Store | null>(null);
-const [stores, setStores] = useState([]);
+type LocationSelectorProps = {
+  active?: boolean;
+};
 
- 
-    useEffect(() => {
-        const fetchStores = async () => {
-            try {
-                const stores = await getStores();
-                setStores(stores);
-                // setSelectedStore(stores[0]); // default selected store
-            } catch (err) {
-                toast.error('Failed to load stores');
-                console.error(err);
-            }
-        };
- 
-        fetchStores();
-         }, []);
-    
+export default function LocationSelector({ active = false }: LocationSelectorProps) {
+  const { stores, selectedStore, setStores, setSelectedStore } = useStore();
 
-    return (
-        <>
-            {/* Trigger */}
-            <div
-                className="flex flex-row items-center space-x-3 cursor-pointer sm:flex-col"
+  const [open, setOpen] = useState(false);
+  const [tempSelectedId, setTempSelectedId] = useState<number | null>(null);
 
-            >
-                <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <Image
-                        src="/assets/images/abushakra.png"
-                        alt="Abu Shakra Logo"
-                        width={48}
-                        height={48}
-                        className="object-cover w-full h-full"
-                    />
-                </div>
-                <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-black whitespace-nowrap">Abu Shakra</span>
-                    <div className="flex items-center space-x-1" onClick={() => setOpen(true)}>
-                        <span className="text-sm text-gray-400 truncate max-w-[160px]">
-                            {selectedStore ? selectedStore.location_description : ''}
-                        </span>
-                        <ChevronDown className="w-4 h-4 text-gray-400" />
+  // Load stores and handle auto-selection on first visit
+  useEffect(() => {
+    const fetchAndHandleStores = async () => {
+      try {
+        const data = await getStores();
+        setStores(data);
 
-                    </div>
-                </div>
+        const hasSelectedBefore = Cookies.get('store_selected_once');
+        const savedStoreId = Cookies.get('store_id');
+
+        // Auto-select first store if no previous selection
+        if (!savedStoreId && !hasSelectedBefore && data.length > 0) {
+          const firstStore = data[0];
+          setSelectedStore(firstStore);
+          setTempSelectedId(firstStore.id);
+          Cookies.set('store_id', String(firstStore.id));
+          Cookies.set('store_selected_once', 'true');
+          setOpen(false);
+          return;
+        }
+
+        // If user requested modal explicitly (e.g. from nav click)
+        if (active) {
+          setOpen(true);
+        }
+
+        // Load previously selected store (if not already loaded)
+        if (savedStoreId && !selectedStore) {
+          const matched = data.find((s) => String(s.id) === savedStoreId);
+          if (matched) {
+            setSelectedStore(matched);
+            setTempSelectedId(matched.id);
+          }
+        }
+
+      } catch (error) {
+        toast.error('Failed to load stores');
+        console.error(error);
+      }
+    };
+
+    fetchAndHandleStores();
+  }, [setStores, setSelectedStore, active, selectedStore]);
+
+  // Confirm selection and persist in cookies
+  const handleConfirm = () => {
+    const selected = stores.find((store) => store.id === tempSelectedId);
+    if (!selected) return;
+
+    setSelectedStore(selected);
+    Cookies.set('store_id', String(selected.id));
+    setOpen(false);
+  };
+
+  return (
+    <>
+      {/* Trigger Button */}
+      <div
+        className="flex items-center space-x-3 cursor-pointer sm:flex-col"
+        onClick={() => setOpen(true)}
+      >
+        <div className="w-12 h-12 rounded-full overflow-hidden">
+          <Image
+            src="/assets/images/abushakra.png"
+            alt="Abu Shakra Logo"
+            width={48}
+            height={48}
+            className="object-cover w-full h-full"
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <span className="text-sm font-semibold text-black whitespace-nowrap">Abu Shakra</span>
+          <div className="flex items-center space-x-1">
+            <span className="text-sm text-gray-400 truncate max-w-[160px]">
+              {selectedStore?.location_description || ''}
+            </span>
+            <ChevronDown className="w-4 h-4 text-gray-400" />
+          </div>
+        </div>
+      </div>
+
+      {/* Dialog */}
+      <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-[2px]" aria-hidden="true" />
+
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
+            <div className="flex items-center justify-between mb-4">
+              <Dialog.Title className="text-xl font-semibold">Select Store</Dialog.Title>
+              <button onClick={() => setOpen(false)}>
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
             </div>
 
-            {/* Popup */}
-            {open && (
-                <div className="space-y-4 fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-xl relative">
-
-                        <button
-                            className="absolute top-2 right-2 text-gray-500 hover:text-black"
-                            onClick={() => setOpen(false)}
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-                        <h2 className="text-lg font-bold mb-4">Select Store</h2>
-
-                        <div className="space-y-2">
-                            {stores.map((store) => (
-                                <div
-                                    key={store.id}
-                                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${selectedStore?.id === store.id
-                                        ? 'border-blue-500 bg-blue-50'
-                                        : 'border-gray-200 hover:bg-gray-50'
-                                        }`}
-                                    onClick={() => {
-                                        setSelectedStore(store)
-                                        Cookies.set('store_id', String(store.id));
-                                    }
-                                        
-                                    }
-                                >
-                                    <h3 className="font-medium">{store.name}</h3>
-                                    <p className="text-gray-600 text-sm mt-1">{store.location_description}</p>
-                                </div>
-                            ))}
-                        </div>
+            {/* Store List */}
+            <div className="space-y-4 max-h-72 overflow-y-auto">
+              {stores.map((store) => (
+                <div
+                  key={store.id}
+                  onClick={() => setTempSelectedId(store.id)}
+                  className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition ${
+                    tempSelectedId === store.id
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:bg-gray-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <Image
+                      src={store.image}
+                      alt={store.name}
+                      width={60}
+                      height={60}
+                      className="rounded object-cover w-14 h-14"
+                    />
+                    <div>
+                      <h3 className="font-semibold">{store.name}</h3>
+                      <p className="text-sm text-blue-600">{store.location_description}</p>
                     </div>
+                  </div>
 
-                    {/* Display selected location */}
-                    {/* {selectedStore && (
-                        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                            <h3 className="font-medium">Selected Location:</h3>
-                            <p className="text-gray-600 mt-1">{selectedStore.location}</p>
-                        </div>
-                    )} */}
+                  {/* Custom Radio Circle */}
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      tempSelectedId === store.id
+                        ? 'border-blue-600'
+                        : 'border-gray-400'
+                    }`}
+                  >
+                    {tempSelectedId === store.id && (
+                      <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                    )}
+                  </div>
                 </div>
-            )}
-        </>
-    );
+              ))}
+            </div>
+
+            {/* Confirm Button */}
+            <button
+              onClick={handleConfirm}
+              className="mt-6 w-full py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition"
+            >
+              Confirm
+            </button>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+    </>
+  );
 }

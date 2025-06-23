@@ -35,7 +35,7 @@ export default function Navbar({ cms }) {
         {logged ? (
           <>
             <ProfileSheet />
-            <LocationSelector active />
+            <LocationSelector  />
           </>
         ) : (
           <LogoutButton />

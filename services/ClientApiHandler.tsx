@@ -154,3 +154,39 @@ export const updateCount = async(payload: UpdateQuantityPayload) => {
   console.log(res.data)
   return res.data;
 };
+export const applyCoupon = async (code: string) => {
+  const res = await axiosClient.post("/order_discounts", {
+    coupon_code: code,
+  });
+  return res.data;
+};
+export const getAddress = async () => {
+  const res = await axiosClient.get("/address");
+  return res.data;
+};
+type AddressPayload = {
+  // type: 'home' | 'work' | 'other';
+  title: string;
+  lat: number;
+  lng: number;
+  // lat: number | '31.05491';
+  // lng: number | '31.0549151';
+  desc: string;
+  is_default?: boolean|false;
+  building: string;
+  floor: string;
+  apartment: string;
+};
+export const addAddress = async (payload: AddressPayload) => {
+  const res = await axiosClient.post("/address",payload);
+  return res.data;
+};
+export const deleteAddress = async (id: any) => {
+  const res = await axiosClient.delete(`address/${id}`);
+  console.log('delete', res)
+
+}
+
+export const updateAddress = (id: number, data: any) => {
+  return axiosClient.patch(`/address/${id}`, data);
+};

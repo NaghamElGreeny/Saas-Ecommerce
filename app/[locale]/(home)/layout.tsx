@@ -2,6 +2,7 @@ import "@/styles/globals.css"
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { getAllPages } from "@/services/ApiHandler";
+// import LocationInitializer from "@/components/shared/LocationInitializer";
 export default async function LocaleLayout({
     children,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,6 +21,7 @@ export default async function LocaleLayout({
     
     return (
         <>
+            {/* <LocationInitializer />  */}
         <Navbar cms={cmsPages.data} />
         {children}
         <Footer />

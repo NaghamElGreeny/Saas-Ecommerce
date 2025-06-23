@@ -56,7 +56,7 @@ export default function CartItemCard({ cartProduct }: Props) {
   };
 
   return (
-    <div className="products-center mb-4 flex h-[160px] justify-between rounded-xl bg-white p-4 shadow-sm">
+    <div className="products-center mb-4 flex h-[160px] justify-between rounded-xl bg-white p-4 ">
       <Image
         src={product.image}
         alt={product.name}
@@ -97,11 +97,11 @@ export default function CartItemCard({ cartProduct }: Props) {
           <div className="mt-auto text-lg font-bold">
             <div className="text-sm text-indigo-400 line-through">
               {product.price.price.toFixed(2)}
-              <span className="ml-1 text-xs font-normal">EGP</span>
+              <span className="ml-1 text-xs font-normal">{product.price.currency}</span>
             </div>
             <div>
               {product.price.price_after.toFixed(2)}
-              <span className="ml-1 text-xs font-normal">EGP</span>
+              <span className="ml-1 text-xs font-normal">{product.price.currency}</span>
             </div>
           </div>
           <div

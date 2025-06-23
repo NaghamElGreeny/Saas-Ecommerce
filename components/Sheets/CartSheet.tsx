@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCartStore } from "@/stores/cartStore";
 import CartItemCard from "../shared/CartItem";
 import TotalOrder from "../shared/TotalOrder";
- import { Spinner } from "@heroui/spinner";
+import { Spinner } from "@heroui/spinner";
 
 export default function CartSheet() {
   const { cart, fetchCart, loading } = useCartStore();
@@ -26,10 +26,14 @@ export default function CartSheet() {
 
   const products = cart?.data?.products || [];
   const hasProducts = products.length > 0;
+  const totalItems = products.reduce(
+    (total, product) => total + product.quantity,
+    0,
+  );
 
   return (
     <Sheet>
-      <SheetTrigger className="cursor-pointer">
+      <SheetTrigger className="relative cursor-pointer">
         <Image
           src="/assets/icons/cart.png"
           alt="cart"
@@ -37,24 +41,28 @@ export default function CartSheet() {
           height={60}
           className="size-[60px] shrink-0"
         />
+        {!loading && totalItems > 0 && (
+          <span className="bg-primary absolute top-4 right-3 flex size-4 items-center justify-center rounded-full text-[8px] font-semibold text-white">
+            {totalItems}
+          </span>
+        )}
       </SheetTrigger>
 
-      <SheetContent className="bg-bg w-full items-center rounded-l-2xl md:min-w-[600px]">
+      <SheetContent className="bg-bg w-full items-center rounded-l-2xl sm:min-w-[550px]">
         <SheetHeader className="w-full rounded-tl-2xl bg-white">
           <SheetTitle className="text-2xl font-bold">
             My Cart
             {hasProducts && (
               <span className="text-primary ms-2 text-sm font-medium">
-                ({products.length} items)
+                ({totalItems} items)
               </span>
             )}
           </SheetTitle>
         </SheetHeader>
 
-
         {loading ? (
           <div className="flex h-[60vh] w-full items-center justify-center">
-           <Spinner size="lg" className="text-primary" />
+            <Spinner size="lg" className="text-primary" />
           </div>
         ) : hasProducts ? (
           <>
@@ -64,13 +72,13 @@ export default function CartSheet() {
               ))}
             </ScrollArea>
 
-            <TotalOrder CartResponse={cart} />
+            <TotalOrder />
 
             <SheetFooter className="flex w-[70%] flex-col items-center justify-center">
-              <SheetClose asChild />
+              <SheetClose asChild >
               <Link
                 href="/checkout"
-                className="flex h-16 w-full items-center justify-center gap-2 rounded-full bg-primary text-white"
+                className="bg-primary flex h-16 w-full items-center justify-center gap-2 rounded-full text-white"
               >
                 <span className="text-2xl">Checkout</span>
                 <Image
@@ -79,7 +87,8 @@ export default function CartSheet() {
                   width={24}
                   height={24}
                 />
-              </Link>
+                </Link>
+                </SheetClose>
             </SheetFooter>
           </>
         ) : (

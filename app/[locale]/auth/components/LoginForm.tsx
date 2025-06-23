@@ -76,6 +76,7 @@ const handleForget=() => {
         setToken(data.data.token);
         Cookies.set('token', data.data.token, { expires: 300 }); // Store token in cookies for 7 days
         console.log('Login data:', data.data);
+        Cookies.remove('store_selected_once');
         // setLogged(true);
        setFormData({
   // phone: data.user.phone,

@@ -1,11 +1,15 @@
-// import { CartResponse } from '@/utils/cartTypes'
+"use client"
+import { useCartStore } from '@/stores/cartStore';
 import React from 'react'
 
-export default function TotalOrder(CartResponse) {
-  const cart = CartResponse.CartResponse;
+export default function TotalOrder() {
+  const CartResponse = useCartStore();
+  const cart = CartResponse.cart;
   console.log('cart', cart.price)
   // console.log('res', CartResponse)
-  
+  //add promocode and delivery 
+  const totalItems = cart?.data?.products.reduce((total, product) => total + product.quantity, 0);
+
   return (
       <>
             <h2 className="m-0 w-[90%] p-0 text-2xl font-bold">
@@ -17,7 +21,7 @@ export default function TotalOrder(CartResponse) {
           Subtotal{" "}
           <span className="ms-1 text-sm text-gray-300">
             {" "}
-            ({cart?.data?.products.length} items)
+            ({totalItems} items)
           </span>
         </h3>
         <h3>

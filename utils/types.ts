@@ -180,3 +180,13 @@ export interface Modifier {
   }[];
 };
 
+export interface Store {
+  id: number;
+  image: string;
+  name: string;
+  phone: string;
+  phone_code: string;
+  lat: number;
+  lng: number;
+  location_description: string;
+}

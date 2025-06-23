@@ -7,6 +7,7 @@
   --color-primary: #5A6AE8;
   --color-sub: #828ABA;
   --color-bg:#f8f8f3;
+  --color-scndbg:#f6f6f6;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
