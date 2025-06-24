@@ -40,10 +40,11 @@ export default function CheckoutCartItem({ cartProduct }: Props) {
           <div>
             <h2 className="text-lg font-semibold">{product.name}</h2>
             <div className="text-sm text-indigo-400">
-              {modifiers.map((mod, index) => (
+                           {modifiers?.map((mod, index) => (
                 <span key={mod.id}>
-                  {mod.quantity}x {mod.name} ({mod.price.price}
-                  {mod.price.currency}){index !== modifiers.length - 1 && ", "}
+                  {mod.quantity}x {mod.name} ({mod.price?.price ?? 0}{" "}
+                  {mod.price?.currency ?? ""})
+                  {index !== modifiers.length - 1 && ", "}
                 </span>
               ))}
             </div>

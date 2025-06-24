@@ -8,114 +8,125 @@ import { TimePicker } from "antd";
 import { ChevronDown, Edit } from "lucide-react";
 import { useAddressStore } from "@/stores/addressStore";
 import { useStore } from "@/stores/useStore";
-import { useCartStore } from "@/stores/cartStore"; // Import cart store
+import { useCartStore } from "@/stores/cartStore";
 import dayjs from "dayjs";
 import AddressItem from "../shared/AddressItem";
 import toast from "react-hot-toast";
-// import { updateCartOrderType } from "@/services/ClientApiHandler"; // API service to update order type
+import { useAuthStore } from "@/stores/authStore";
+import { confirmOrder } from "@/services/ClientApiHandler";
 
 const OrderForm = () => {
   const { addresses, fetchAddresses } = useAddressStore();
   const { stores, selectedStore, setSelectedStore } = useStore();
-  const { cart, fetchCart } = useCartStore(); // Get cart from store
+  const { cart, fetchCart } = useCartStore();
+const [isSubmitting, setIsSubmitting] = useState(false);
+  type UserData = {
+    points?: number;
+    wallet?: number;
+  };
+
+  const userData = useAuthStore(s => s.userData) as UserData;
+  console.log('user', userData)
 
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const [openStoreDialog, setOpenStoreDialog] = useState(false);
-  const [selectedDialogAddressId, setSelectedDialogAddressId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [selectedDialogAddressId, setSelectedDialogAddressId] = useState<
+    number | null
+  >(null);
 
   useEffect(() => {
     fetchAddresses();
   }, []);
 
-  const defaultAddress = addresses.find((address) => address.is_default);
+  const defaultAddress = addresses.find((a) => a.is_default);
 
   const validationSchema = Yup.object().shape({
-    orderType: Yup.string().oneOf(["delivery", "takeaway"]).required("Order type is required"),
-    schedule: Yup.boolean(),
-    date: Yup.string().when("schedule", {
-      is: true,
-      then: Yup.string().required("Date is required when scheduling"),
-      otherwise: Yup.string().notRequired(),
-    }),
-    time: Yup.string().when("schedule", {
-      is: true,
-      then: Yup.string().required("Time is required when scheduling"),
-      otherwise: Yup.string().notRequired(),
-    }),
-    paymentMethod: Yup.string().oneOf(["cash", "card"]).required("Payment method is required"),
-    selectedAddressId: Yup.number().when("orderType", {
-      is: "delivery",
-      then: Yup.number().required("Address is required for delivery"),
-      otherwise: Yup.number().nullable(),
-    }),
-    selectedStoreId: Yup.number().when("orderType", {
-      is: "takeaway",
-      then: Yup.number().required("Store is required for takeaway"),
-      otherwise: Yup.number().nullable(),
-    }),
+    orderType: Yup.string().required("Order type is required"),
+    is_schedule: Yup.boolean(),
+    // order_date: Yup.string().required("Date is required"),
+    // order_time: Yup.string().required("Time is required"),
+    pay_type: Yup.string().required("Payment method is required"),
+    selectedAddressId: Yup.number().required("Address is required"),
+    selectedStoreId: Yup.number().required("Store is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      orderType: cart?.data?.order_type || "delivery", 
-      schedule: false,
-      date: "",
-      time: "",
-      paymentMethod: "cash",
+      orderType: cart?.data?.order_type || "delivery",
+      is_schedule: false,
+      order_date: "",
+      order_time: "",
+      pay_type: "cash",
       selectedAddressId: defaultAddress?.id || null,
       selectedStoreId: selectedStore?.id || null,
     },
     validationSchema,
-    onSubmit: (values) => {
-      try {
-        
-          toast.success('order confirmed');
-      console.log("Form Submitted", values);
-      } catch {
-        
-      }
-    
-    },
-    enableReinitialize: true, 
+    // onSubmit: async (values) => {
+    //   const res = await confirmOrder(values);
+    //   toast.success("Order confirmed");
+    //   console.log("Form submitted", values);
+    // },
+    onSubmit: async (values) => {
+        setIsSubmitting(true);
+  const payload = {
+    order_type: values.orderType,
+    // has_loyal: userData?.points, 
+    // has_wallet: userData?.wallet, 
+    is_schedule: values.is_schedule ? 1 : 0,
+    address_id: selectedAddress.id,
+    order_date: values.is_schedule ? values.order_date : undefined,
+    order_time: values.is_schedule ? values.order_time : undefined,
+    pay_type: JSON.stringify([{ [values.pay_type]: cart.price.total }]),
+  };
+
+  try {
+  const res=  await confirmOrder(payload);
+  if (res?.status === "success") {
+    toast.success("Order confirmed");
+  } else {
+    toast.error(res?.message || "Failed to confirm order");
+  }
+    // toast.success("Order confirmed");
+  } catch (err) {
+    console.error("Error confirming order:", err);
+    toast.error("Failed to confirm order");
+  }
+}
+    , enableReinitialize: true,
   });
 
   const { values, errors, touched, setFieldValue, handleSubmit } = formik;
 
-  const handleTimeChange = (time: dayjs.Dayjs | null) => {
-    if (time) {
-      const formattedTime = time.format("h:mm A");
-      setFieldValue("time", formattedTime);
+  const selectedAddress = addresses.find(
+    (a) => a.id === values.selectedAddressId,
+  );
+  const selectedBranch =
+    stores.find((s) => s.id === values.selectedStoreId) || selectedStore;
+
+  const handleTimeChange = (order_time: dayjs.Dayjs | null) => {
+    if (order_time) {
+      const formatted = order_time.format("h:mm A");
+      setFieldValue("order_time", formatted);
     }
   };
 
-  const selectedAddress = addresses.find(
-    (address) => address.id === values.selectedAddressId
-  );
-  const selectedBranch =
-    stores.find((store) => store.id === values.selectedStoreId) ||
-    selectedStore;
-
-  return (
-    <form onSubmit={handleSubmit} className="mx-auto w-full space-y-6 p-6">
-      {/* Order Type */}
-   <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
-  {["delivery", "take_away"].map((type) => (
+  const renderOrderTypeOption = (type: string) => (
     <div key={type} className="w-full">
-      <div className="flex items-center h-full rounded-xl bg-white"> {/* Added h-full */}
-        <label
-          htmlFor={type}
-          className="flex w-full items-center justify-between gap-2 px-5 py-4"
-        >
-          <div className="flex items-center gap-2 w-full"> {/* Added w-full */}
+      <label
+        htmlFor={type}
+        className="flex h-full cursor-pointer items-center rounded-xl bg-white px-5 py-4"
+      >
+        <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center gap-2">
             <Image
-              src={`/assets/icons/${type==="delivery"?'delivery':'takeaway'}.svg`}
+              src={`/assets/icons/${type === "delivery" ? "delivery" : "takeaway"}.svg`}
               alt={type}
               width={32}
               height={32}
-              className="flex-shrink-0" // Prevent image from shrinking
             />
-            <h3 className="capitalize flex-grow">{type==="delivery"?'delivery':'Takeaway'}</h3> {/* Added flex-grow */}
+            <h3 className="flex-grow capitalize">
+              {type === "delivery" ? "Delivery" : "Takeaway"}
+            </h3>
           </div>
           <input
             type="radio"
@@ -124,18 +135,27 @@ const OrderForm = () => {
             value={type}
             checked={values.orderType === type}
             onChange={() => {
-              setFieldValue("orderType", type)
-              fetchCart({order_type:type,address_id:selectedAddress?.id.toString()})
+              setFieldValue("orderType", type);
+              fetchCart({
+                order_type: type,
+                address_id: selectedAddress?.id?.toString(),
+              });
             }}
-            className="h-5 w-5 flex-shrink-0" 
+            className="h-5 w-5"
           />
-        </label>
-      </div>
+        </div>
+      </label>
     </div>
-  ))}
-</div>
+  );
 
-      {/* Address */}
+  return (
+    <form onSubmit={handleSubmit} className="mx-auto w-full space-y-6 p-6">
+      {/* Order Type */}
+      <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
+        {["delivery", "take_away"].map(renderOrderTypeOption)}
+      </div>
+
+      {/* Address (if delivery) */}
       {values.orderType === "delivery" && (
         <>
           <h2 className="text-lg font-semibold">Your Shipping Address</h2>
@@ -144,15 +164,15 @@ const OrderForm = () => {
               setSelectedDialogAddressId(values.selectedAddressId);
               setOpenAddressDialog(true);
             }}
-            className="bg-scndbg flex cursor-pointer items-center justify-between rounded-lg p-3"
+            className="flex cursor-pointer items-center justify-between rounded-lg bg-gray-100 p-3"
           >
             <div className="flex items-center gap-2">
               <Image
                 src="/assets/images/map.png"
                 alt="map"
-                width={24}
-                height={24}
-                className="h-16 w-16 rounded-lg"
+                width={64}
+                height={64}
+                className="rounded-lg"
               />
               <div>
                 <h2 className="font-bold">{selectedAddress?.title}</h2>
@@ -161,27 +181,27 @@ const OrderForm = () => {
             </div>
             <Edit className="text-primary" />
           </div>
-          {errors.selectedAddressId && touched.selectedAddressId && (
+          {touched.selectedAddressId && errors.selectedAddressId && (
             <p className="text-sm text-red-500">{errors.selectedAddressId}</p>
           )}
         </>
       )}
 
-      {/* Store */}
+      {/* Store (if takeaway) */}
       {values.orderType === "take_away" && (
         <>
           <h2 className="text-lg font-semibold">Select Branch</h2>
           <div
             onClick={() => setOpenStoreDialog(true)}
-            className="bg-scndbg flex cursor-pointer items-center justify-between rounded-lg p-3"
+            className="flex cursor-pointer items-center justify-between rounded-lg bg-gray-100 p-3"
           >
             <div className="flex items-center gap-2">
               <Image
                 src={selectedBranch?.image || "/assets/images/store.png"}
                 alt="branch"
-                width={24}
-                height={24}
-                className="h-16 w-16 rounded-lg"
+                width={64}
+                height={64}
+                className="rounded-lg"
               />
               <div>
                 <h2 className="font-bold">{selectedBranch?.name}</h2>
@@ -192,59 +212,67 @@ const OrderForm = () => {
             </div>
             <ChevronDown className="text-primary" />
           </div>
-          {errors.selectedStoreId && touched.selectedStoreId && (
+          {touched.selectedStoreId && errors.selectedStoreId && (
             <p className="text-sm text-red-500">{errors.selectedStoreId}</p>
           )}
         </>
       )}
 
-      {/* Time */}
+      {/* Schedule Time */}
       <div>
-        <div className="mb-2 flex w-full gap-4">
-          <label className="flex items-center gap-2 font-medium">
+        <div className="mb-2 flex gap-4 font-medium">
+          <label className="flex items-center gap-2">
             <input
               type="radio"
-              name="schedule"
-              checked={!values.schedule}
-              onChange={() => setFieldValue("schedule", false)}
+              name="is_schedule"
+              checked={!values.is_schedule}
+              onChange={() => setFieldValue("is_schedule", false)}
             />
             Order Now
           </label>
-          <label className="flex items-center gap-2 font-medium">
+          <label className="flex items-center gap-2">
             <input
               type="radio"
-              name="schedule"
-              checked={values.schedule}
-              onChange={() => setFieldValue("schedule", true)}
+              name="is_schedule"
+              checked={values.is_schedule}
+              onChange={() => setFieldValue("is_schedule", true)}
             />
             Schedule Order
           </label>
         </div>
-        <div className="flex w-full gap-4">
+        <div className="flex gap-4">
           <input
             type="date"
-            disabled={!values.schedule}
-            value={values.date}
-            onChange={(e) => setFieldValue("date", e.target.value)}
+            value={values.order_date}
+            onChange={(e) => setFieldValue("order_date", e.target.value)}
             className="!w-1/2 rounded-lg !border-none p-3 text-gray-600"
           />
+         
           <TimePicker
             use12Hours
             format="h:mm A"
             onChange={handleTimeChange}
-            placeholder="From Time"
-            className="time-picker w-1/2 !rounded-lg border-none !p-3"
+            placeholder="Select Time"
+            className="order_time-picker w-1/2 !rounded-lg !border-none !p-3"
           />
         </div>
-        {values.schedule && errors.date && (
-          <p className="text-sm text-red-500">{errors.date}</p>
-        )}
-        {values.schedule && errors.time && (
-          <p className="text-sm text-red-500">{errors.time}</p>
+        {values.is_schedule && (
+          <>
+            <div className="flex w-full ">
+           <div className="order_dateerror w-1/2">  {errors.order_date && (
+                <p className="text-sm text-red-500 ">{errors.order_date}</p>
+              )}</div>
+           <div className="order_timeerror  w-1/2">{errors.order_time && (
+                <p className="text-sm text-red-500">{errors.order_time}</p>
+              )}</div>
+            
+              
+            </div>
+          </>
         )}
       </div>
 
-      {/* Payment */}
+      {/* Payment Method */}
       <div>
         <h2 className="mb-2 text-lg font-semibold">Payment Methods</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -264,25 +292,30 @@ const OrderForm = () => {
               </div>
               <input
                 type="radio"
-                name="paymentMethod"
+                name="pay_type"
                 value={method}
-                checked={values.paymentMethod === method}
-                onChange={() => setFieldValue("paymentMethod", method)}
+                checked={values.pay_type === method}
+                onChange={() => setFieldValue("pay_type", method)}
               />
             </label>
           ))}
         </div>
-        {errors.paymentMethod && (
-          <p className="text-sm text-red-500">{errors.paymentMethod}</p>
+        {errors.pay_type && (
+          <p className="text-sm text-red-500">{errors.pay_type}</p>
         )}
       </div>
 
+      {/* Submit */}
       <div className="flex justify-end">
         <button
           type="submit"
           className="bg-primary w-1/4 rounded-full py-3 text-white hover:bg-blue-700"
         >
-          Confirm
+         {isSubmitting ? (
+    <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+  ) : (
+    "Confirm"
+  )}
         </button>
       </div>
 
@@ -297,7 +330,7 @@ const OrderForm = () => {
                 <div
                   key={address.id}
                   onClick={() => setSelectedDialogAddressId(address.id)}
-                  className={`rounded-lg border transition ${
+                  className={`rounded-lg border p-2 transition ${
                     isSelected ? "border-primary bg-blue-50" : "border-gray-200"
                   }`}
                 >
@@ -346,7 +379,7 @@ const OrderForm = () => {
             className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-white"
             onClick={() => {
               const selected = stores.find(
-                (s) => s.id === values.selectedStoreId
+                (s) => s.id === values.selectedStoreId,
               );
               if (selected) setSelectedStore(selected);
               setOpenStoreDialog(false);

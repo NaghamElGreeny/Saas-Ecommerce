@@ -191,11 +191,17 @@ export const updateAddress = (id: number, data: any) => {
   return axiosClient.patch(`/address/${id}`, data);
 };
 interface ConfirmOrderPayload {
-
-  [key: string]: any;
+  order_type: 'delivery' | 'take_away';
+  has_loyal: boolean;
+  has_wallet: boolean;
+  is_schedule: boolean;
+  order_date?: string;
+  order_time?: string;
+  pay_type:[{[key: string]:number}]
+  // [key: string]: any;
 }
 
-export const confirmOrder = (payload: ConfirmOrderPayload): Promise<any> => {
+export const confirmOrder = (payload: any): Promise<any> => {
   const res=axiosClient.post(`/orders`, payload);
   return res.data
 };

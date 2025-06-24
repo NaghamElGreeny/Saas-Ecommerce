@@ -18,6 +18,7 @@ export interface CartData {
   item_count: number;
   points: number;
   wallet: number;
+  order_type?: 'delivery' | 'take_away';
 }
 
 export interface Store {

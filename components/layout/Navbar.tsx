@@ -14,6 +14,7 @@ import Image from "next/image";
 
 export default function Navbar({ cms }) {
   const logged = !!useAuthStore((state) => state.token);
+console.log(logged)
   return (
     <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-between px-4 md:px-10 lg:px-14">
       {/* Logo */}

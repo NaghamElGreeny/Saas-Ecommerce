@@ -26,7 +26,7 @@ export default function CartItemCard({ cartProduct }: Props) {
         price: mod.price,
       })),
     ) ?? [];
-
+  // console.log(modifiers)
   const handleRemove = async () => {
     try {
       await removeProduct(cartProduct.id);
@@ -56,7 +56,7 @@ export default function CartItemCard({ cartProduct }: Props) {
   };
 
   return (
-    <div className="products-center mb-4 flex h-[160px] justify-between rounded-xl bg-white p-4 ">
+    <div className="products-center mb-4 flex h-[160px] justify-between rounded-xl bg-white p-4">
       <Image
         src={product.image}
         alt={product.name}
@@ -72,10 +72,11 @@ export default function CartItemCard({ cartProduct }: Props) {
               {product.name}
             </h2>
             <div className="mt-0.5 line-clamp-2 max-w-[60%] text-sm text-indigo-400">
-              {modifiers.map((mod, index) => (
+              {modifiers?.map((mod, index) => (
                 <span key={mod.id}>
-                  {mod.quantity}x {mod.name} ({mod.price.price}
-                  {mod.price.currency}){index !== modifiers.length - 1 && ", "}
+                  {mod.quantity}x {mod.name} ({mod.price?.price ?? 0}{" "}
+                  {mod.price?.currency ?? ""})
+                  {index !== modifiers.length - 1 && ", "}
                 </span>
               ))}
             </div>
@@ -97,11 +98,15 @@ export default function CartItemCard({ cartProduct }: Props) {
           <div className="mt-auto text-lg font-bold">
             <div className="text-sm text-indigo-400 line-through">
               {product.price.price.toFixed(2)}
-              <span className="ml-1 text-xs font-normal">{product.price.currency}</span>
+              <span className="ml-1 text-xs font-normal">
+                {product.price.currency}
+              </span>
             </div>
             <div>
               {product.price.price_after.toFixed(2)}
-              <span className="ml-1 text-xs font-normal">{product.price.currency}</span>
+              <span className="ml-1 text-xs font-normal">
+                {product.price.currency}
+              </span>
             </div>
           </div>
           <div
@@ -109,13 +114,12 @@ export default function CartItemCard({ cartProduct }: Props) {
               actionLoading ? "pointer-events-none opacity-50" : ""
             }`}
           >
-       <Minus className="size-4 cursor-pointer" onClick={handleDecrease} />
+            <Minus className="size-4 cursor-pointer" onClick={handleDecrease} />
             <span className="font-semibold text-black">
               {cartProduct.quantity}
             </span>
             <Plus className="size-4 cursor-pointer" onClick={handleIncrease} />
           </div>
-         
         </div>
       </div>
     </div>

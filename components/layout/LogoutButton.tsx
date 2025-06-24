@@ -11,11 +11,13 @@ export default function LogoutButton({ isMobile = false }: { isMobile?: boolean 
   const locale = useLocale();
   const t = useTranslations("NAV");
   const token = useAuthStore((state) => state.token);
+  const { setToken } = useAuthStore();
 
   const handleLogout = async () => {
     try {
       await logout({ device_type: "web" });
       cookies.remove("token");
+      setToken(null)
       useAuthStore.getState().setToken("");
       toast.success("Logged out successfully");
     } catch {

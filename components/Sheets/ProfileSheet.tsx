@@ -25,15 +25,18 @@ import cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import AddressSheet from './AddressSheet';
 import { ChevronRight } from 'lucide-react';
+import { useAuthStore } from '@/stores/authStore';
 
 export default function ProfileSheet() {
   const [openProfile, setOpenProfile] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
-
+  const { setToken } = useAuthStore();
   const handleLogout = () => {
     cookies.remove('token');
     toast.success('Logged out');
     setOpenProfile(false);
+          setToken(null)
+
   };
 
   return (

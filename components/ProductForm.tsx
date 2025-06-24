@@ -9,6 +9,7 @@ import { Modifier } from "@/utils/types";
 import Cookies from "js-cookie";
 import { useRef } from "react";
 import toast from "react-hot-toast";
+import { useCartStore } from "@/stores/cartStore";
 
 const ProductForm = ({ productId, modifiers }: {
   productId: number;
@@ -21,7 +22,7 @@ const ProductForm = ({ productId, modifiers }: {
   }[] | null>(null);
 
   const storeid = Cookies.get("store_id");
-
+  const { fetchCart } = useCartStore();
   const initialValues = {
     store_id: parseInt(storeid || "1"),
     product_id: productId,
@@ -43,7 +44,8 @@ const ProductForm = ({ productId, modifiers }: {
     };
 
     console.log("payload", payload);
- const res=   await AddToCart(payload);
+    const res = await AddToCart(payload);
+    fetchCart()
     toast.success('added to cart')
   };
 

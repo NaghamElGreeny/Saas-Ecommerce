@@ -8,7 +8,7 @@ export default function TotalOrder() {
   const cart = CartResponse.cart;
   
   const totalItems = cart?.data?.products?.reduce((total, product) => total + product.quantity, 0) || 0;
-console.log(cart.price)
+console.log(cart?.price)
   return (
     <>
       <h2 className="m-0 w-[90%] p-0 text-2xl font-bold">

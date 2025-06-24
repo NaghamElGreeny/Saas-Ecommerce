@@ -11,28 +11,16 @@ import AddressForm from "../Forms/AddAdressForm";
 
 export default function AddressSheet() {
   // const { addresses, setAddresses } = useAddressStore();
-  const { addresses, fetchAddresses, deleteAddressItem } = useAddressStore();
+  const { addresses, fetchAddresses } = useAddressStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editingAddress, setEditingAddress] = useState<any | null>(null);
 
   useEffect(() => {
     fetchAddresses();
   }, []);
 
-  // const fetchAddresses = async () => {
-  //   try {
-  //     const response = await getAddress();
-  //     setAddresses(response.data);
-  //     console.log(addresses)
-  //   } catch (error) {
-  //     console.error("Failed to fetch addresses:", error);
-  //   }
-  // };
 
-  const handleEdit = (addressData: any) => {
-    setEditingAddress(addressData);
-    setIsDialogOpen(true);
-  };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
