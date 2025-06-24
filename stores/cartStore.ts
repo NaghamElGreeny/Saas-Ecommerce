@@ -10,7 +10,7 @@ interface CartStore {
    actionLoading: boolean;
   error: string | null;
 
-  fetchCart: () => Promise<void>;
+  fetchCart: (params?:Record<string,string>) => Promise<void>;
   clearCart: () => Promise<void>;
   setCart: (cart: CartResponse) => void;
   updateProductQuantity: (productId: number, quantity: number) => Promise<void>;
@@ -25,10 +25,10 @@ export const useCartStore = create<CartStore>()(
        actionLoading: false,
       error: null,
 
-      fetchCart: async () => {
+      fetchCart: async (params) => {
          set({ loading: true, error: null });
         try {
-          const res = await getCart();
+          const res = await getCart({params});
           set({ cart: res, loading: false });
         } catch (err: any) {
           set({

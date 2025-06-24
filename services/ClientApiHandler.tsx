@@ -129,9 +129,9 @@ export const getProductReviews = async (productId: number): Promise<ReviewRespon
 };
 // export const updateQuantity=
 // const token = useAuthStore.getState().token;
-export const getCart = async () => {
+export const getCart = async ({params}:{params?:Record<string,string>}) => {
 
-  const res = await axiosClient.get<CartResponse>('carts');
+  const res = await axiosClient.get<CartResponse>('carts',{ params });
   // console.log(res);
   return res.data;
 }
@@ -190,7 +190,13 @@ export const deleteAddress = async (id: any) => {
 export const updateAddress = (id: number, data: any) => {
   return axiosClient.patch(`/address/${id}`, data);
 };
-export const confirmOrder = (payload) => {
-  return axiosClient.post(`/orders`);
+interface ConfirmOrderPayload {
+
+  [key: string]: any;
+}
+
+export const confirmOrder = (payload: ConfirmOrderPayload): Promise<any> => {
+  const res=axiosClient.post(`/orders`, payload);
+  return res.data
 };
 

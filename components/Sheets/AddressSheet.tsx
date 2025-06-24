@@ -47,25 +47,22 @@ export default function AddressSheet() {
         </SheetTitle>
         <div style={{ width: 24 }} />
       </SheetHeader>
+<div className="flex-grow overflow-hidden p-4">
+  <ScrollArea className="h-full w-full flex overflow-y-auto">
+    <div className="flex w-full flex-col space-y-4">
+      {addresses?.length > 0 ? (
+        addresses.map((address) => (
+          <AddressItem key={address.id} addr={address} />
+        ))
+      ) : (
+        <p className="mt-8 text-center text-gray-500">
+          No addresses found.
+        </p>
+      )}
+    </div>
+  </ScrollArea>
+</div>
 
-      <div className="flex-grow overflow-hidden p-4">
-        <ScrollArea className="h-full w-full overflow-y-auto">
-          {addresses?.length > 0 ? (
-            addresses.map((address) => (
-              <AddressItem
-                key={address.id}
-                addr={address}
-                onEdit={handleEdit}
-                
-              />
-            ))
-          ) : (
-            <p className="mt-8 text-center text-gray-500">
-              No addresses found.
-            </p>
-          )}
-        </ScrollArea>
-      </div>
 
       <SheetFooter className="flex h-fit flex-col items-center justify-center">
         <Dialog

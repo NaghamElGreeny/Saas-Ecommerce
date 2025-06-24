@@ -8,24 +8,27 @@ import { TimePicker } from "antd";
 import { ChevronDown, Edit } from "lucide-react";
 import { useAddressStore } from "@/stores/addressStore";
 import { useStore } from "@/stores/useStore";
+import { useCartStore } from "@/stores/cartStore"; // Import cart store
 import dayjs from "dayjs";
 import AddressItem from "../shared/AddressItem";
 import toast from "react-hot-toast";
+// import { updateCartOrderType } from "@/services/ClientApiHandler"; // API service to update order type
 
 const OrderForm = () => {
   const { addresses, fetchAddresses } = useAddressStore();
   const { stores, selectedStore, setSelectedStore } = useStore();
+  const { cart, fetchCart } = useCartStore(); // Get cart from store
 
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const [openStoreDialog, setOpenStoreDialog] = useState(false);
   const [selectedDialogAddressId, setSelectedDialogAddressId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchAddresses();
   }, []);
 
   const defaultAddress = addresses.find((address) => address.is_default);
-
 
   const validationSchema = Yup.object().shape({
     orderType: Yup.string().oneOf(["delivery", "takeaway"]).required("Order type is required"),
@@ -55,7 +58,7 @@ const OrderForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      orderType: "delivery",
+      orderType: cart?.data?.order_type || "delivery", 
       schedule: false,
       date: "",
       time: "",
@@ -65,8 +68,14 @@ const OrderForm = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      toast.success('order confirmed');
+      try {
+        
+          toast.success('order confirmed');
       console.log("Form Submitted", values);
+      } catch {
+        
+      }
+    
     },
     enableReinitialize: true, 
   });
@@ -91,7 +100,7 @@ const OrderForm = () => {
     <form onSubmit={handleSubmit} className="mx-auto w-full space-y-6 p-6">
       {/* Order Type */}
    <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
-  {["delivery", "takeaway"].map((type) => (
+  {["delivery", "take_away"].map((type) => (
     <div key={type} className="w-full">
       <div className="flex items-center h-full rounded-xl bg-white"> {/* Added h-full */}
         <label
@@ -100,13 +109,13 @@ const OrderForm = () => {
         >
           <div className="flex items-center gap-2 w-full"> {/* Added w-full */}
             <Image
-              src={`/assets/icons/${type}.svg`}
+              src={`/assets/icons/${type==="delivery"?'delivery':'takeaway'}.svg`}
               alt={type}
               width={32}
               height={32}
               className="flex-shrink-0" // Prevent image from shrinking
             />
-            <h3 className="capitalize flex-grow">{type}</h3> {/* Added flex-grow */}
+            <h3 className="capitalize flex-grow">{type==="delivery"?'delivery':'Takeaway'}</h3> {/* Added flex-grow */}
           </div>
           <input
             type="radio"
@@ -114,7 +123,10 @@ const OrderForm = () => {
             name="orderType"
             value={type}
             checked={values.orderType === type}
-            onChange={() => setFieldValue("orderType", type)}
+            onChange={() => {
+              setFieldValue("orderType", type)
+              fetchCart({order_type:type,address_id:selectedAddress?.id.toString()})
+            }}
             className="h-5 w-5 flex-shrink-0" 
           />
         </label>
@@ -156,7 +168,7 @@ const OrderForm = () => {
       )}
 
       {/* Store */}
-      {values.orderType === "takeaway" && (
+      {values.orderType === "take_away" && (
         <>
           <h2 className="text-lg font-semibold">Select Branch</h2>
           <div
