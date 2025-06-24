@@ -1,26 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  SheetHeader,
-  SheetTitle,
-  SheetFooter,
-} from "@/components/ui/sheet";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-import { getAddress } from "@/services/ClientApiHandler";
 import { useAddressStore } from "@/stores/addressStore";
 
 import AddressItem from "../shared/AddressItem";
 import AddressForm from "../Forms/AddAdressForm";
 
 export default function AddressSheet() {
-  const { addresses, setAddresses } = useAddressStore();
+  // const { addresses, setAddresses } = useAddressStore();
+  const { addresses, fetchAddresses, deleteAddressItem } = useAddressStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<any | null>(null);
 
@@ -28,14 +19,15 @@ export default function AddressSheet() {
     fetchAddresses();
   }, []);
 
-  const fetchAddresses = async () => {
-    try {
-      const response = await getAddress();
-      setAddresses(response.data);
-    } catch (error) {
-      console.error("Failed to fetch addresses:", error);
-    }
-  };
+  // const fetchAddresses = async () => {
+  //   try {
+  //     const response = await getAddress();
+  //     setAddresses(response.data);
+  //     console.log(addresses)
+  //   } catch (error) {
+  //     console.error("Failed to fetch addresses:", error);
+  //   }
+  // };
 
   const handleEdit = (addressData: any) => {
     setEditingAddress(addressData);
@@ -64,6 +56,7 @@ export default function AddressSheet() {
                 key={address.id}
                 addr={address}
                 onEdit={handleEdit}
+                
               />
             ))
           ) : (
@@ -75,7 +68,10 @@ export default function AddressSheet() {
       </div>
 
       <SheetFooter className="flex h-fit flex-col items-center justify-center">
-        <Dialog open={isDialogOpen} onOpenChange={(open) => open ? null : handleDialogClose()}>
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={(open) => (open ? null : handleDialogClose())}
+        >
           <DialogTrigger asChild>
             <button className="mt-4 flex h-10 w-[80%] items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white">
               Add new address

@@ -20,10 +20,6 @@ export default function AddressItem({ addr, onEdit }) {
       toast.error('Failed to delete address');
     }
   };
-  // const handleUpdate  = async () => {
-  // //update address data
-  // };
-
 
   return (
     <div className="mb-3 flex justify-between rounded-xl bg-white p-4">

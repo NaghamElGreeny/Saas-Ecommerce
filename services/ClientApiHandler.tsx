@@ -156,7 +156,7 @@ export const updateCount = async(payload: UpdateQuantityPayload) => {
 };
 export const applyCoupon = async (code: string) => {
   const res = await axiosClient.post("/order_discounts", {
-    coupon_code: code,
+    code: code,
   });
   return res.data;
 };

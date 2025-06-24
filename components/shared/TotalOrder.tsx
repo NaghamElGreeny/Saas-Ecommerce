@@ -5,7 +5,7 @@ import React from 'react'
 export default function TotalOrder() {
   const CartResponse = useCartStore();
   const cart = CartResponse.cart;
-  console.log('cart', cart.price)
+  // console.log('cart', cart.price)
   // console.log('res', CartResponse)
   //add promocode and delivery 
   const totalItems = cart?.data?.products.reduce((total, product) => total + product.quantity, 0);
