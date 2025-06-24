@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { TimePicker } from "antd";
@@ -9,6 +10,7 @@ import { useAddressStore } from "@/stores/addressStore";
 import { useStore } from "@/stores/useStore";
 import dayjs from "dayjs";
 import AddressItem from "../shared/AddressItem";
+import toast from "react-hot-toast";
 
 const OrderForm = () => {
   const { addresses, fetchAddresses } = useAddressStore();
@@ -16,12 +18,40 @@ const OrderForm = () => {
 
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const [openStoreDialog, setOpenStoreDialog] = useState(false);
+  const [selectedDialogAddressId, setSelectedDialogAddressId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchAddresses();
   }, []);
 
   const defaultAddress = addresses.find((address) => address.is_default);
+
+
+  const validationSchema = Yup.object().shape({
+    orderType: Yup.string().oneOf(["delivery", "takeaway"]).required("Order type is required"),
+    schedule: Yup.boolean(),
+    date: Yup.string().when("schedule", {
+      is: true,
+      then: Yup.string().required("Date is required when scheduling"),
+      otherwise: Yup.string().notRequired(),
+    }),
+    time: Yup.string().when("schedule", {
+      is: true,
+      then: Yup.string().required("Time is required when scheduling"),
+      otherwise: Yup.string().notRequired(),
+    }),
+    paymentMethod: Yup.string().oneOf(["cash", "card"]).required("Payment method is required"),
+    selectedAddressId: Yup.number().when("orderType", {
+      is: "delivery",
+      then: Yup.number().required("Address is required for delivery"),
+      otherwise: Yup.number().nullable(),
+    }),
+    selectedStoreId: Yup.number().when("orderType", {
+      is: "takeaway",
+      then: Yup.number().required("Store is required for takeaway"),
+      otherwise: Yup.number().nullable(),
+    }),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -33,12 +63,15 @@ const OrderForm = () => {
       selectedAddressId: defaultAddress?.id || null,
       selectedStoreId: selectedStore?.id || null,
     },
+    validationSchema,
     onSubmit: (values) => {
+      toast.success('order confirmed');
       console.log("Form Submitted", values);
     },
+    enableReinitialize: true, 
   });
 
-  const { values, setFieldValue, handleSubmit } = formik;
+  const { values, errors, touched, setFieldValue, handleSubmit } = formik;
 
   const handleTimeChange = (time: dayjs.Dayjs | null) => {
     if (time) {
@@ -48,7 +81,7 @@ const OrderForm = () => {
   };
 
   const selectedAddress = addresses.find(
-    (address) => address.id === values.selectedAddressId,
+    (address) => address.id === values.selectedAddressId
   );
   const selectedBranch =
     stores.find((store) => store.id === values.selectedStoreId) ||
@@ -56,46 +89,49 @@ const OrderForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="mx-auto w-full space-y-6 p-6">
-      {/* Order Type: Delivery or Takeaway */}
-      <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
-        {["delivery", "takeaway"].map((type) => (
-          <div key={type} className="w-full">
-            <div className="flex items-center rounded-xl bg-white">
-              <label
-                htmlFor={type}
-                className="flex w-full items-center justify-between gap-2 px-5 py-4"
-              >
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={`/assets/icons/${type}.svg`}
-                    alt={type}
-                    width={32}
-                    height={32}
-                    className="text-primary size-8"
-                  />
-                  <h3 className="capitalize">{type}</h3>
-                </div>
-                <input
-                  type="radio"
-                  id={type}
-                  name="orderType"
-                  value={type}
-                  checked={values.orderType === type}
-                  onChange={() => setFieldValue("orderType", type)}
-                  className="h-5 w-5"
-                />
-              </label>
-            </div>
+      {/* Order Type */}
+   <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
+  {["delivery", "takeaway"].map((type) => (
+    <div key={type} className="w-full">
+      <div className="flex items-center h-full rounded-xl bg-white"> {/* Added h-full */}
+        <label
+          htmlFor={type}
+          className="flex w-full items-center justify-between gap-2 px-5 py-4"
+        >
+          <div className="flex items-center gap-2 w-full"> {/* Added w-full */}
+            <Image
+              src={`/assets/icons/${type}.svg`}
+              alt={type}
+              width={32}
+              height={32}
+              className="flex-shrink-0" // Prevent image from shrinking
+            />
+            <h3 className="capitalize flex-grow">{type}</h3> {/* Added flex-grow */}
           </div>
-        ))}
+          <input
+            type="radio"
+            id={type}
+            name="orderType"
+            value={type}
+            checked={values.orderType === type}
+            onChange={() => setFieldValue("orderType", type)}
+            className="h-5 w-5 flex-shrink-0" 
+          />
+        </label>
       </div>
+    </div>
+  ))}
+</div>
 
-      {/* Address Section */}
+      {/* Address */}
       {values.orderType === "delivery" && (
         <>
           <h2 className="text-lg font-semibold">Your Shipping Address</h2>
           <div
-            onClick={() => setOpenAddressDialog(true)}
+            onClick={() => {
+              setSelectedDialogAddressId(values.selectedAddressId);
+              setOpenAddressDialog(true);
+            }}
             className="bg-scndbg flex cursor-pointer items-center justify-between rounded-lg p-3"
           >
             <div className="flex items-center gap-2">
@@ -113,10 +149,13 @@ const OrderForm = () => {
             </div>
             <Edit className="text-primary" />
           </div>
+          {errors.selectedAddressId && touched.selectedAddressId && (
+            <p className="text-sm text-red-500">{errors.selectedAddressId}</p>
+          )}
         </>
       )}
 
-      {/* Store Section */}
+      {/* Store */}
       {values.orderType === "takeaway" && (
         <>
           <h2 className="text-lg font-semibold">Select Branch</h2>
@@ -141,19 +180,21 @@ const OrderForm = () => {
             </div>
             <ChevronDown className="text-primary" />
           </div>
+          {errors.selectedStoreId && touched.selectedStoreId && (
+            <p className="text-sm text-red-500">{errors.selectedStoreId}</p>
+          )}
         </>
       )}
 
-      {/* Time Selection */}
+      {/* Time */}
       <div>
-        <div className="mb-2 flex gap-4 w-full">
+        <div className="mb-2 flex w-full gap-4">
           <label className="flex items-center gap-2 font-medium">
             <input
               type="radio"
               name="schedule"
               checked={!values.schedule}
               onChange={() => setFieldValue("schedule", false)}
-              className="!w-fit"
             />
             Order Now
           </label>
@@ -163,7 +204,6 @@ const OrderForm = () => {
               name="schedule"
               checked={values.schedule}
               onChange={() => setFieldValue("schedule", true)}
-              className="!w-fit"
             />
             Schedule Order
           </label>
@@ -172,11 +212,10 @@ const OrderForm = () => {
           <input
             type="date"
             disabled={!values.schedule}
-            className="!w-1/2 rounded-lg !border-none p-3 text-gray-600"
             value={values.date}
             onChange={(e) => setFieldValue("date", e.target.value)}
+            className="!w-1/2 rounded-lg !border-none p-3 text-gray-600"
           />
-
           <TimePicker
             use12Hours
             format="h:mm A"
@@ -185,9 +224,15 @@ const OrderForm = () => {
             className="time-picker w-1/2 !rounded-lg border-none !p-3"
           />
         </div>
+        {values.schedule && errors.date && (
+          <p className="text-sm text-red-500">{errors.date}</p>
+        )}
+        {values.schedule && errors.time && (
+          <p className="text-sm text-red-500">{errors.time}</p>
+        )}
       </div>
 
-      {/* Payment Methods */}
+      {/* Payment */}
       <div>
         <h2 className="mb-2 text-lg font-semibold">Payment Methods</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -202,7 +247,6 @@ const OrderForm = () => {
                   alt={method}
                   width={32}
                   height={32}
-                  className="size-8"
                 />
                 {method.charAt(0).toUpperCase() + method.slice(1)}
               </div>
@@ -212,11 +256,13 @@ const OrderForm = () => {
                 value={method}
                 checked={values.paymentMethod === method}
                 onChange={() => setFieldValue("paymentMethod", method)}
-                className="h-5 w-5"
               />
             </label>
           ))}
         </div>
+        {errors.paymentMethod && (
+          <p className="text-sm text-red-500">{errors.paymentMethod}</p>
+        )}
       </div>
 
       <div className="flex justify-end">
@@ -233,25 +279,29 @@ const OrderForm = () => {
         <DialogContent className="max-w-md">
           <h2 className="mb-4 text-lg font-bold">Select Address</h2>
           <div className="max-h-72 space-y-4 overflow-y-auto">
-            {addresses.map((address) => (
-              // <div
-              //   key={address.id}
-              //   onClick={() => setFieldValue("selectedAddressId", address.id)}
-              //   className={`cursor-pointer rounded-lg border p-4 ${
-              //     address.id === values.selectedAddressId
-              //       ? "border-blue-500 bg-blue-50"
-              //       : "hover:bg-gray-100"
-              //   }`}
-              // >
-              //   <h3 className="font-semibold">{address.title}</h3>
-              //   <p className="text-sm text-gray-600">{address.desc}</p>
-              // </div>
-              <AddressItem key={address.id} addr={address}/>
-            ))}
+            {addresses.map((address) => {
+              const isSelected = selectedDialogAddressId === address.id;
+              return (
+                <div
+                  key={address.id}
+                  onClick={() => setSelectedDialogAddressId(address.id)}
+                  className={`rounded-lg border transition ${
+                    isSelected ? "border-primary bg-blue-50" : "border-gray-200"
+                  }`}
+                >
+                  <AddressItem addr={address} />
+                </div>
+              );
+            })}
           </div>
           <button
             className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-white"
-            onClick={() => setOpenAddressDialog(false)}
+            onClick={() => {
+              if (selectedDialogAddressId) {
+                setFieldValue("selectedAddressId", selectedDialogAddressId);
+                setOpenAddressDialog(false);
+              }
+            }}
           >
             Confirm
           </button>
@@ -284,9 +334,9 @@ const OrderForm = () => {
             className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-white"
             onClick={() => {
               const selected = stores.find(
-                (s) => s.id === values.selectedStoreId,
+                (s) => s.id === values.selectedStoreId
               );
-              if (selected) setSelectedStore(selected); // تحديث الجلوبال ستور
+              if (selected) setSelectedStore(selected);
               setOpenStoreDialog(false);
             }}
           >

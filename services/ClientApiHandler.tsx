@@ -190,3 +190,7 @@ export const deleteAddress = async (id: any) => {
 export const updateAddress = (id: number, data: any) => {
   return axiosClient.patch(`/address/${id}`, data);
 };
+export const confirmOrder = (payload) => {
+  return axiosClient.post(`/orders`);
+};
+
