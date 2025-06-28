@@ -41,28 +41,44 @@ export const useLikedStore = create<LikedStore>()(
         }
       },
 
-      toggleLike: async (product: Product) => {
-        const { likedItems } = get();
-        const isAlreadyLiked = likedItems.some((p) => p.id === product.id);
+    toggleLike: async (product: any) => {
+  const { likedItems } = get();
+  const isAlreadyLiked = likedItems.some((p) => p.id === product.id);
 
-        try {
-          if (isAlreadyLiked) {
-            await removeFromFavourites(product.id);
-            set({
-              likedItems: likedItems.filter((p) => p.id !== product.id),
-            });
-          } else {
-            await addToFavourites(product.id);
-            set({
-              likedItems: [...likedItems, product],
-            });
-          }
-        } catch (error: any) {
-          set({
-            error: error.message || 'فشل في التعديل على المفضلة',
-          });
-        }
-      },
+  try {
+    if (isAlreadyLiked) {
+      const favouriteItem = likedItems.find((p) => p.id === product.id);
+      const favourite_id = product.favourite_id || favouriteItem?.favourite_id;
+
+      if (!favourite_id) {
+        throw new Error("favourite_id غير موجود");
+      }
+
+      await removeFromFavourites(favourite_id);
+
+      set({
+        likedItems: likedItems.filter((p) => p.id !== product.id),
+      });
+    } else {
+      const added = await addToFavourites(product.id);
+
+      const newFavourite = {
+        ...product,
+        favourite_id: added?.data?.id,
+      };
+
+      set({
+        likedItems: [...likedItems, newFavourite],
+      });
+    }
+
+    await get().fetchLikedItems();
+  } catch (error: any) {
+    set({
+      error: error.message || "فشل في التعديل على المفضلة",
+    });
+  }
+},
 
       removeFromWishlist: async (productId: number) => {
         const { likedItems } = get();
@@ -71,11 +87,13 @@ export const useLikedStore = create<LikedStore>()(
           set({
             likedItems: likedItems.filter((item) => item.id !== productId),
           });
+          await get().fetchLikedItems();
         } catch (error: any) {
           set({
             error: error.message || 'فشل في حذف المنتج من المفضلة',
           });
         }
+
       },
 
       isLiked: (itemId: number) => {

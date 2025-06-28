@@ -2,7 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import { Trash2 } from "lucide-react";
-import toast from "react-hot-toast";
 import { useLikedStore } from "@/stores/likedStore";
 
 type Props = {
@@ -11,13 +10,9 @@ type Props = {
 
 export default function WishlistCard({ cartProduct }: Props) {
   const { removeFromWishlist } = useLikedStore();
+
   const handleRemove = async () => {
-    try {
-     const res= await removeFromWishlist(cartProduct.id);
-      toast.success(res.message);
-    } catch (error) {
-      toast.error("حدث خطأ أثناء الحذف");
-    }
+await removeFromWishlist(cartProduct.favourite_id);
   };
 
   return (
@@ -44,7 +39,7 @@ export default function WishlistCard({ cartProduct }: Props) {
                   {index !== modifiers.length - 1 && ", "}
                 </span>
               ))} */}
-              <span>{ cartProduct.desc}</span>
+              <span>{cartProduct.desc}</span>
             </div>
           </div>
           <button className="w-[20%]" onClick={handleRemove}>

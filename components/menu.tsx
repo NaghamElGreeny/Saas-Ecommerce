@@ -15,7 +15,7 @@ const Menu = ({ items }: { items: Product[] }) => {
   const { mainCategory, subCategory, search } = useMenuFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredItems, setFilteredItems] = useState<Product[]>(items);
-  const { toggleLike } = useLikedStore();
+  const { fetchLikedItems } = useLikedStore();
   useEffect(() => {
     let result = [...items];
 
@@ -36,9 +36,9 @@ const Menu = ({ items }: { items: Product[] }) => {
         item.name.toLowerCase().includes(search.toLowerCase())
       );
     }
-
+    fetchLikedItems();
     setFilteredItems(result);
-  }, [items, mainCategory, subCategory, search]);
+  }, [items, mainCategory, subCategory, search,fetchLikedItems]);
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;

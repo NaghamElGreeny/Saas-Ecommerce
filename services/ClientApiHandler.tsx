@@ -211,12 +211,14 @@ export const getFavourites = async (): Promise<any> => {
   console.log('/favourite res', res.data);
   return res.data;
 };
-export const addToFavourites =async (payload: any): Promise<any> => {
-  const res =await axiosClient.post(`/favourite`, payload);
+export const addToFavourites =async (product_id: number): Promise<any> => {
+  const res =await axiosClient.post(`/favourite`, {
+    product_id: product_id,
+  });
   return res.data
 };
-export const removeFromFavourites =async (payload: any): Promise<any> => {
-  const res=await axiosClient.delete(`/favourite`, payload);
-  return res.data
+export const removeFromFavourites = async (favourite_id: number): Promise<any> => {
+  const res = await axiosClient.delete(`/favourite/${favourite_id}`);
+  return res.data;
 };
 

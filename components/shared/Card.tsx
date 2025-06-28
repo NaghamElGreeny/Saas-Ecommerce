@@ -1,30 +1,22 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useLikedStore } from "@/stores/likedStore";
 import { Product } from "@/utils/menuTypes";
 import Image from "next/image";
 
-function Card({
-  item,
-  offer,
-  width,
-}: {
-  item: Product;
-  offer?: any;
-  width?: string;
-}) {
+function Card({ item, width }: { item: Product; width?: string }) {
   const router = useRouter();
-
-  const { isLiked, toggleLike, fetchLikedItems } = useLikedStore();
-  const liked = isLiked(item.id);
-
-  // Fetch favorites once when component mounts
+  const { isLiked, toggleLike } = useLikedStore();
+  const [mounted, setMounted] = useState(false);
+console.log(item)
   useEffect(() => {
-    fetchLikedItems();
+    setMounted(true);
   }, []);
+
+  const liked = mounted ? isLiked(item.id) : false;
 
   const handlePress = () => {
     router.push(`/product/${item.slug}`);
@@ -34,7 +26,7 @@ function Card({
     <div
       onClick={handlePress}
       style={{ width }}
-      className={`h-[509px] w-[302px] flex-shrink-0 cursor-pointer rounded-2xl bg-white px-4 pt-2.5 pb-6 shadow-sm transition-shadow hover:shadow-md`}
+      className="h-[509px] w-[302px] flex-shrink-0 cursor-pointer rounded-2xl bg-white px-4 pt-2.5 pb-6 shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="img relative mb-4">
         <Image
@@ -52,23 +44,35 @@ function Card({
         <h3 className="mb-1 text-lg font-bold">{item.name}</h3>
         <p className="mb-2 text-sm text-gray-600">{item.desc}</p>
         <div className="mt-2 flex flex-1 items-center justify-between">
-          <p className="text-2xl font-bold">
-            {item.price.price}{" "}
-            <span className="text-lg">{item.price.currency}</span>{" "}
-          </p>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation(); 
-              toggleLike(item.id);
-            }}
-          >
-            {liked ? (
-              <AiFillHeart className="text-primary text-xl" />
-            ) : (
-              <AiOutlineHeart className="text-xl text-gray-400 transition-colors hover:text-blue-400" />
-            )}
-          </button>
+          <div className="mt-auto text-lg font-bold">
+            <div className="text-sm text-indigo-400 line-through">
+              {item.price.price.toFixed(2)}
+              <span className="ml-1 text-xs font-normal">
+                {item.price.currency}
+              </span>
+            </div>
+            <div>
+              {item.price.price_after.toFixed(2)}
+              <span className="ml-1 text-xs font-normal">
+                {item.price.currency}
+              </span>
+            </div>
+          </div>
+          {mounted && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleLike(item);
+              }}
+              className="cursor-pointer"
+            >
+              {liked ? (
+                <AiFillHeart className="text-primary text-xl" />
+              ) : (
+                <AiOutlineHeart className="text-xl text-gray-400 transition-colors hover:text-blue-400" />
+              )}
+            </button>
+          )}
         </div>
       </div>
     </div>
