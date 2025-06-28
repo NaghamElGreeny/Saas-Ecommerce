@@ -13,14 +13,13 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@heroui/spinner";
 import { useLikedStore } from "@/stores/likedStore";
-import WishlistCard from "../shared/WishlistCard";
+import WishlistCard from "../cards/WishlistCard";
 
 export default function WishList() {
   const { likedItems, fetchLikedItems, loading } = useLikedStore();
   useEffect(() => {
     fetchLikedItems();
   }, [fetchLikedItems]);
-  console.log(likedItems);
   const totalItems = likedItems.length;
   const hasProducts = totalItems > 0;
   return (

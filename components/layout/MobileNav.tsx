@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import ProfileSheet from "../Sheets/ProfileSheet";
 import { FiMenu, FiX } from "react-icons/fi";
@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ReservationForm from "../sections/Reservation";
 import { CmsPages } from "@/utils/types";
 import CartSheet from "../Sheets/CartSheet";
-import NotificationSheet from "../Sheets/Notification";
+import NotificationSheet from "../Sheets/NotificationSheet";
 const NAV_LINKS = [
   // { href: "/", labelKey: "home" },
   // { href: "/about", labelKey: "about" },
@@ -110,7 +110,7 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
   //     toast.error("Failed to logout");
   //   }
   // };
-    const { setToken } = useAuthStore();
+  const { setToken } = useAuthStore();
   const handleLogout = () => {
     cookies.remove("token");
     toast.success("Logged out");
@@ -180,9 +180,9 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
           {renderReservationDialog()}
           {renderCmsPages()}
           {logged ? (
-     <AlertDialog>
-                <AlertDialogTrigger >
-                  {/* <Image
+            <AlertDialog>
+              <AlertDialogTrigger>
+                {/* <Image
                     src="/assets/icons/login.png"
                     alt="login"
                     width={24}
@@ -190,19 +190,23 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
                     className="scale-x-[-1]"
                   />
                   Log Out */}
-                  <LogoutButton />
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This will log you out.</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                <LogoutButton />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will log you out.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLogout}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           ) : (
             <Link
               href={`/${locale}/auth`}

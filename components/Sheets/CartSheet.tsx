@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCartStore } from "@/stores/cartStore";
-import CartItemCard from "../shared/CartItem";
+import CartItemCard from "../cards/CartItem";
 import TotalOrder from "../shared/TotalOrder";
 import { Spinner } from "@heroui/spinner";
 

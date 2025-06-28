@@ -6,7 +6,7 @@ import { useLikedStore } from "@/stores/likedStore";
 import { ArrowRight } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import Card from "./Card";
+import Card from "../cards/Card";
 import Link from "next/link";
 import { CardItem } from "@/utils/types";
 // Import Swiper styles
@@ -26,7 +26,7 @@ export default function Slider({ title, items }: SliderProps) {
   };
 
   return (
-    <div className="sliderr container my-6  min-h-screen px-10">
+    <div className="sliderr container my-6 min-h-screen px-10">
       {/* Header */}
       <div className="mb-10 flex items-center justify-between px-28">
         <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">{title}</h2>
@@ -52,13 +52,11 @@ export default function Slider({ title, items }: SliderProps) {
               992: { slidesPerView: 3.2, spaceBetween: 25 },
               1200: { slidesPerView: 3.5, spaceBetween: 30 },
             }}
-            className="w-full h-full"
+            className="h-full w-full"
           >
             {items &&
               items.map((item) => (
-                <SwiperSlide key={item.id}
-                style={{width:'400px'}}
-                >
+                <SwiperSlide key={item.id} style={{ width: "400px" }}>
                   <Card
                     item={item}
                     // width="350px"

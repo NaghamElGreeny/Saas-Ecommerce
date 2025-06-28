@@ -190,6 +190,7 @@ export const deleteAddress = async (id: any) => {
 export const updateAddress = (id: number, data: any) => {
   return axiosClient.patch(`/address/${id}`, data);
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface ConfirmOrderPayload {
   order_type: 'delivery' | 'take_away';
   has_loyal: boolean;
@@ -201,16 +202,17 @@ interface ConfirmOrderPayload {
   // [key: string]: any;
 }
 
-export const confirmOrder = (payload: any): Promise<any> => {
-  const res=axiosClient.post(`/orders`, payload);
+export const confirmOrder = async (payload: any): Promise<any> => {
+  const res=await axiosClient.post(`/orders`, payload);
   return res.data
 };
 
 export const getFavourites = async (): Promise<any> => {
   const res = await axiosClient.get(`/favourite`);
-  console.log('/favourite res', res.data);
+  // console.log('/favourite res', res.data);
   return res.data;
 };
+
 export const addToFavourites =async (product_id: number): Promise<any> => {
   const res =await axiosClient.post(`/favourite`, {
     product_id: product_id,
@@ -222,3 +224,11 @@ export const removeFromFavourites = async (favourite_id: number): Promise<any> =
   return res.data;
 };
 
+export const getNotifications = async (): Promise<any> => {
+  const res = await axiosClient.get(`/notifications`);
+  return res.data;
+};
+export const deleteNotification = async (id: string) => {
+  const res = await axiosClient.delete(`/notifications/${id}`);
+  return res.data;
+};

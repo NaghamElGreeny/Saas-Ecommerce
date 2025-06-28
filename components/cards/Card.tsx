@@ -11,7 +11,6 @@ function Card({ item, width }: { item: Product; width?: string }) {
   const router = useRouter();
   const { isLiked, toggleLike } = useLikedStore();
   const [mounted, setMounted] = useState(false);
-console.log(item)
   useEffect(() => {
     setMounted(true);
   }, []);

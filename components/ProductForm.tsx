@@ -44,7 +44,7 @@ const ProductForm = ({ productId, modifiers }: {
     };
 
     console.log("payload", payload);
-    const res = await AddToCart(payload);
+     await AddToCart(payload);
     fetchCart()
     toast.success('added to cart')
   };
@@ -54,7 +54,7 @@ const ProductForm = ({ productId, modifiers }: {
       {({ values, setFieldValue }) => (
         <Form>
           {/* Note */}
-          <div className="note w-full">
+          <div className="note w-full mb-6">
             <h3 className="mb-6 text-2xl font-bold">Note</h3>
             <Field
               as={Textarea}
