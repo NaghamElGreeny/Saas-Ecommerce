@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import cookies from "js-cookie";
 import toast from "react-hot-toast";
-import { logout } from "@/services/authApi";
+// import { logout } from "@/services/authApi";
 import { useAuthStore } from "@/stores/authStore";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ReservationForm from "../sections/Reservation";
@@ -39,7 +39,19 @@ const cmsTranslationMap: Record<string, { en: string; ar: string }> = {
     ar: "سياسة الخصوصية",
   },
 };
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import LogoutButton from "./LogoutButton";
+import WishList from "../Sheets/WishListSheet";
 function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
   const t = useTranslations("NAV");
   const locale = useLocale();
@@ -86,19 +98,24 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
     };
   }, [isOpen]);
 
-  const Logout = async () => {
-    try {
-      await logout({ device_type: "web" });
-      cookies.remove("token");
-      cookies.remove('store_selected_once');
-      useAuthStore.getState().setToken("");
-      // setLogged(false);
-      toast.success("Logged out successfully");
-    } catch {
-      toast.error("Failed to logout");
-    }
+  // const Logout = async () => {
+  //   try {
+  //     await logout({ device_type: "web" });
+  //     cookies.remove("token");
+  //     cookies.remove('store_selected_once');
+  //     useAuthStore.getState().setToken("");
+  //     // setLogged(false);
+  //     toast.success("Logged out successfully");
+  //   } catch {
+  //     toast.error("Failed to logout");
+  //   }
+  // };
+    const { setToken } = useAuthStore();
+  const handleLogout = () => {
+    cookies.remove("token");
+    toast.success("Logged out");
+    setToken(null);
   };
-
   const renderNavLinks = () =>
     NAV_LINKS.map(({ href, labelKey }) => (
       <Link key={href} href={href} className="hover:opacity-80">
@@ -139,6 +156,7 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
     <>
       {/* Mobile Menu Toggle */}
       <div className="flex items-center gap-4 lg:hidden">
+        <WishList />
         <CartSheet />
         <NotificationSheet />
         {logged && <ProfileSheet />}
@@ -162,19 +180,29 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
           {renderReservationDialog()}
           {renderCmsPages()}
           {logged ? (
-            <button
-              onClick={Logout}
-              className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white"
-            >
-              <Image
-                src="/assets/icons/login.png"
-                alt="login"
-                width={24}
-                height={24}
-                className="scale-x-[-1]"
-              />
-              <span>{t("logout")}</span>
-            </button>
+     <AlertDialog>
+                <AlertDialogTrigger >
+                  {/* <Image
+                    src="/assets/icons/login.png"
+                    alt="login"
+                    width={24}
+                    height={24}
+                    className="scale-x-[-1]"
+                  />
+                  Log Out */}
+                  <LogoutButton />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>This will log you out.</AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
           ) : (
             <Link
               href={`/${locale}/auth`}

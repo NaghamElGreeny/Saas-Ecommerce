@@ -206,3 +206,17 @@ export const confirmOrder = (payload: any): Promise<any> => {
   return res.data
 };
 
+export const getFavourites = async (): Promise<any> => {
+  const res = await axiosClient.get(`/favourite`);
+  console.log('/favourite res', res.data);
+  return res.data;
+};
+export const addToFavourites =async (payload: any): Promise<any> => {
+  const res =await axiosClient.post(`/favourite`, payload);
+  return res.data
+};
+export const removeFromFavourites =async (payload: any): Promise<any> => {
+  const res=await axiosClient.delete(`/favourite`, payload);
+  return res.data
+};
+

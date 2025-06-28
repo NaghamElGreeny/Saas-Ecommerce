@@ -6,6 +6,7 @@ import Link from "next/link";
 import Card from "./shared/Card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/utils/menuTypes";
+import { useLikedStore } from "@/stores/likedStore";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -14,7 +15,7 @@ const Menu = ({ items }: { items: Product[] }) => {
   const { mainCategory, subCategory, search } = useMenuFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredItems, setFilteredItems] = useState<Product[]>(items);
-
+  const { toggleLike } = useLikedStore();
   useEffect(() => {
     let result = [...items];
 

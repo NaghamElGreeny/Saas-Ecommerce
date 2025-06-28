@@ -13,23 +13,23 @@ export default function LogoutButton({ isMobile = false }: { isMobile?: boolean 
   const token = useAuthStore((state) => state.token);
   const { setToken } = useAuthStore();
 
-  const handleLogout = async () => {
-    try {
-      await logout({ device_type: "web" });
-      cookies.remove("token");
-      setToken(null)
-      useAuthStore.getState().setToken("");
-      toast.success("Logged out successfully");
-    } catch {
-      toast.error("Failed to logout");
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     await logout({ device_type: "web" });
+  //     cookies.remove("token");
+  //     setToken(null)
+  //     useAuthStore.getState().setToken("");
+  //     toast.success("Logged out successfully");
+  //   } catch {
+  //     toast.error("Failed to logout");
+  //   }
+  // };
 
   if (token) {
     return (
-      <button
-        onClick={handleLogout}
-        className={`mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white`}
+      <div
+        // onClick={handleLogout}
+        className={`mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white cursor-pointer`}
       >
         <Image
           src="/assets/icons/login.png"
@@ -39,7 +39,7 @@ export default function LogoutButton({ isMobile = false }: { isMobile?: boolean 
           className="scale-x-[-1]"
         />
         <span>{t("logout")}</span>
-      </button>
+      </div>
     );
   }
 

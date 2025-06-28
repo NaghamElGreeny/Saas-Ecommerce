@@ -26,6 +26,7 @@ import toast from 'react-hot-toast';
 import AddressSheet from './AddressSheet';
 import { ChevronRight } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
+import LogoutButton from '../layout/LogoutButton';
 
 export default function ProfileSheet() {
   const [openProfile, setOpenProfile] = useState(false);
@@ -36,7 +37,6 @@ export default function ProfileSheet() {
     toast.success('Logged out');
     setOpenProfile(false);
           setToken(null)
-
   };
 
   return (
@@ -80,15 +80,8 @@ export default function ProfileSheet() {
 
             <SheetFooter className="flex flex-col items-center justify-center">
               <AlertDialog>
-                <AlertDialogTrigger className="mt-4 flex h-10 w-[80%] items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white">
-                  <Image
-                    src="/assets/icons/login.png"
-                    alt="login"
-                    width={24}
-                    height={24}
-                    className="scale-x-[-1]"
-                  />
-                  Log Out
+                <AlertDialogTrigger className=" w-[80%] ">
+                  <LogoutButton />
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>

@@ -1,15 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useLikedStore } from "@/stores/likedStore";
 import { Product } from "@/utils/menuTypes";
+import Image from "next/image";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function Card({
   item,
   offer,
@@ -19,16 +16,20 @@ function Card({
   offer?: any;
   width?: string;
 }) {
-  const likedItems = useLikedStore((state) => state.likedItems);
-  const toggleLike = useLikedStore((state) => state.toggleLike);
-    const liked = likedItems.includes(item.id);
-     const router = useRouter();
+  const router = useRouter();
+
+  const { isLiked, toggleLike, fetchLikedItems } = useLikedStore();
+  const liked = isLiked(item.id);
+
+  // Fetch favorites once when component mounts
+  useEffect(() => {
+    fetchLikedItems();
+  }, []);
+
   const handlePress = () => {
-      console.log("Item clicked:", item.name);
-      //  router.push(`/product/${item.slug}?lat=${item.lat || 0}&lng=${item.lng || 0}`);
-       router.push(`/product/${item.slug}`);
+    router.push(`/product/${item.slug}`);
   };
-  // console.log(item);
+
   return (
     <div
       onClick={handlePress}
@@ -36,9 +37,11 @@ function Card({
       className={`h-[509px] w-[302px] flex-shrink-0 cursor-pointer rounded-2xl bg-white px-4 pt-2.5 pb-6 shadow-sm transition-shadow hover:shadow-md`}
     >
       <div className="img relative mb-4">
-        <img
+        <Image
           src={item.image}
           alt={item.name}
+          width={384}
+          height={325}
           className="h-[325px] w-96 rounded-2xl object-cover"
         />
         <div className="absolute top-2 left-2 rounded-full bg-yellow-50 px-2 py-1 text-xs font-bold shadow">
@@ -56,9 +59,8 @@ function Card({
 
           <button
             onClick={(e) => {
-              e.stopPropagation();
+              e.stopPropagation(); 
               toggleLike(item.id);
-              console.log("liked");
             }}
           >
             {liked ? (
