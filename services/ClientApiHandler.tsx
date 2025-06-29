@@ -6,6 +6,7 @@ import {
   Category,
   LoginPayload,
   LogoutPayload,
+  OrderData,
   RegisterPayload,
   ReservationPayload,
   ResetPasswordPayload,
@@ -235,11 +236,16 @@ export const deleteNotification = async (id: string) => {
 
 export const getOrder = async (slug: number) => {
   try {
-    const res = await axiosClient.get<{ data: any }>(`/orders/${slug}`);
+    const res = await axiosClient.get<{ data: OrderData }>(`/orders/${slug}`);
     console.log("✅ Order response:", res.data.data);
     return res.data.data; 
   } catch (error) {
     console.error("❌ Fetch error at: Order", error);
     throw error;
   }
+};
+
+export const reOrder =async (id: number): Promise<any> => {
+  const res =await axiosClient.post(`orders/${id}/re_order`);
+  return res.data
 };
