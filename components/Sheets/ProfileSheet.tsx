@@ -27,18 +27,24 @@ import AddressSheet from './AddressSheet';
 import { ChevronRight } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 import LogoutButton from '../layout/LogoutButton';
+import { useRouter } from 'next/navigation'
 
 export default function ProfileSheet() {
   const [openProfile, setOpenProfile] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const { setToken } = useAuthStore();
+
   const handleLogout = () => {
     cookies.remove('token');
     toast.success('Logged out');
     setOpenProfile(false);
           setToken(null)
   };
-
+    const router = useRouter();
+    const handlePress = () => {
+        // console.log(notification.notify_id)
+        router.push(`/profile`);
+    };
   return (
     <>
       {/* Profile Sheet */}
@@ -77,7 +83,24 @@ export default function ProfileSheet() {
          </div>
               <ChevronRight />
             </div>
+            <div
+              onClick={() => handlePress()}
+              className="w-full flex items-center justify-between cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                     <Image
+                src="/assets/icons/profile.png"
+                alt="address"
+                width={65}
+                height={65}
+              />
+              My Account
+         </div>
+              <ChevronRight />
+            </div>
 
+            
+            
             <SheetFooter className="flex flex-col items-center justify-center">
               <AlertDialog>
                 <AlertDialogTrigger className=" w-[80%] ">

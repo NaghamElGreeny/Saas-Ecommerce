@@ -249,3 +249,39 @@ export const reOrder =async (id: number): Promise<any> => {
   const res =await axiosClient.post(`orders/${id}/re_order`);
   return res.data
 };
+
+export const getUser = async () => {
+  const res = await axiosClient.get("/profile");
+  return res.data;
+};
+export const changePassword = async (payload: any) => {
+  const res = await axiosClient.post("/profile/change_password", payload);
+  return res.data;
+};
+export const changePhone = async (payload: any) => {
+  const res = await axiosClient.post("/profile/send_verification_code", payload);
+  return res.data;
+};
+
+export const uploadImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("attachment_type", "image");
+  formData.append("model", "users");
+
+  const response = await axiosClient.post("/store_attachment", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};
+export const updateUserInfo = async (data: { name: string; email: string }) => {
+  try {
+    const response = await axiosClient.patch("/profile", data);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to update user info");
+  }
+};
