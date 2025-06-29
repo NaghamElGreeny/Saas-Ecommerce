@@ -32,6 +32,7 @@ axiosInstance.interceptors.response.use(
   async (error: AxiosError) => {
     if (error.response && error.response.status === 401) {
       const cookieStore = await cookies();
+      
       const locale = cookieStore.get("NEXT_LOCALE").value;
       redirect(locale === "ar" ? "/ar/auth/login" : "/auth/login");
     }

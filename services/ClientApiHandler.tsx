@@ -232,3 +232,14 @@ export const deleteNotification = async (id: string) => {
   const res = await axiosClient.delete(`/notifications/${id}`);
   return res.data;
 };
+
+export const getOrder = async (slug: number) => {
+  try {
+    const res = await axiosClient.get<{ data: any }>(`/orders/${slug}`);
+    console.log("✅ Order response:", res.data.data);
+    return res.data.data; 
+  } catch (error) {
+    console.error("❌ Fetch error at: Order", error);
+    throw error;
+  }
+};

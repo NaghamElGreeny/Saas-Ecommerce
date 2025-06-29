@@ -15,7 +15,7 @@ type Props = {
 const ProductDetails: React.FC = async ({ params }: Props) => {
   const slug = (await params).slug;
   const product = await getMenuItem(decodeURIComponent(slug));
-
+// console.log('menu item',product)
   const renderStars = (rating: number, className?: string) => {
     return (
       <div className={`flex items-center ${className || ""}`}>

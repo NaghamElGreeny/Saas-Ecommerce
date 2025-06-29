@@ -97,7 +97,7 @@ export const ShareButtons = () => {
               key={option.name}
               onClick={option.onClick}
               aria-label={option.name}
-              className={`flex size-14 items-center justify-center rounded-full p-3 text-white transition ${option.bgColor}`}
+              className={`flex size-14 items-center justify-center rounded-full p-3 text-white cursor-pointer transition ${option.bgColor}`}
             >
               {option.icon}
             </button>

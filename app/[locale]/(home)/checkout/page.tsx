@@ -1,9 +1,9 @@
-"use client";
 import React from "react";
 import TotalOrder from "@/components/shared/TotalOrder";
 import CheckoutOrders from "@/components/shared/CheckoutOrders";
 import OrderForm from "@/components/sections/OrderForm";
 import PromoCodeInput from "@/components/shared/PromocodeInput";
+
 
 export default function ChecoutPage() {
 
@@ -21,7 +21,7 @@ export default function ChecoutPage() {
           {/* promo code*/}
           <PromoCodeInput />
 
-          <TotalOrder />
+          <TotalOrder/>
         </div>
       </div>
     </>

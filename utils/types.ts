@@ -190,3 +190,133 @@ export interface Store {
   lng: number;
   location_description: string;
 }
+
+export type OrderData = {
+  id: number;
+  order_num: string;
+  status: string;
+  status_trans: string;
+  order_type: string;
+  is_schedule: boolean;
+  address: string | null;
+  is_payment: boolean;
+  pay_type: {
+    cash?: number;
+    credit?: number;
+  }[];
+  order_time: string;
+  order_date: string;
+  can_cancel: boolean;
+  store: {
+    id: number;
+    image: string;
+    name: string;
+    complete_name: string;
+    phone: string;
+    phone_code: string;
+    logo: string | null;
+    lat: number;
+    lng: number;
+    location_description: string;
+    location_info: string | null;
+    order_type: {
+      web_delivery: boolean;
+      web_take_away: boolean;
+      app_delivery: boolean;
+      app_take_away: boolean;
+    };
+    payment_method: {
+      id: number;
+      main_type: string;
+      type: string;
+    }[];
+  };
+  driver: null;
+  item: {
+    id: number;
+    product: {
+      id: number;
+      name: string;
+      slug: string;
+      desc: string;
+      type: string;
+      image: string;
+      food_icon: {
+        id: number;
+        name: string;
+        image: string;
+      }[];
+      rating: number;
+      review_count: number;
+      rate: number;
+      is_favourite: boolean;
+      favourite_id: number | null;
+      price: {
+        price: number;
+        currency: string;
+        percentage: number;
+        discount_value: number;
+        price_after: number;
+        offer: {
+          id: number;
+          from_day: string | null;
+          to_day: string | null;
+          from_time: string | null;
+          to_time: string | null;
+        };
+      };
+    };
+    quantity: number;
+    total_price: number;
+    note: string | null;
+    combo: any[]; // إذا عايزة تعملي نوع مفصل ليه، ممكن تبعتيلي شكل الـ combo
+    sub_modifiers: {
+      id: number;
+      name: string;
+      selections_type: string;
+      min_num_of_selection: number;
+      max_num_of_selection: number;
+      item_modifiers: {
+        id: number;
+        order_item_id: number;
+        price: {
+          price: number;
+          currency: string;
+        };
+        name: string;
+        image: string;
+        quantity: number;
+      }[];
+    }[];
+    is_rate: boolean;
+    review: {
+      id: number;
+      rate: number;
+      review: string;
+      note: string;
+    };
+  }[];
+  item_count: number;
+  cancel_reason: string | null;
+  desc_cancel_reason: string | null;
+  price_detail: {
+    total_price: number;
+    discount_value: number;
+    total_item_price_before_discount: number;
+    delivery_price: number;
+    surcharge_value: number;
+    tax_rate_percentage: number;
+    tax_rate_value: number;
+    price_paied_from_wallet: number;
+    points: number;
+    currency: string;
+  };
+  call_center: string;
+  call_center_message: string;
+  order_status: {
+    key: string;
+    value: string;
+    status: string;
+    icon: string;
+  }[];
+};

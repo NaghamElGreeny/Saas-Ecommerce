@@ -53,7 +53,7 @@ console.log(cart?.price)
             </h3>
           </div>
         )}
-{/* {cart?.data?.order_type === "delivery" && cart?.price?.delivery_fee && (
+{cart?.data?.order_type === "delivery" && cart?.price?.delivery_fee && (
   <div className="DeliveryFee flex w-full justify-between">
     <h3>Delivery Fee</h3>
     <h3>
@@ -61,7 +61,7 @@ console.log(cart?.price)
       <span>{cart?.currency}</span>
     </h3>
   </div>
-)} */}
+)}
 
         <hr />
         

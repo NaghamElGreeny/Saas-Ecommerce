@@ -21,7 +21,7 @@ export default function NotificationSheet() {
 
   useEffect(() => {
     fetchNotifications();
-  }, []);
+  }, [fetchNotifications]);
 
   return (
     <Sheet>

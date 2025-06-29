@@ -126,6 +126,7 @@ interface SimplePrice {
 }
 
 interface PriceSummary {
+  delivery_fee: any;
   tax_rate_percentage: number;
   tax_rate_value: number;
   sun_total: number;

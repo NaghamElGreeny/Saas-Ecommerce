@@ -78,6 +78,7 @@ body{
     }
     input[type='radio'] {
   @apply  size-5 rounded-full  focus:outline-none focus:ring-0;
+  
 }
   }
   .reserve-form{

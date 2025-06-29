@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
-import { ApiCategories, CmsPage } from "../utils/types";
+import { ApiCategories, CmsPage, OrderData } from "../utils/types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fetchData = async (endpoint: string, errorMsg: string, config = {}) => {
@@ -50,8 +50,6 @@ export const getAllPages = async () => {
 };
 export const getMenuItem = async (slug: string) => {
   try {
-    // const res = await axiosInstance.get(`/product/${encodeURIComponent(slug)}`);
-    // const res = await axiosInstance.get<{ data: any }>(`/en/product/${encodeURIComponent(slug)}`);
     const res = await axiosInstance.get<{ data: any }>(
       `/product/${encodeURIComponent(slug)}`,
     );
@@ -62,7 +60,28 @@ export const getMenuItem = async (slug: string) => {
     throw error;
   }
 };
-
+// export const getOrder = async (slug: number) => {
+//   try {
+//     const res = await axiosInstance.get<{ data: any }>(
+//       `/orders/${slug}`,
+//     );
+//     console.log("Order responce:", res.data);
+//     return res.data.data;
+//   } catch (error) {
+//     console.error("Fetch error at: Order", error);
+//     throw error;
+//   }
+// };
+// export const getOrder = async (slug: number) => {
+//   try {
+//     const res = await axiosInstance.get<{ data: any }>(`/orders/${slug}`);
+//     console.log("✅ Order response:", res.data);
+//     return res.data.data; 
+//   } catch (error) {
+//     console.error("❌ Fetch error at: Order", error);
+//     throw error;
+//   }
+// };
 export const getMenu = async () => {
   try {
     const res = await axiosInstance.get(`/product`);

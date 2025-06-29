@@ -14,17 +14,15 @@ import {
 } from "@/components/ui/dialog"; // from shadcn/ui
 import { X } from "lucide-react";
 import { ShareButtons } from "./ShareButtons";
-import { CartProduct } from "@/utils/cartTypes";
 
 
-
-export default function ProductHeaderClient({ product }: CartProduct) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function ProductHeaderClient({ product }: any) {
   const { isLiked, toggleLike } = useLikedStore();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   const liked = mounted ? isLiked(product.id) : false;
-
 
   return (
     <div className="flex items-center justify-end gap-4 px-2">
@@ -42,20 +40,24 @@ export default function ProductHeaderClient({ product }: CartProduct) {
           </button>
         </DialogTrigger>
 
-              <DialogContent className="max-h-[300px] min-h-[150px] rounded-3xl bg-[#FBFAFC] pb-3 "
-              showCloseButton={false}>
+        <DialogContent
+          className=" w-full max-w-md -translate-x-1/2 rounded-t-3xl bg-[#FBFAFC] px-4 pt-3 pb-4 shadow-lg"
+          showCloseButton={false}
+        >
           <DialogHeader>
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-2xl font-bold">Share This Item</DialogTitle>
+              <DialogTitle className="text-2xl font-bold">
+                Share This Item
+              </DialogTitle>
               <DialogClose asChild>
                 <button>
-                  <X className="h-6 w-6 text-gray-600" />
+                  <X className="h-6 w-6 text-gray-600 cursor-pointer" />
                 </button>
               </DialogClose>
             </div>
           </DialogHeader>
-<ShareButtons />
-        
+
+          <ShareButtons />
         </DialogContent>
       </Dialog>
 
@@ -71,7 +73,7 @@ export default function ProductHeaderClient({ product }: CartProduct) {
           {liked ? (
             <AiFillHeart className="text-primary size-8" />
           ) : (
-            <AiOutlineHeart className="text-gray-400 hover:text-blue-400 size-8 transition-colors" />
+            <AiOutlineHeart className="size-8 text-gray-400 transition-colors hover:text-blue-400" />
           )}
         </button>
       )}
