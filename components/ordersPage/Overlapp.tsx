@@ -23,7 +23,7 @@ const OverlappingImages: React.FC<OverlappingImagesProps> = ({
       {images.map((imageSrc, index) => (
         <span
           key={index}
-          className="absolute overflow-hidden rounded-full border-[3px] border-backgroud"
+          className="absolute overflow-hidden rounded-full border-[3px] border-bg"
           style={{
             left: index * (size - overlap),
             width: size,

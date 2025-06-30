@@ -13,7 +13,7 @@ const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
           {order.order_num ? `Order #${order.order_num}` : order.name}
         </p>
         <p className="ms-auto h-fit w-fit rounded-full px-4 py-2 text-sm text-blue-700 capitalize">
-          {status}
+                  {order.type === "order" ? order.order_type : 'Table Reservation'}
         </p>
       </div>
 
