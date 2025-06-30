@@ -309,3 +309,12 @@ export const getWallet = async () => {
     throw new Error(error?.response?.data?.message || "Failed to get loyality");
   }
 };
+
+export const getOrdersByStatus=async (status: string) => {
+  try {
+    const response = await axiosClient.get(`orders-and-reservations?status=${status}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to fetch orders");
+  }
+}

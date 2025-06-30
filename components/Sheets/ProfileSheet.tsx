@@ -140,7 +140,7 @@ export default function ProfileSheet() {
               {/* Order */}
               <div
                 onClick={() => {
-                  console.log("order clicked");
+                  router.push("/orders")
                 }}
                 className="flex w-full cursor-pointer items-center justify-between"
               >
