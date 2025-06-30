@@ -29,11 +29,14 @@ const AccountForm = () => {
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(
     null,
   );
+
+  const [avatarUrl, setAvatarUrl] = useState(userData.avatar);
+  const [uploadedAvatar, setUploadedAvatar] = useState("");
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const user = await getUser();
-            if (user) setUserData(user.data);
+      try {
+        const user = await getUser();
+        if (user) setUserData(user.data);
         const codes = await getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);
@@ -63,62 +66,21 @@ const AccountForm = () => {
       .required("Confirm your new password"),
   });
 
- const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    try {
-      const uploaded = await uploadImage(file); // استدعاء الدالة
-      console.log("Uploaded image response:", uploaded);
-
-      // لو الصورة بترجع URL مثلًا في uploaded.url
-      setUserData({
-        ...userData,
-        avatar: uploaded.data, // ← غيريها حسب الريسبونس الفعلي
-      });
-console.log('avatar',userData.avatar)
-      toast.success("Image uploaded successfully");
-    } catch (err) {
-      toast.error("Image upload failed");
-      console.error(err);
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const uploaded = await uploadImage(file);
+        const uploadedUrl = uploaded.data.avatar_url || uploaded.data;
+        setUploadedAvatar(uploadedUrl);
+        setAvatarUrl(URL.createObjectURL(file)); // معاينة
+        toast.success("Image uploaded successfully");
+      } catch (err) {
+        toast.error("Image upload failed");
+        console.error(err);
+      }
     }
-  }
-};
-// const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-//   const file = e.target.files?.[0];
-//   if (file) {
-//     try {
-//       const formData = new FormData();
-//       formData.append("file", file);
-//       formData.append("attachment_type", "image");
-//       formData.append("model", "users");
-
-//       const response = await fetch("http://localhost:8000/api/upload", {
-//         method: "POST",
-//         body: formData,
-//       });
-
-//       const result = await response.json();
-
-//       if (response.ok) {
-//         const filename = result.data;
-//         const imageUrl = `http://localhost:8000/uploads/${filename}`; // 👈 عدلي المسار حسب مكان الصور فعليًا
-
-//         setUserData((prev) => ({
-//           ...prev,
-//           avatar: imageUrl,
-//         }));
-
-//         toast.success("Image uploaded successfully");
-//       } else {
-//         toast.error(result.message || "Upload failed");
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       toast.error("Something went wrong during upload");
-//     }
-//   }
-// };
-
+  };
 
   return (
     <>
@@ -128,17 +90,19 @@ console.log('avatar',userData.avatar)
           email: userData.email || "",
         }}
         validationSchema={validationSchema}
-      onSubmit={async (values) => {
-  try {
-    const updated = await updateUserInfo(values); 
-    setUserData({ ...userData, ...updated.data });
-    toast.success("Account updated successfully");
-  } catch (err) {
-    toast.error("Failed to update account");
-    console.error(err);
-  }
-}}
-
+        onSubmit={async (values) => {
+          try {
+            const updated = await updateUserInfo({
+              ...values,
+              avatar: uploadedAvatar || userData.avatar, // ← استخدمي الجديد لو موجود
+            });
+            setUserData({ ...userData, ...updated.data });
+            toast.success("Account updated successfully");
+          } catch (err) {
+            toast.error("Failed to update account");
+            console.error(err);
+          }
+        }}
       >
         {({ values, handleChange, handleBlur, errors, touched }) => (
           <Form className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
@@ -146,7 +110,7 @@ console.log('avatar',userData.avatar)
             <div className="flex flex-col items-center justify-center space-y-3">
               <div className="relative h-[200px] w-[200px]">
                 <Image
-                  src={userData.avatar}
+                  src={avatarUrl}
                   alt="Profile picture"
                   width={200}
                   height={200}
@@ -196,7 +160,9 @@ console.log('avatar',userData.avatar)
                   className="w-full rounded border px-3 py-2"
                 />
                 {touched.full_name && errors.full_name && (
-                  <div className="mt-1 text-xs text-red-500">{errors.full_name}</div>
+                  <div className="mt-1 text-xs text-red-500">
+                    {errors.full_name}
+                  </div>
                 )}
               </div>
 
