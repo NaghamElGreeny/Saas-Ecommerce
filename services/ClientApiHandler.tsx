@@ -285,3 +285,27 @@ export const updateUserInfo = async (data: { name: string; email: string }) => {
     throw new Error(error?.response?.data?.message || "Failed to update user info");
   }
 };
+export const changeNotification = async () => {
+  try {
+    const response = await axiosClient.post("/setting/change_notification_status");
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to change notification");
+  }
+};
+export const getLoyality = async () => {
+  try {
+    const response = await axiosClient.get("/loyal_card");
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to get loyality");
+  }
+};
+export const getWallet = async () => {
+  try {
+    const response = await axiosClient.get("/wallet");
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to get loyality");
+  }
+};

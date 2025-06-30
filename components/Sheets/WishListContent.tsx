@@ -1,46 +1,26 @@
 "use client";
 import React, { useEffect } from "react";
-import Image from "next/image";
 import {
-  Sheet,
   SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@heroui/spinner";
 import { useLikedStore } from "@/stores/likedStore";
 import WishlistCard from "../cards/WishlistCard";
-
-export default function WishList() {
-  const { likedItems, fetchLikedItems, loading } = useLikedStore();
-  useEffect(() => {
-    fetchLikedItems();
-  }, [fetchLikedItems]);
-  const totalItems = likedItems.length;
-  const hasProducts = totalItems > 0;
+function WishListContent() {
+      const { likedItems, fetchLikedItems, loading } = useLikedStore();
+      useEffect(() => {
+        fetchLikedItems();
+      }, [fetchLikedItems]);
+      const totalItems = likedItems.length;
+      const hasProducts = totalItems > 0;
   return (
-    <Sheet>
-   
-      <SheetTrigger className="relative cursor-pointer">
-        <Image
-          src="/assets/icons/navheart.png"
-          alt="wishlist"
-          width={60}
-          height={60}
-          className="size-[60px] shrink-0"
-        />
-        {!loading && totalItems > 0 && (
-          <span className="bg-primary absolute top-4 right-3 flex size-4 items-center justify-center rounded-full text-[8px] font-semibold text-white">
-            {totalItems}
-          </span>
-        )}
-      </SheetTrigger>
-
-      <SheetContent className="bg-bg w-full items-center rounded-l-2xl sm:min-w-[550px]">
+      <>
+           <SheetContent className="bg-bg w-full items-center rounded-l-2xl sm:min-w-[550px]">
         <SheetHeader className="w-full rounded-tl-2xl bg-white">
           <SheetTitle className="text-2xl font-bold">
             WishList
@@ -75,6 +55,8 @@ export default function WishList() {
           </div>
         )}
       </SheetContent>
-    </Sheet>
-  );
+      </>
+  )
 }
+
+export default WishListContent
