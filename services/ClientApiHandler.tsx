@@ -310,11 +310,21 @@ export const getWallet = async () => {
   }
 };
 
-export const getOrdersByStatus=async (status: string) => {
+export const getOrdersByStatus=async (params) => {
   try {
-    const response = await axiosClient.get(`orders-and-reservations?status=${status}`);
+    const response = await axiosClient.get(`orders-and-reservations`,{params});
     return response.data;
   } catch (error: any) {
     throw new Error(error?.response?.data?.message || "Failed to fetch orders");
   }
 }
+export const getReservation= async (slug: number) => {
+  try {
+    const res = await axiosClient.get<{ data: any }>(`/reservations/${slug}`);
+    console.log("✅ Reservation response:", res.data.data);
+    return res.data.data; 
+  } catch (error) {
+    console.error("❌ Fetch error at: Order", error);
+    throw error;
+  }
+};

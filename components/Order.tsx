@@ -7,6 +7,8 @@ import TotalOrder from "./shared/TotalOrder";
 import { ScrollArea } from "./ui/scroll-area";
 import CheckoutCartItem from "./shared/CheckoutCartItem";
 import OrderDetails from "./OrderDetails";
+import { Spinner } from "@heroui/spinner";
+import { Loader } from "lucide-react";
 
 type OrderProps = {
   slugg: number;
@@ -33,8 +35,13 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
     fetchOrder();
   }, [slugg]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!order) return <p>Order not found</p>;
+  if (loading) return <div className="loading w-full flex min-h-screen items-center justify-center">
+    {/* <Spinner color="blue" /> */}
+    <Loader color="blue"/>
+  </div>;
+  if (!order) return  <div className="loading w-full flex min-h-screen items-center justify-center">
+  <h2>order not found</h2>  
+  </div>;
 
   return (
     <div className="containerr my-12 grid min-h-[70vh] w-full grid-cols-1 gap-y-4 px-10 lg:grid-cols-2">

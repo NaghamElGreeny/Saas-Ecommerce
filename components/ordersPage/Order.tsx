@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Link from "next/link";
 import React from "react";
 import OverlappingImages from "./Overlapp";
@@ -13,22 +13,27 @@ const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
           {order.order_num ? `Order #${order.order_num}` : order.name}
         </p>
         <p className="ms-auto h-fit w-fit rounded-full px-4 py-2 text-sm text-blue-700 capitalize">
-                  {order.type === "order" ? order.order_type : 'Table Reservation'}
+          {order.type === "order" ? order.order_type : "Table Reservation"}
         </p>
       </div>
 
       {/* Content */}
-      <div className="flex flex-wrap justify-between gap-4">
+      <div className="flex flex-wrap justify-between gap-2">
         {/* Left: Image + Item Count */}
         <div className="flex flex-col items-center gap-3">
-          <div className="relative flex h-fit ">
+          <div className="relative flex h-fit max-w-[100px]">
             {/* المفروض يلف عالايتمز ويعرض صورهم */}
             <OverlappingImages
-              images={order.type === "order" ? order.item.map(item => item.product?.image) : [order.store.image]}
+              images={
+                order.type === "order"
+                  ? order.item.map((item) => item.product?.image)
+                  : [order.store.image]
+              }
               size={50}
-              overlap={50 * (0.15 * (order.type === "order" ?order.item.length:1))}
+              overlap={
+                50 * (0.15 * (order.type === "order" ? order.item.length : 1))
+              }
             />{" "}
-     
           </div>
           <p className="text-sm text-gray-500">
             {order.type === "order"
@@ -38,14 +43,30 @@ const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
         </div>
 
         {/* Middle: Product Info */}
-        <div className="flex flex-col justify-center">
-          <p className="font-semibold capitalize">{order.productName}</p>
-          <p className="text-sm text-gray-500">{order.productType}</p>
+        <div className="flex w-2/4 flex-col justify-start">
+          <p className="truncate font-semibold text-gray-800 capitalize">
+            {order.type === "order"
+              ? order.address?.title
+              : "Table Reservation"}
+          </p>
+          {order.type === "order" ? (
+            <div className="flex flex-col gap-1">
+              {order.item.map((productItem: any) => (
+                <p key={productItem.id} className="text-primary text-sm">
+                  {productItem.product.name}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p className="truncate text-sm text-gray-500">
+              {order.store.complete_name}
+            </p>
+          )}
         </div>
 
         {/* Right: Details Button */}
         <Link
-          href={""}
+          href= {order.type === "order" ?`order/${order.id}`:`reservations/${order.id}`}
           className="ms-auto mt-auto flex h-[52px] w-[52px] items-center justify-center rounded-full bg-blue-600 text-white transition hover:bg-blue-700"
         >
           <svg
