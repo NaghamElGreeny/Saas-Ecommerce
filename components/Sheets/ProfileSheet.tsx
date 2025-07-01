@@ -20,6 +20,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import Image from "next/image";
 import cookies from "js-cookie";
 import toast from "react-hot-toast";
@@ -31,24 +39,23 @@ import { useRouter } from "next/navigation";
 import WishListContent from "./WishListContent";
 import { ScrollArea } from "../ui/scroll-area";
 import { Switch } from "../ui/switch";
-import { changeNotification, getUser, getWallet } from "@/services/ClientApiHandler";
+import {
+  changeNotification,
+  getUser,
+  getWallet,
+} from "@/services/ClientApiHandler";
 import { useLoyalityStore } from "@/stores/loyalityStore";
+import CreditCard from "../cards/CreditCard";
 
 export default function ProfileSheet() {
   const [openProfile, setOpenProfile] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const [openWishList, setOpenWishList] = useState(false);
-  const { setToken,userData,setUserData } = useAuthStore();
-  const [notifiable,setNotifiable] = useState(userData.notifiable);
-  const [wallet,setWallet] = useState({});
- const {
-    points,
-    transactions,
-    fetchLoyality,
-    loading,
-    error,
-  } = useLoyalityStore();
-
+  const { setToken, userData, setUserData } = useAuthStore();
+  const [notifiable, setNotifiable] = useState(userData.notifiable);
+  const [wallet, setWallet] = useState({});
+  const { points, transactions, fetchLoyality } = useLoyalityStore();
+  console.log("userdata ", userData);
   useEffect(() => {
     fetchLoyality();
     const fetchWallet = async () => {
@@ -67,22 +74,22 @@ export default function ProfileSheet() {
   };
   const handleRemoveAccount = () => {
     //delete account request
-       cookies.remove("token");
+    cookies.remove("token");
     toast.success("Logged out");
     setOpenProfile(false);
     setToken(null);
-  }
+  };
   const router = useRouter();
   const handlePress = () => {
     // console.log(notification.notify_id)
     router.push(`/profile`);
   };
-  const handleToggle =async () => {
+  const handleToggle = async () => {
     await changeNotification();
     const user = await getUser();
-    setUserData(user)
+    setUserData(user);
     setNotifiable(user.notifiable);
-  }
+  };
   return (
     <>
       {/* Profile Sheet */}
@@ -140,7 +147,7 @@ export default function ProfileSheet() {
               {/* Order */}
               <div
                 onClick={() => {
-                  router.push("/orders")
+                  router.push("/orders");
                 }}
                 className="flex w-full cursor-pointer items-center justify-between"
               >
@@ -175,10 +182,7 @@ export default function ProfileSheet() {
                 <ChevronRight />
               </div>
               {/* notification */}
-              <div
-             
-                className="flex w-full  items-center justify-between"
-              >
+              <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Image
                     src="/assets/icons/notification.svg"
@@ -189,67 +193,158 @@ export default function ProfileSheet() {
                   Notifications
                 </div>
                 {/* toglle btn to turn it on or off */}
-                    <AlertDialog>
-                <AlertDialogTrigger asChild>
-    <div className="cursor-pointer">
-      <Switch checked={notifiable} />
-    </div>
-  </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will Change notification status.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>No,Keep it</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleToggle}>
-                     Yes, Change
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
- 
-
-           
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <div className="cursor-pointer">
+                      <Switch checked={notifiable} />
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will Change notification status.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>No,Keep it</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleToggle}>
+                        Yes, Change
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
               {/* loyality card */}
-              <div
-                onClick={() => {
-                  console.log("loyality clicked");
-                }}
-                className="flex w-full cursor-pointer items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <Image
-                    src="/assets/icons/loyalitycard.svg"
-                    alt="loyalitycard"
-                    width={65}
-                    height={65}
-                  />
-                  Loyality Card
-                </div>
-                <div className="greendiv loyalitypoints bg-green-100  text-green-600 rounded-full py-1.5 px-2">{points} points</div>
-              </div>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div className="loyality flex w-full cursor-pointer items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src="/assets/icons/loyalitycard.svg"
+                        alt="loyalitycard"
+                        width={65}
+                        height={65}
+                      />
+                      Loyality Card
+                    </div>
+                    <div className="greendiv loyalitypoints rounded-full bg-green-100 px-2 py-1.5 text-green-600">
+                      {points} points
+                    </div>
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="xs:min-w-[100vw] h-[90vh] overflow-hidden px-3 py-8 sm:max-w-[700px] sm:min-w-[700px]">
+                  <ScrollArea className="scrollbar scrollbar-thumb-primary scrollbar-track-transparent h-[600] px-4 py-2">
+                    <CreditCard
+                      full_name="User N"
+                      // wallet={{ balance: 0, currency: "E£" }}
+                      loyality={points}
+                    />
+
+                    <div className="mt-4 space-y-4">
+                      {transactions?.length > 0 ? (
+                        transactions.map((txn, index) => (
+                          <div
+                            key={index}
+                            className="bg-muted flex items-center justify-between rounded-lg p-3"
+                          >
+                            {/* Left Icon & Title */}
+                            <div className="flex items-center gap-3">
+                              <Image
+                                src={txn.image}
+                                alt="transaction"
+                                width={82}
+                                height={82}
+                                className="rounded-md object-cover"
+                              />
+                              <div className="flex h-16 flex-col justify-between">
+                                <div className="text-[22px] font-semibold">
+                                  Transaction ID - {txn.id}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {new Date(
+                                    txn.created_at,
+                                  ).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Right: Points */}
+                            <div className="flex flex-col items-end">
+                              <div className="text-lg font-bold">
+                                {txn.points}{" "}
+                                <span className="text-sm font-medium">
+                                  Points
+                                </span>
+                              </div>
+                              <div
+                                className={`mt-1 text-xs ${
+                                  txn.status === "come_in"
+                                    ? "text-green-500"
+                                    : "text-red-500"
+                                }`}
+                              >
+                                <Image
+                                  src={`/assets/icons/${txn.status}.svg`}
+                                  alt={`${txn.status}`}
+                                  width={24}
+                                  height={24}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-muted-foreground text-sm">
+                          No transactions found.
+                        </p>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
+
               {/* wallet */}
-              <div
-                onClick={() => {
-                  console.log("Wallet clicked");
-                }}
-                className="flex w-full cursor-pointer items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <Image
-                    src="/assets/icons/wallet.svg"
-                    alt="wallet"
-                    width={65}
-                    height={65}
-                  />
-                  Wallet
-                </div>
-                <div className="greendiv loyalitypoints  bg-green-100  text-green-600 rounded-full py-1.5 px-2.5">{wallet.balance} {wallet.currency}</div>
-              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div
+                    className="flex w-full cursor-pointer items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src="/assets/icons/wallet.svg"
+                        alt="wallet"
+                        width={65}
+                        height={65}
+                      />
+                      Wallet
+                    </div>
+                    <div className="greendiv loyalitypoints rounded-full bg-green-100 px-2.5 py-1.5 text-green-600">
+                      {wallet.balance} {wallet.currency}
+                    </div>
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="xs:min-w-[100vw] h-[90vh] overflow-hidden px-3 py-8 sm:max-w-[700px] sm:min-w-[700px]">
+                  <ScrollArea className="scrollbar scrollbar-thumb-primary scrollbar-track-transparent h-[600] px-4 py-2">
+                    <CreditCard
+                      full_name="User N"
+                      wallet={{
+                        balance: wallet.balance,
+                        currency: wallet.currency,
+                      }}
+                    />
+                    <div className="w-full m-4">
+                        <h2 className="font-bold text-lg">Cancelled Orders</h2>
+                    <div className="canceled w-full h-[200px] flex items-center justify-center">
+                     <p>no data in cancelled orders</p> 
+                    </div>
+                  </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
+              
+         
 
               {/* delete account */}
               <AlertDialog>
@@ -276,7 +371,7 @@ export default function ProfileSheet() {
                   <AlertDialogFooter>
                     <AlertDialogCancel>No,Keep it</AlertDialogCancel>
                     <AlertDialogAction onClick={handleRemoveAccount}>
-                     Yes, delete
+                      Yes, delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -311,8 +406,6 @@ export default function ProfileSheet() {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-
-
             </ScrollArea>
             <SheetFooter className="flex flex-col items-center justify-center">
               <SheetClose asChild />
@@ -337,5 +430,3 @@ export default function ProfileSheet() {
     </>
   );
 }
-
-
