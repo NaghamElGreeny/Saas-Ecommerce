@@ -55,7 +55,7 @@ export default function ProfileSheet() {
   const [notifiable, setNotifiable] = useState(userData.notifiable);
   const [wallet, setWallet] = useState({});
   const { points, transactions, fetchLoyality } = useLoyalityStore();
-  console.log("userdata ", userData);
+  // console.log("userdata ", userData);
   useEffect(() => {
     fetchLoyality();
     const fetchWallet = async () => {

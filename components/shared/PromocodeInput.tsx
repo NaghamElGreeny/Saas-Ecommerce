@@ -49,7 +49,7 @@ export default function PromoCodeInput() {
   };
 
   return (
-    <div className="mb-4 w-full p-5">
+    <div className="w-full p-5">
       <h2 className="text-xl font-bold mb-2">Promo Code</h2>
       {isApplied ? (
         <div className="flex items-center justify-between rounded-2xl px-4 py-3 border border-green-200">

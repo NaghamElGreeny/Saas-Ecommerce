@@ -62,7 +62,7 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
               width={24}
               height={24}
             />
-            <p>
+            <p className={`${order.status_trans === "finished" ? "" : "text-red-500"}`}>
               {order.status_trans === "finished" ? "completed" : "cancelled"}
             </p>
           </div>

@@ -19,6 +19,8 @@ interface LoyaltyState {
   transactions: Transaction[];
   loading: boolean;
   error: string | null;
+   usePoints: boolean;
+  setUsePoints: (value: boolean) => void;
   fetchLoyality: () => Promise<void>;
 }
 
@@ -30,14 +32,14 @@ export const useLoyalityStore = create<LoyaltyState>()(
       transactions: [],
       loading: false,
       error: null,
-
+ usePoints: false,
+  setUsePoints: (value) => set({ usePoints: value }),
       fetchLoyality: async () => {
   try {
     set({ loading: true, error: null });
 
     const res = await getLoyality();
 
-    // ✅ لو هو فعلاً بيرجع البيانات على طول
     if (res.status !== "success" || !res.data) {
       throw new Error("Failed to fetch loyalty");
     }

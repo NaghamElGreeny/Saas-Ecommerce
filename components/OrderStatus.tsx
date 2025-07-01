@@ -1,32 +1,41 @@
 "use client";
-import { Check, Clock } from "lucide-react";
+
 import clsx from "clsx";
+import Image from "next/image";
+
+type StatusType = "done" | "in_progress" | "pending";
 
 type Status = {
   key: string;
   value: string;
-  status: "done" | "in_progress" | "pending";
+  status: StatusType;
+  icon: string;
 };
 
 interface OrderStatusStepperProps {
+  orderType: "delivery" | "pickup";
   statusList: Status[];
 }
 
 export default function OrderStatusStepper({
+  orderType,
   statusList,
 }: OrderStatusStepperProps) {
-  return (
- <div className="relative flex items-center justify-between px-4 pt-8">
-    
-     
+  const displayedSteps =
+    orderType === "delivery" ? statusList : statusList.slice(0, 3);
 
-      {statusList.map((step, index) => {
-        const isDone = step.status === "done"||"completed";
+  return (
+    <div className="relative flex items-center justify-between px-6 pt-8">
+      {displayedSteps.map((step, index) => {
+        const isDone = step.status === "done";
         const isInProgress = step.status === "in_progress";
 
         return (
-          <div key={index} className="relative z-10 flex flex-col items-center w-full">
-            {/* خط ملون بين النقط */}
+          <div
+            key={step.key}
+            className="relative z-10 flex flex-col items-center w-full"
+          >
+            {/* lines */}
             {index !== statusList.length - 1 && (
               <div
                 className={clsx(
@@ -43,21 +52,29 @@ export default function OrderStatusStepper({
               />
             )}
 
-            {/* دائرة الحالة */}
+      {/* icon */}
             <div
               className={clsx(
-                "h-9 w-9 rounded-full flex items-center justify-center border-2",
+                "h-10 w-10 rounded-full flex items-center justify-center border-2 bg-white",
                 isDone
-                  ? "bg-primary text-white border-primary"
+                  ? "border-primary"
                   : isInProgress
-                  ? "bg-white text-primary border-primary"
-                  : "bg-white text-gray-400 border-gray-300"
+                  ? "border-primary"
+                  : "border-gray-300"
               )}
             >
-              {isDone ? <Check size={20} /> : <Clock size={20} />}
+              <Image
+                src={step.icon}
+                alt={step.value}
+                width={24}
+                height={24}
+                className={clsx(
+                  isDone || isInProgress ? "opacity-100" : "opacity-50"
+                )}
+              />
             </div>
 
-            {/* اسم الحالة */}
+          {/* status name */}
             <span
               className={clsx(
                 "mt-2 text-xs font-medium text-center",

@@ -16,12 +16,15 @@ import { useAuthStore } from "@/stores/authStore";
 import { confirmOrder } from "@/services/ClientApiHandler";
 import SuccessModal from "../Success";
 import Success from "../Success";
+import { useLoyalityStore } from "@/stores/loyalityStore";
 
 type OrderFormProps = {
   params: Record<string, string | string[]>;
 };
 
 const OrderForm = ({ params }: OrderFormProps) => {
+  const { points, fetchLoyality ,setUsePoints} = useLoyalityStore();
+  const { usePoints } = useLoyalityStore();
   const { addresses, fetchAddresses } = useAddressStore();
   const { stores, selectedStore, setSelectedStore } = useStore();
   const { cart, fetchCart } = useCartStore();
@@ -44,6 +47,11 @@ const OrderForm = ({ params }: OrderFormProps) => {
     // } else {
     //   pay_type.push({ credit: total_price });
     // }
+    if (usePoints) {
+      pay_type.push({ credit: total_price - points }, { points: points });
+    } else {
+      pay_type.push({ credit: total_price });
+    }
     const checkoutPayload = {
       ...data,
       cartProducts: cart.data.products,
@@ -64,7 +72,6 @@ const OrderForm = ({ params }: OrderFormProps) => {
 
     if (response.ok && session.url) {
       window.location.href = session.url;
-      
     }
   };
   const userData = useAuthStore((s) => s.userData) as UserData;
@@ -84,19 +91,19 @@ const OrderForm = ({ params }: OrderFormProps) => {
       if (params.status === "success") {
         try {
           const res = await confirmOrder({
-               ...params
-          //  pay_type: JSON.stringify([{ [String(params?.pay_type)]: cart.price.total }])
+            ...params,
+            //  pay_type: JSON.stringify([{ [String(params?.pay_type)]: cart.price.total }])
           });
           setOpen(true);
-          setOrderId(res.data.orderId as string);    
-        }
-        catch (error) {
+          setOrderId(res.data.orderId as string);
+          fetchCart();
+          setUsePoints(false)
+        } catch (error) {
           toast.error(error?.message || "Failed to confirm order");
         }
       }
     })();
-    
-  },[])
+  }, []);
 
   const defaultAddress = addresses.find((a) => a.is_default);
 
@@ -131,7 +138,14 @@ const OrderForm = ({ params }: OrderFormProps) => {
         address_id: selectedAddress.id,
         order_date: values.is_schedule ? values.order_date : undefined,
         order_time: values.is_schedule ? values.order_time : undefined,
-        pay_type: JSON.stringify([{ [values.pay_type]: cart.price.total }]),
+        pay_type: usePoints
+          ? JSON.stringify([
+              { [values.pay_type]: cart.price.total - points },
+              { points: points },
+            ])
+          : JSON.stringify([{ [values.pay_type]: cart.price.total }]),
+
+        // pay_type: JSON.stringify([{ [values.pay_type]: cart.price.total }]),
       };
 
       try {
@@ -141,14 +155,15 @@ const OrderForm = ({ params }: OrderFormProps) => {
         }
         const res = await confirmOrder(payload);
         if (res?.status === "success") {
-          // toast.success("Order confirmed");
           setOpen(true);
           setOrderId(res.data.id);
+          fetchLoyality();
+          fetchCart();
+          setUsePoints(false)
         }
-        // toast.success("Order confirmed");
       } catch (err) {
         console.error("Error confirming order:", err);
-        toast.error("Failed to confirm order");
+        toast.error(err?.message);
       }
     },
     enableReinitialize: true,
@@ -372,6 +387,32 @@ const OrderForm = ({ params }: OrderFormProps) => {
                 />
               </label>
             ))}
+            {points && points > cart?.price.total ? (
+              <label
+                key={"points"}
+                className="flex cursor-pointer items-center justify-between rounded-xl border p-4"
+              >
+                <div className="flex items-center gap-2 font-semibold">
+                  <Image
+                    src={`/assets/icons/points.svg`}
+                    alt={"points"}
+                    width={32}
+                    height={32}
+                  />
+                  {/* {method.charAt(0).toUpperCase() + method.slice(1)} */}
+                  {points} Points
+                </div>
+                <input
+                  type="radio"
+                  name="pay_type"
+                  value={"points"}
+                  checked={values.pay_type === "points"}
+                  onChange={() => setFieldValue("pay_type", "points")}
+                />
+              </label>
+            ) : (
+              ""
+            )}
           </div>
           {errors.pay_type && (
             <p className="text-sm text-red-500">{errors.pay_type}</p>

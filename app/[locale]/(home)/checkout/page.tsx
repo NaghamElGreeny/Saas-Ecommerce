@@ -21,7 +21,7 @@ export default async function ChecoutPage({ searchParams }:{searchParams:Promise
 
           {/* promo code*/}
           <PromoCodeInput />
-
+ 
           <TotalOrder/>
         </div>
       </div>

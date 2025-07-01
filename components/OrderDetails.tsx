@@ -42,7 +42,12 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
   return (
     <div className="space-y-6 rounded-2xl bg-whiteee p-4 text-black ">
       {/* Order Status */}
-      <OrderStatusStepper statusList={order.order_status} />
+      {/* <OrderStatusStepper statusList={order.order_status} /> */}
+      <OrderStatusStepper
+  orderType={order.order_type}
+  statusList={order.order_status}
+/>
+
 
       {/* Branch Info -  Location */}
       <div>
