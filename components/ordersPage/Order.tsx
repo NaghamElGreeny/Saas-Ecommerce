@@ -4,7 +4,7 @@ import React from "react";
 import OverlappingImages from "./Overlapp";
 
 const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
-  //   console.log("order Sent ", order);
+    // console.log("order Sent ", order);
   return (
     <div className="max-h-48 animate-[zoomIn_1.3s] rounded-3xl bg-white p-5 shadow-md">
       {/* Top Row */}
