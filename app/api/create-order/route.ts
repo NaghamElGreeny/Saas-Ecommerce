@@ -1,53 +1,25 @@
+import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
+import { CartProduct } from '@/utils/cartTypes';
 
-const stripe = new Stripe('sk_test_51Rfh1xQuvBQQaqOXH6p7jZFTamrA48voiqsEcsDMEQIkGpK6OgsGrV5CwpkEzHMB48I8UVJRiEv4XwwWOMr0ECmE00cwDsMbxi');
-/* 
-interface Price {
-  price: number;
-  currency: string;
-}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-interface Product {
-  name: string;
-  image?: string;
-  price: Price;
-}
-
-interface ItemModifier {
-  quantity: number;
-  name: string;
-}
-
-interface SubModifier {
-  item_modifiers: ItemModifier[];
-}
-
-interface CartProduct {
-  product: Product;
-  quantity: number;
-  sub_modifiers: SubModifier[];
-}
-
-interface PriceSummary {
-  total: number;
-}
- */
-interface CheckoutRequestBody {
+type CheckoutRequestBody = Record<string, string> & {
   cartProducts: CartProduct[];
-  priceSummary: PriceSummary;
+  total: number;
 }
 
 
 export async function POST(req: Request) {
   try {
-   /*  if (!process.env.STRIPE_SECRET_KEY) {
-      throw new Error('Stripe secret key not configured');
-    }
- */
+    /*  if (!process.env.STRIPE_SECRET_KEY) {
+       throw new Error('Stripe secret key not configured');
+     }
+  */
     const body: CheckoutRequestBody = await req.json();
-    const { cartProducts, priceSummary } = body;
+    const { cartProducts, total, ...additionalParams } = body;
 
-    if (!cartProducts?.length || !priceSummary || typeof priceSummary.total !== 'number') {
+    if (!cartProducts?.length || !total || typeof total !== 'number') {
       return NextResponse.json(
         { message: 'Invalid request body. Missing cart items or price summary.' },
         { status: 400 }
@@ -62,8 +34,6 @@ export async function POST(req: Request) {
       const { product, quantity, sub_modifiers } = cartProduct;
       const currency = product.price.currency;
       const unitAmount = Math.round(product.price.price * 100);
-
-
       if (sessionCurrency && sessionCurrency !== currency) {
         return NextResponse.json(
           { message: 'All products must use the same currency' },
@@ -75,14 +45,14 @@ export async function POST(req: Request) {
       const descriptionParts: string[] = [];
       sub_modifiers.forEach((sub) => {
         sub.item_modifiers.forEach((mod) => {
-          descriptionParts.push(⁠ ${mod.quantity}x ${mod.name} ⁠);
+          descriptionParts.push(`${mod.quantity}x ${mod.name}`);
         });
       });
       const description = descriptionParts.join(', ').slice(0, 500);
 
       line_items.push({
         price_data: {
-          currency:"usd",
+          currency: "usd",
           product_data: {
             name: product.name,
             description: description || undefined,
@@ -95,15 +65,23 @@ export async function POST(req: Request) {
     }
 
     const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_BASE_URL;
-    
+
+    // Construct search parameters from additionalParams
+    const searchParams = new URLSearchParams();
+    for (const key in additionalParams) {
+      if (Object.prototype.hasOwnProperty.call(additionalParams, key)) {
+        searchParams.append(key, additionalParams[key]);
+      }
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       line_items,
-      success_url: ⁠ ${origin}/checkout?session_id={CHECKOUT_SESSION_ID} ⁠,
-      cancel_url: ⁠ ${origin}/checkout?status=faild ⁠,
+      success_url: `${origin}/checkout?status=success&session_id={CHECKOUT_SESSION_ID}${searchParams.toString() ? `&${searchParams.toString()}` : ''}`,
+      cancel_url: `${origin}/checkout?status=faild`,
       metadata: {
-        originalTotal: priceSummary.total.toFixed(2),
+        originalTotal: total.toFixed(2),
         itemCount: cartProducts.length.toString(),
       },
     });

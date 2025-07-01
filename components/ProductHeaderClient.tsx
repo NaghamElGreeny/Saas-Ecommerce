@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/components/ui/dialog"; // from shadcn/ui
+} from "@/components/ui/dialog"; 
 import { X } from "lucide-react";
 import { ShareButtons } from "./ShareButtons";
 

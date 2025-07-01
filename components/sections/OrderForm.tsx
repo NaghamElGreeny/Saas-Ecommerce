@@ -14,6 +14,8 @@ import AddressItem from "../shared/AddressItem";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/stores/authStore";
 import { confirmOrder } from "@/services/ClientApiHandler";
+import SuccessModal from "../Success";
+import Success from "../Success";
 
 const OrderForm = () => {
   const { addresses, fetchAddresses } = useAddressStore();
@@ -24,7 +26,41 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     points?: number;
     wallet?: number;
   };
+ const [open, setOpen] = useState(false);
+ const [orderId, setOrderId] = useState('');
+const cridetPaymet = async (data) => {
+    const pay_type = [];
+    const total_price = cart.price!.total!;
 
+    // if (usePoints) {
+    //   pay_type.push(
+    //     { wallet: total_price - user!.points },
+    //     { points: user!.points }
+    //   );
+    // } else {
+    //   pay_type.push({ credit: total_price });
+    // }
+    const checkoutPayload = {
+      ...data,
+      cartProducts: cart.data.products,
+      total: pay_type.length == 2 ? total_price - (user?.points || 0) : total_price,
+    }
+
+    const response = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+
+      body: JSON.stringify(checkoutPayload),
+    });
+
+    const session = await response.json();
+
+    if (response.ok && session.url) {
+      window.location.href = session.url;
+    }
+  }
   const userData = useAuthStore(s => s.userData) as UserData;
   console.log('user', userData)
 
@@ -61,11 +97,6 @@ const [isSubmitting, setIsSubmitting] = useState(false);
       selectedStoreId: selectedStore?.id || null,
     },
     validationSchema,
-    // onSubmit: async (values) => {
-    //   const res = await confirmOrder(values);
-    //   toast.success("Order confirmed");
-    //   console.log("Form submitted", values);
-    // },
     onSubmit: async (values) => {
         setIsSubmitting(true);
   const payload = {
@@ -79,13 +110,18 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     pay_type: JSON.stringify([{ [values.pay_type]: cart.price.total }]),
   };
 
-  try {
+      try {
+        if (values.pay_type === "card") {
+          await cridetPaymet(payload)
+          return;
+    }
   const res=  await confirmOrder(payload);
-  if (res?.status === "success") {
-    toast.success("Order confirmed");
-  } else {
-    toast.error(res?.message || "Failed to confirm order");
-  }
+        if (res?.status === "success") {
+          // toast.success("Order confirmed");
+          setOpen(true)
+          setOrderId(res.data.id);
+    //  {   <Success open={open} onOpenChange={setOpen} />}
+        }
     // toast.success("Order confirmed");
   } catch (err) {
     console.error("Error confirming order:", err);
@@ -148,7 +184,10 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     </div>
   );
 
-  return (
+  return (<>
+      {/* Success Dialog */}
+      <Success open={open} onOpenChange={setOpen} firstTitle="Go to Order Details" firstLink={`order/${orderId}`} secondTitle="Continue Shopping" secondLink="/checkout" />
+
     <form onSubmit={handleSubmit} className="mx-auto w-full space-y-6 p-6">
       {/* Order Type */}
       <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
@@ -389,7 +428,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
           </button>
         </DialogContent>
       </Dialog>
-    </form>
+    </form></>
   );
 };
 
