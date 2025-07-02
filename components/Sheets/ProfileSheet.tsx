@@ -17,6 +17,7 @@ import DeleteAccountBtn from "../ProfileSheetComponents/DeleteAccountBtn";
 import LogoutBtn from "../ProfileSheetComponents/LogoutBtn";
 import AccountBtn from "../ProfileSheetComponents/AccountBtn";
 import OrdersBtn from "../ProfileSheetComponents/OrdersBtn";
+import CmsPages from "../ProfileSheetComponents/CmsPages";
 
 export default function ProfileSheet() {
   const [openProfile, setOpenProfile] = useState(false);
@@ -67,7 +68,8 @@ export default function ProfileSheet() {
         }
       >
         {!openAddress && (
-          <ScrollArea className="w-full overflow-y-auto rounded-md px-2 py-4">
+          <>
+            <ScrollArea className="w-full overflow-y-auto rounded-md px-4 py-4 h-[90vh] flex gap-5">
             <SheetItem
               icon="/assets/icons/address.svg"
               label="My Address"
@@ -87,9 +89,12 @@ export default function ProfileSheet() {
             <Loyality />
             <Wallet />
 
+            <CmsPages onClose={() => setOpenProfile(false)}/>
+
             <DeleteAccountBtn onClose={() => setOpenProfile(false)} />
             <LogoutBtn onClose={() => setOpenProfile(false)} />
-          </ScrollArea>
+            </ScrollArea>
+          </>
         )}
       </GlobalSheet>
 

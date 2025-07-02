@@ -13,7 +13,7 @@ type StoreState = {
 
 export const useStore = create<StoreState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       stores: [],
       selectedStore: null,
 

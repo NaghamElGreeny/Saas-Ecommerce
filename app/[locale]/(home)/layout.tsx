@@ -10,7 +10,9 @@ export default async function LocaleLayout({
 }: {
     children: React.ReactNode;
     params: Promise<{ locale: string }>;
-}) {
+    }) {
+    
+    //   const { pages, fetchPages, loading } = usePagesStore();
     let cmsPages = null;
     try {
         cmsPages = await getAllPages(); 

@@ -25,16 +25,11 @@ export default async function LocaleLayout({
 
   const themeMode = appCookies.get('modeLayout')
 
-  // const setToken = useAuthStore((state) => state.setToken);
-  // // توكن 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-  //   if (token) setToken(token);
-  // }, [setToken]);
-
-
   return (
-    <html className={`${themeMode ? themeMode : ''}`} lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+    <html className={`${themeMode ? themeMode : ''}`}
+      lang={locale}
+      // dir={locale === "ar" ? "rtl" : "ltr"}
+    >
       <head>
         <title>{locale === "ar" ? "نغم" : "MEA"}</title>
         <link rel="icon" href="/assets/logo/logo.svg" />

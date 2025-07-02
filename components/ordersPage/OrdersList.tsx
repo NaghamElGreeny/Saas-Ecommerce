@@ -30,7 +30,7 @@ export default function OrdersList({ status }: Props) {
 console.log(meta)
   useEffect(() => {
     fetchOrders({page:currentPage,status});
-  }, [currentPage]);
+  }, [currentPage, status]);
   useEffect(() => {
     fetchOrders({page:1,status});
   }, [status]);

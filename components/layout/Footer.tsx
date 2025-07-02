@@ -1,7 +1,14 @@
-// components/Footer.tsx
+'use client';
+import { usePagesStore } from '@/stores/usePagesStore';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Footer() {
+      const { pages, fetchPages } = usePagesStore();
+
+  useEffect(() => {
+    if (!pages.length) fetchPages();
+  }, [pages, fetchPages]);
     const socials = [
         'facebook',
         'twitter',

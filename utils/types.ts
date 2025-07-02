@@ -320,3 +320,12 @@ export type OrderData = {
     icon: string;
   }[];
 };
+export type StaticPage = {
+  id: number;
+  title: string;
+  slug: string;
+  in_menu: boolean;
+  icon: string;
+  user_type: "both" | "guest" | "auth"; // لو فيه تمييز
+  created_at: string;
+};

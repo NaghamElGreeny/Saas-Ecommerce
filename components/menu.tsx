@@ -2,34 +2,39 @@
 
 import { useEffect, useState } from "react";
 import { useMenuFilterStore } from "@/stores/menuFilterStore";
-import Link from "next/link";
+
 import Card from "./cards/Card";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/utils/menuTypes";
 import { useLikedStore } from "@/stores/likedStore";
+import Pagination from "./Pagination"; // استورد Pagination الجديد
 
 const ITEMS_PER_PAGE = 6;
 
-const Menu = ({ items }: { items: Product[] }) => {
+const Menu = ({
+  items,
+  offer,
+}: {
+  items: Product[];
+  offer?: boolean | false;
+}) => {
   const { mainCategory, subCategory, search } = useMenuFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredItems, setFilteredItems] = useState<Product[]>(items);
   const { fetchLikedItems } = useLikedStore();
+
   useEffect(() => {
     let result = [...items];
-
-    if (mainCategory) {
-      result = result.filter(
-        (item) => item.category?.toLowerCase() === mainCategory.toLowerCase(),
-      );
-    }
-
-    if (subCategory) {
-      result = result.filter(
-        (item) =>
-          item.sub_category?.toLowerCase() === subCategory.toLowerCase(),
-      );
-    }
+    // if (mainCategory) {
+    //   result = result.filter(
+    //     (item) => item.category?.toLowerCase() === mainCategory.toLowerCase(),
+    //   );
+    // }
+    // if (subCategory) {
+    //   result = result.filter(
+    //     (item) =>
+    //       item.sub_category?.toLowerCase() === subCategory.toLowerCase(),
+    //   );
+    // }
 
     if (search) {
       result = result.filter((item) =>
@@ -38,6 +43,7 @@ const Menu = ({ items }: { items: Product[] }) => {
     }
     fetchLikedItems();
     setFilteredItems(result);
+    setCurrentPage(1); 
   }, [items, mainCategory, subCategory, search, fetchLikedItems]);
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
@@ -46,37 +52,22 @@ const Menu = ({ items }: { items: Product[] }) => {
     startIndex,
     startIndex + ITEMS_PER_PAGE,
   );
+
   return (
-    <div className="col-span-3 space-y-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="col-span-3 space-y-8 w-full">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 w-full content-baseline place-items-center">
         {currentItems.map((item) => (
-          // <Link key={item.id} href={`/product/${item.slug}?lat=${item.lat || 0}&lng=${item.lng || 0}`}>
-          <Card key={item.id} item={item} width="full" />
-          //</Link>
+          <Card key={item.id} item={item} width="full" offer={offer} />
         ))}
       </div>
 
-      <div className="flex justify-center gap-2">
-        <button onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}>
-          <ChevronLeft />
-        </button>
-
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            className={`rounded px-3 py-1 ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
-
-        <button
-          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-        >
-          <ChevronRight />
-        </button>
-      </div>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <Pagination
+          meta={{ current_page: currentPage, last_page: totalPages }}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };

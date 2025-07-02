@@ -25,7 +25,7 @@ export default function NotificationToggle() {
           Notifications
         </div>
         <div className="cursor-pointer" onClick={() => setOpenNotifDialog(true)}>
-          <Switch checked={notifiable} />
+          <Switch checked={notifiable} className="bg-primary relative inline-flex !h-7 !w-12 items-center rounded-full"/>
         </div>
       </div>
 

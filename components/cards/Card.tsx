@@ -7,7 +7,7 @@ import { useLikedStore } from "@/stores/likedStore";
 import { Product } from "@/utils/menuTypes";
 import Image from "next/image";
 
-function Card({ item, width }: { item: Product; width?: string }) {
+function Card({ item, width, offer }: { item: Product; width?: string;offer?:boolean }) {
   const router = useRouter();
   const { isLiked, toggleLike } = useLikedStore();
   const [mounted, setMounted] = useState(false);
@@ -25,7 +25,8 @@ function Card({ item, width }: { item: Product; width?: string }) {
     <div
       onClick={handlePress}
       style={{ width }}
-      className="h-[509px] w-[302px] flex-shrink-0 cursor-pointer rounded-2xl bg-white px-4 pt-2.5 pb-6 shadow-sm transition-shadow hover:shadow-md"
+      // className="h-[509px] w-[302px]  flex-shrink-0 cursor-pointer rounded-2xl bg-white px-4 pt-2.5 pb-6 shadow-sm transition-shadow hover:shadow-md"
+      className="h-[509px] min-w-[302px] max-w-[402px] flex flex-col   cursor-pointer rounded-2xl bg-white px-4 pt-2.5 pb-6 shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="img relative mb-4">
         <Image
@@ -57,7 +58,14 @@ function Card({ item, width }: { item: Product; width?: string }) {
               </span>
             </div>
           </div>
-          {mounted && (
+          {offer ?
+            (
+              <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-primary text-[14px] font-[400] leading-4 text-white">
+                <p>off</p>
+                <p>{item.price.percentage }</p>
+            </div>
+            ): (
+             mounted && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -71,7 +79,9 @@ function Card({ item, width }: { item: Product; width?: string }) {
                 <AiOutlineHeart className="text-xl text-gray-400 transition-colors hover:text-blue-400" />
               )}
             </button>
+          )
           )}
+         
         </div>
       </div>
     </div>

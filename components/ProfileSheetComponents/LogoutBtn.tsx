@@ -7,7 +7,7 @@ import cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/stores/authStore";
 
-export default function LogoutBtn({ onClose }: { onClose: () => void }) {
+export default function LogoutBtn({ onClose }: { onClose?: () => void }) {
   const [open, setOpen] = useState(false);
   const { setToken } = useAuthStore();
 

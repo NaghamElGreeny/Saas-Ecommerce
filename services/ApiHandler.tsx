@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
-import { ApiCategories, CmsPage, OrderData } from "../utils/types";
+import { ApiCategories, CmsPage } from "../utils/types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fetchData = async (endpoint: string, errorMsg: string, config = {}) => {
@@ -14,13 +14,9 @@ const fetchData = async (endpoint: string, errorMsg: string, config = {}) => {
   }
 };
 
-// export const getMenu = () => fetchData("/product", "Failed to fetch Products");
-// export const getHome = () => fetchData("/home", "Failed to fetch Products");
-
 export const getHome = async () => {
   try {
     const res = await axiosInstance.get<{ data: any }>("/home");
-    // console.log(" home data fetched", res.data.data);
     return res.data.data;
   } catch (error) {
     console.error("Fetch error at: cms-pages", error);
@@ -42,7 +38,6 @@ export const getAllPages = async () => {
   try {
     const res = await axiosInstance.get("/cms-pages");
     return res.data;
-    console.log("CMS pages fetched successfully", res.data);
   } catch (error) {
     console.error("Fetch error at: cms-pages", error);
     throw error;
@@ -60,28 +55,6 @@ export const getMenuItem = async (slug: string) => {
     throw error;
   }
 };
-// export const getOrder = async (slug: number) => {
-//   try {
-//     const res = await axiosInstance.get<{ data: any }>(
-//       `/orders/${slug}`,
-//     );
-//     console.log("Order responce:", res.data);
-//     return res.data.data;
-//   } catch (error) {
-//     console.error("Fetch error at: Order", error);
-//     throw error;
-//   }
-// };
-// export const getOrder = async (slug: number) => {
-//   try {
-//     const res = await axiosInstance.get<{ data: any }>(`/orders/${slug}`);
-//     console.log("✅ Order response:", res.data);
-//     return res.data.data; 
-//   } catch (error) {
-//     console.error("❌ Fetch error at: Order", error);
-//     throw error;
-//   }
-// };
 export const getMenu = async () => {
   try {
     const res = await axiosInstance.get(`/product`);
@@ -100,8 +73,8 @@ export const getCategories = async () => {
     throw error;
   }
 };
-// export const AddToCart = async (payload: any) => {
-//   const res = await axiosInstance.post("carts", payload);
-//   console.log(res.data)
-//   return res.data;
-// };
+export const getWebSettings = async () => {
+  const res = await axiosInstance.get("/web_settings");
+  console.log(res.data)
+  return res.data;
+};

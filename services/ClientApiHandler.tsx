@@ -333,3 +333,13 @@ export const getReservation= async (slug: number) => {
     throw error;
   }
 };
+
+export const getAllPages = async () => {
+  try {
+    const res = await axiosClient.get("/cms-pages");
+    return res.data;
+  } catch (error) {
+    console.error("Fetch error at: cms-pages", error);
+    throw error;
+  }
+};

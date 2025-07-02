@@ -28,7 +28,7 @@ export default async function Home() {
         sectionData={webContent}
         sectionType="discover"
       />
-      <Slider title="Offers" items={offers} />
+      <Slider title="Offers" items={offers} offer={ true} />
       <ReservationForm
         show={true}
         className={

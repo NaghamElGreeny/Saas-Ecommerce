@@ -2,7 +2,6 @@ import Filter from '@/components/Filter';
 import Menu from '@/components/menu';
 import HeroSection from '@/components/shared/HeroSection';
 import { getCategories, getHome, getMenuItem } from '@/services/ApiHandler';
-import { useAuthStore } from '@/stores/authStore';
 import React from 'react';
 
 async function MenuPage() {
