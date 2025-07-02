@@ -29,7 +29,7 @@ const AddressForm = ({
 
   return (
     <div className="h-full w-full space-y-6 overflow-y-auto rounded-3xl bg-white p-6">
-      <h2 className="mb-4 text-xl font-semibold">Add New Address</h2>
+      <h2 className="mb-4 text-xl font-semibold">{isUpdate?"Edit Address":"Add New Address"}</h2>
 
 <Formik
   initialValues={{

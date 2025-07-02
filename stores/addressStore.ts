@@ -1,4 +1,4 @@
-// stores/addressStore.ts
+
 import { getAddress, updateAddress, deleteAddress } from '@/services/ClientApiHandler';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -41,7 +41,7 @@ export const useAddressStore = create<AddressStore>()(
       fetchAddresses: async () => {
         try {
           const res = await getAddress();
-          set({ addresses: res.data });
+          set({ addresses: (res as { data: Address[] }).data });
         } catch (error) {
           console.error('Fetch error:', error);
         }
