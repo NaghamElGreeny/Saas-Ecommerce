@@ -80,7 +80,7 @@ export default function ProfileSheet() {
   };
   const router = useRouter();
   const handlePress = () => {
-    // console.log(notification.notify_id)
+
     router.push(`/profile`);
   };
   const handleToggle = async () => {
