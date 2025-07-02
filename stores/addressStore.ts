@@ -3,7 +3,7 @@ import { getAddress, updateAddress, deleteAddress } from '@/services/ClientApiHa
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type Address = {
+export type Address = {
   id: number;
   type: string | null;
   title: string;

@@ -33,7 +33,8 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
 
   const orderDate = order.order_date;
     const orderTime = order.order_time;
-    const {setCart,fetchCart} = useCartStore();
+  const { setCart, fetchCart } = useCartStore();
+  console.log(order)
   const handleClick = async () => {
       const res = await reOrder(order.id);
       setCart(res);
@@ -122,14 +123,16 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
       </div>
       {/* Reorder Button */}
 
-      <div className="flex justify-end">
-        <button
-          className="bg-primary hover:bg-primary/90 rounded-full px-6 py-2 text-white shadow-md transition"
-          onClick={handleClick}
-        >
-          Reorder
-        </button>
-      </div>
+      {order.status_trans!== "canceled" && (
+        <div className="flex justify-end">
+          <button
+        className="bg-primary hover:bg-primary/90 rounded-full px-6 py-2 text-white shadow-md transition"
+        onClick={handleClick}
+          >
+        Reorder
+          </button>
+        </div>
+      )}
     </div>
   );
 }

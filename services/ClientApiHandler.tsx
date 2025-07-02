@@ -258,8 +258,13 @@ export const changePassword = async (payload: any) => {
   const res = await axiosClient.post("/profile/change_password", payload);
   return res.data;
 };
-export const changePhone = async (payload: any) => {
+export const sendVerificationCode = async (payload: any) => {
   const res = await axiosClient.post("/profile/send_verification_code", payload);
+  return res.data;
+};
+export const updatePhone = async (payload: any) => {
+  const res = await axiosClient.post('/profile/update_phone'
+, payload);
   return res.data;
 };
 

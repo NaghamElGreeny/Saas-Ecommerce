@@ -56,6 +56,7 @@ interface ButtonProps_TP extends ButtonVariants_TP {
   loading?: boolean
   type?: "button" | "submit" | "reset"
   bordered?: boolean
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export const Button = ({
@@ -65,11 +66,12 @@ export const Button = ({
   disabled,
   action,
   loading,
+    onClick,
   type = "button",
   bordered = false,
   ...props
 }: ButtonProps_TP) => {
-  var newClass =
+  const newClass =
     className + " " + (loading ? "inline-flex items-center gap-2" : "")
   return (  
     <button
@@ -81,7 +83,7 @@ export const Button = ({
         bordered: bordered,
         className: newClass,
       })}
-      onClick={action}
+    onClick={onClick ?? action}
       {...props}
     >
       {loading && <Spinner />}

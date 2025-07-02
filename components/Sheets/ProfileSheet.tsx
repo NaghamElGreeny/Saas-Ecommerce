@@ -41,7 +41,6 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Switch } from "../ui/switch";
 import {
   changeNotification,
-  getUser,
   getWallet,
 } from "@/services/ClientApiHandler";
 import { useLoyalityStore } from "@/stores/loyalityStore";
@@ -51,7 +50,7 @@ export default function ProfileSheet() {
   const [openProfile, setOpenProfile] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const [openWishList, setOpenWishList] = useState(false);
-  const { setToken, userData, setUserData } = useAuthStore();
+  const { setToken, userData,fetchUserData } = useAuthStore();
   const [notifiable, setNotifiable] = useState(userData.notifiable);
   const [wallet, setWallet] = useState({});
   const { points, transactions, fetchLoyality } = useLoyalityStore();
@@ -75,7 +74,7 @@ export default function ProfileSheet() {
   const handleRemoveAccount = () => {
     //delete account request
     cookies.remove("token");
-    toast.success("Logged out");
+    toast.success("Account deleted successfully");
     setOpenProfile(false);
     setToken(null);
   };
@@ -86,9 +85,8 @@ export default function ProfileSheet() {
   };
   const handleToggle = async () => {
     await changeNotification();
-    const user = await getUser();
-    setUserData(user);
-    setNotifiable(user.notifiable);
+    fetchUserData();
+    setNotifiable(userData.notifiable);
   };
   return (
     <>

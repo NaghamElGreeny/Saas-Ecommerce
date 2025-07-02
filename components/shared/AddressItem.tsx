@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent ,DialogHeader,DialogTitle} from "@/components/ui/dialog";
 import { Edit, Trash2 } from "lucide-react";
 import { useAddressStore } from "@/stores/addressStore";
 import AddressForm from "../Forms/AddAdressForm";
@@ -51,6 +51,7 @@ export default function AddressItem({ addr }: { addr: any }) {
                 </button>
               </DialogTrigger>
               <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl p-0 sm:max-w-[600px]">
+                <DialogHeader><DialogTitle></DialogTitle></DialogHeader>
                 <AddressForm
                   isUpdate
                   initialData={addr}

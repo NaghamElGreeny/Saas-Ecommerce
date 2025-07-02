@@ -1,15 +1,9 @@
 import { useRef, useState } from "react";
-// import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { addAddress, updateAddress } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
-// import GoogleMapComponent from "../shared/GoogleMap";
 import GoogleMapSelector from "../shared/GoogleMap";
-// import { useGoogleMapsLoader } from "@/utils/useGoogleMapsLoader";
-
-// const containerStyle = { width: "100%", height: "200px" };
-// const defaultCenter = { lat: 31.022782, lng: 31.386789 };
 
 const validationSchema = Yup.object({
   address: Yup.string().min(3, "Minimum 3 characters").required("Required"),
@@ -32,10 +26,6 @@ const AddressForm = ({
     initialData ? { lat: initialData.lat, lng: initialData.lng } : null
   );
   const searchInputRef = useRef<HTMLInputElement>(null);
-  // const mapRef = useRef<GoogleMap>(null);
-  // const [map, setMap] = useState<google.maps.Map | null>(null);
-
-  // const { isLoaded } = useGoogleMapsLoader();
 
   return (
     <div className="h-full w-full space-y-6 overflow-y-auto rounded-3xl bg-white p-6">
@@ -76,13 +66,12 @@ const AddressForm = ({
       await updateAddress(initialData.id, payload); 
       toast.success("Address updated successfully!");
     } else {
-      await addAddress(payload); // ← ريكويست الإضافة
+      await addAddress(payload); 
       toast.success("Address saved successfully!");
       resetForm();
       setLocation(null);
     }
-
-    if (onSuccess) onSuccess(); // عشان نقفل المودال مثلاً أو نعمل تحديث للبيانات
+    onSuccess();
   } catch (error) {
     toast.error("Failed to save address");
     console.error(error);
@@ -92,7 +81,7 @@ const AddressForm = ({
 }}
 
       >
-        {({ setFieldValue, isSubmitting }) => (
+        {({  isSubmitting }) => (
           <Form className="space-y-4">
             <div className="flex items-center gap-2">
               <Field type="checkbox" name="isDefault" className="!size-5" />
