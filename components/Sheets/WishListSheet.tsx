@@ -6,9 +6,14 @@ import { useLikedStore } from "@/stores/likedStore";
 import WishlistCard from "../cards/WishlistCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@heroui/spinner";
-import GlobalSheet from "@/components/shared/GlobalSheet"; // غير الباث لو لازم
-
-export default function WishList() {
+import GlobalSheet from "@/components/shared/GlobalSheet";
+export default function WishList({
+  open,
+  onOpenChange,
+}: {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const { likedItems, fetchLikedItems, loading } = useLikedStore();
 
   useEffect(() => {
@@ -54,8 +59,8 @@ export default function WishList() {
 
   return (
     <GlobalSheet
-      open={undefined} // لو محتاج تخليه controlled قولهالي
-      onOpenChange={() => {}} // placeholder
+      open={open}
+      onOpenChange={onOpenChange}
       title={
         <>
           WishList
