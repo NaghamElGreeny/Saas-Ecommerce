@@ -1,24 +1,18 @@
 "use client";
-import React, { useState } from "react";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
+import React, { useState } from "react";
 import Image from "next/image";
-import AddressSheet from "./AddressSheet";
 import { ChevronRight } from "lucide-react";
-import WishListContent from "./WishListContent";
 import { ScrollArea } from "../ui/scroll-area";
-// import GlobalSheet from "../shared/GlobalSheet";
+
+import GlobalSheet from "../shared/GlobalSheet";
+
+// Components
+import AddressSheet from "./AddressSheet";
+import WishListContent from "./WishListContent";
+import NotificationToggle from "../ProfileSheetComponents/Notification";
 import Loyality from "../ProfileSheetComponents/Loyality";
 import Wallet from "../ProfileSheetComponents/Wallet";
-import NotificationToggle from "../ProfileSheetComponents/Notification";
 import DeleteAccountBtn from "../ProfileSheetComponents/DeleteAccountBtn";
 import LogoutBtn from "../ProfileSheetComponents/LogoutBtn";
 import AccountBtn from "../ProfileSheetComponents/AccountBtn";
@@ -28,10 +22,41 @@ export default function ProfileSheet() {
   const [openProfile, setOpenProfile] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const [openWishList, setOpenWishList] = useState(false);
+
+  const handleNestedOpen = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setOpenProfile(false);
+    setTimeout(() => setter(true), 300);
+  };
+
+  const SheetItem = ({
+    icon,
+    label,
+    onClick,
+  }: {
+    icon: string;
+    label: string;
+    onClick: () => void;
+  }) => (
+    <div
+      onClick={onClick}
+      className="flex w-full cursor-pointer items-center justify-between"
+    >
+      <div className="flex items-center gap-3">
+        <Image src={icon} alt={label} width={65} height={65} />
+        {label}
+      </div>
+      <ChevronRight />
+    </div>
+  );
+
   return (
     <>
-      <Sheet open={openProfile} onOpenChange={setOpenProfile}>
-        <SheetTrigger>
+      {/* Profile Sheet */}
+      <GlobalSheet
+        open={openProfile}
+        onOpenChange={setOpenProfile}
+        title="Profile"
+        trigger={
           <Image
             src="/assets/icons/profile.png"
             alt="profile"
@@ -39,94 +64,52 @@ export default function ProfileSheet() {
             height={60}
             className="cursor-pointer"
           />
-        </SheetTrigger>
+        }
+      >
         {!openAddress && (
-          <SheetContent className="bg-bg w-full rounded-l-2xl px-4 sm:min-w-[550px]">
-            <SheetHeader>
-              <SheetTitle className="text-2xl font-bold">Profile</SheetTitle>
-            </SheetHeader>
-            <ScrollArea className="w-full overflow-y-auto rounded-md px-2">
-              {/* Address */}
-              <div
-                onClick={() => {
-                  setOpenProfile(false);
-                  setTimeout(() => setOpenAddress(true), 300);
-                }}
-                className="flex w-full cursor-pointer items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <Image
-                    src="/assets/icons/address.svg"
-                    alt="account"
-                    width={65}
-                    height={65}
-                  />
-                  My Address
-                </div>
-                <ChevronRight />
-              </div>
+          <ScrollArea className="w-full overflow-y-auto rounded-md px-2 py-4">
+            <SheetItem
+              icon="/assets/icons/address.svg"
+              label="My Address"
+              onClick={() => handleNestedOpen(setOpenAddress)}
+            />
 
-              {/* Account */}
-              <AccountBtn onClose={() => setOpenProfile(false)} />
+            <AccountBtn onClose={() => setOpenProfile(false)} />
+            <OrdersBtn onClose={() => setOpenProfile(false)} />
 
-              {/* Orders */}
-              <OrdersBtn onClose={() => setOpenProfile(false)} />
+            <SheetItem
+              icon="/assets/icons/wishlist.svg"
+              label="Wish List"
+              onClick={() => handleNestedOpen(setOpenWishList)}
+            />
 
-              {/* Wishlist */}
-              <div
-                onClick={() => {
-                  setOpenProfile(false);
-                  setTimeout(() => setOpenWishList(true), 300);
-                }}
-                className="flex w-full cursor-pointer items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <Image
-                    src="/assets/icons/wishlist.svg"
-                    alt="wishlist"
-                    width={65}
-                    height={65}
-                  />
-                  Wish List
-                </div>
-                <ChevronRight />
-              </div>
+            <NotificationToggle />
+            <Loyality />
+            <Wallet />
 
-              {/* Notifications Toggle */}
-              <NotificationToggle />
-
-              {/* Loyality */}
-              <Loyality />
-
-              {/* Wallet */}
-              <Wallet />
-
-              {/* Delete Account */}
-              <DeleteAccountBtn onClose={() => setOpenProfile(false)} />
-
-              {/* Logout */}
-              <LogoutBtn onClose={() => setOpenProfile(false)} />
-            </ScrollArea>
-            <SheetFooter className="flex flex-col items-center justify-center">
-              <SheetClose asChild />
-            </SheetFooter>
-          </SheetContent>
+            <DeleteAccountBtn onClose={() => setOpenProfile(false)} />
+            <LogoutBtn onClose={() => setOpenProfile(false)} />
+          </ScrollArea>
         )}
-      </Sheet>
+      </GlobalSheet>
 
       {/* Address Sheet */}
-      <Sheet open={openAddress} onOpenChange={setOpenAddress}>
-        <SheetContent className="bg-bg w-full rounded-l-2xl px-4 sm:min-w-[550px]">
-          <AddressSheet />
-        </SheetContent>
-      </Sheet>
+      <GlobalSheet
+        open={openAddress}
+        onOpenChange={setOpenAddress}
+        title="My Address"
+      >
+        <AddressSheet />
+      </GlobalSheet>
 
       {/* WishList Sheet */}
-      <Sheet open={openWishList} onOpenChange={setOpenWishList}>
-        <SheetContent className="bg-bg w-full rounded-l-2xl px-4 sm:min-w-[550px]">
-          <WishListContent />
-        </SheetContent>
-      </Sheet>
+      <GlobalSheet
+        open={openWishList}
+        onOpenChange={setOpenWishList}
+        title="Wish List"
+      >
+        <WishListContent />
+      </GlobalSheet>
     </>
   );
 }
