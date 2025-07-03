@@ -34,10 +34,12 @@ const AccountForm = () => {
   const [avatarUrl, setAvatarUrl] = useState(userData.avatar);
   const [uploadedAvatar, setUploadedAvatar] = useState("");
 
+  const [newPhone, setNewPhone] = useState<{
+    phone: string;
+    phone_code: string;
+  } | null>(null);
 
-const [newPhone, setNewPhone] = useState<{ phone: string; phone_code: string } | null>(null);
-
-const [showVerification, setShowVerification] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -155,7 +157,7 @@ const [showVerification, setShowVerification] = useState(false);
             <div className="space-y-3 md:col-span-2">
               {/* Name */}
               <div>
-                <label className="text-primary text-sm font-semibold">
+                <label className="text-text-website-font text-sm font-semibold">
                   Name
                 </label>
                 <input
@@ -174,7 +176,7 @@ const [showVerification, setShowVerification] = useState(false);
 
               {/* Phone (Disabled) */}
               <div className="!mb-0">
-                <label className="text-primary w-full items-end text-sm font-semibold">
+                <label className="text-text-website-font w-full items-end text-sm font-semibold">
                   Phone
                 </label>
                 <div className="flex gap-2">
@@ -202,7 +204,7 @@ const [showVerification, setShowVerification] = useState(false);
 
               {/* Email */}
               <div>
-                <label className="text-primary text-sm font-semibold">
+                <label className="text-text-website-font text-sm font-semibold">
                   Email
                 </label>
                 <input
@@ -231,99 +233,108 @@ const [showVerification, setShowVerification] = useState(false);
       </Formik>
 
       {/* Phone Dialog */}
-{/* Phone Dialog */}
-<Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
-  <DialogContent>
-    <h3 className="text-lg font-semibold">Change Phone</h3>
+      {/* Phone Dialog */}
+      <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
+        <DialogContent>
+          <h3 className="text-lg font-semibold">Change Phone</h3>
 
-    {!showVerification ? (
-      <Formik
-        initialValues={{
-          phone_code: selectedCountry?.phone_code || "20",
-          phone: "",
-        }}
-        validationSchema={Yup.object({
-          phone: Yup.string()
-            .required('Phone is required')
-            .matches(/^\d+$/, 'Phone must be digits only')
-            .max(selectedCountry?.phone_limit || 10, `Max ${selectedCountry?.phone_limit || 10} digits`),
-        })}
-        onSubmit={async (values, { setSubmitting, setErrors }) => {
-          try {
-            setSubmitting(true);
-            const res = await sendVerificationCode(values);
-            setNewPhone(values);
-            setShowVerification(true); // عرض فورم الكود
-          } catch (error: any) {
-            const errorMsg = error?.response?.data?.message || "Something went wrong";
-            toast.error(errorMsg);
-            if (error?.response?.data?.errors) {
-              setErrors(error.response.data.errors);
-            }
-          } finally {
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({ isSubmitting, values, handleChange, errors, touched }) => (
-          <Form className="mt-4 space-y-4">
-            <div className="flex items-center gap-2">
-              {/* Country Code */}
-              <div className="relative w-28">
-                <select
-                  name="phone_code"
-                  className="w-full appearance-none rounded-xl border p-3"
-                  value={values.phone_code}
-                  onChange={handleChange}
-                >
-                  {countryCodes.map((country) => (
-                    <option key={country.id} value={country.phone_code}>
-                      +{country.phone_code}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
-                  <ChevronDown size={18} />
-                </div>
-              </div>
+          {!showVerification ? (
+            <Formik
+              initialValues={{
+                phone_code: selectedCountry?.phone_code || "20",
+                phone: "",
+              }}
+              validationSchema={Yup.object({
+                phone: Yup.string()
+                  .required("Phone is required")
+                  .matches(/^\d+$/, "Phone must be digits only")
+                  .max(
+                    selectedCountry?.phone_limit || 10,
+                    `Max ${selectedCountry?.phone_limit || 10} digits`,
+                  ),
+              })}
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                try {
+                  setSubmitting(true);
+                  const res = await sendVerificationCode(values);
+                  setNewPhone(values);
+                  setShowVerification(true); // عرض فورم الكود
+                } catch (error: any) {
+                  const errorMsg =
+                    error?.response?.data?.message || "Something went wrong";
+                  toast.error(errorMsg);
+                  if (error?.response?.data?.errors) {
+                    setErrors(error.response.data.errors);
+                  }
+                } finally {
+                  setSubmitting(false);
+                }
+              }}
+            >
+              {({ isSubmitting, values, handleChange, errors, touched }) => (
+                <Form className="mt-4 space-y-4">
+                  <div className="flex items-center gap-2">
+                    {/* Country Code */}
+                    <div className="relative w-28">
+                      <select
+                        name="phone_code"
+                        className="w-full appearance-none rounded-xl border p-3"
+                        value={values.phone_code}
+                        onChange={handleChange}
+                      >
+                        {countryCodes.map((country) => (
+                          <option key={country.id} value={country.phone_code}>
+                            +{country.phone_code}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
+                        <ChevronDown size={18} />
+                      </div>
+                    </div>
 
-              {/* Phone Input */}
-              <div className="flex-1">
-                <input
-                  name="phone"
-                  type="tel"
-                  placeholder="Phone"
-                  value={values.phone}
-                  onChange={handleChange}
-                  className="w-full rounded-md border p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
-              </div>
-            </div>
-            {touched.phone && errors.phone && (
-              <div className="mt-0 text-sm text-red-500">{errors.phone}</div>
-            )}
+                    {/* Phone Input */}
+                    <div className="flex-1">
+                      <input
+                        name="phone"
+                        type="tel"
+                        placeholder="Phone"
+                        value={values.phone}
+                        onChange={handleChange}
+                        className="w-full rounded-md border p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                  {touched.phone && errors.phone && (
+                    <div className="mt-0 text-sm text-red-500">
+                      {errors.phone}
+                    </div>
+                  )}
 
-            <Button type="submit" className="w-full" loading={isSubmitting}>
-              Send Verification Code
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    ) : (
-      <>
-        <VerificationCodeDialog
-          newPhone={newPhone}
-          onClose={() => {
-            setShowPhoneDialog(false);
-            setShowVerification(false);
-          }}
-        />
-      </>
-    )}
-  </DialogContent>
-</Dialog>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    loading={isSubmitting}
+                  >
+                    Send Verification Code
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+          ) : (
+            <>
+              <VerificationCodeDialog
+                newPhone={newPhone}
+                onClose={() => {
+                  setShowPhoneDialog(false);
+                  setShowVerification(false);
+                }}
+              />
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
-      
       {/* Password Dialog */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
         <DialogContent>

@@ -30,7 +30,10 @@ export default function NotificationCard({ notification }: any) {
     router.push(`/order/${notification.notify_id}`);
   };
   return (
-    <div className="notifications-center mb-4 flex h-[160px] justify-between rounded-xl bg-white p-4 cursor-pointer"   onClick={handlePress}>
+    <div
+      className="notifications-center mb-4 flex h-[160px] cursor-pointer justify-between rounded-xl bg-white p-4"
+      onClick={handlePress}
+    >
       <Image
         src={notification.image || "/assets/images/abushakra.png"}
         alt={"order"}
@@ -42,9 +45,7 @@ export default function NotificationCard({ notification }: any) {
       <div className="flex h-full w-full flex-col justify-between px-4">
         <div className="flex justify-between">
           <div>
-            <h2 className="text-lg font-semibold">
-              {notification.title}
-            </h2>
+            <h2 className="text-lg font-semibold">{notification.title}</h2>
             <div className="mt-0.5 max-w-[90%] text-sm text-indigo-400">
               {notification.body}
             </div>
@@ -59,7 +60,7 @@ export default function NotificationCard({ notification }: any) {
         </div>
 
         <div className="flex items-center justify-between">
-          <p className="text-primary">{notification.time_ago}</p>
+          <p className="text-text-website-font">{notification.time_ago}</p>
         </div>
       </div>
     </div>

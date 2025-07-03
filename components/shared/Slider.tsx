@@ -22,7 +22,7 @@ export default function Slider({ title, items,offer }: SliderProps) {
     <div className="sliderr container my-6 min-h-screen px-10">
       {/* Header */}
       <div className="mb-10 flex items-center justify-between px-28">
-        <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">{title}</h2>
+        <h2 data-aos="fade-up" className="text-3xl font-bold md:text-4xl lg:text-5xl">{title}</h2>
         <Link
           href={offer?'/offers':'/menu'}
           className="flex cursor-pointer text-sm text-indigo-600 hover:text-indigo-800 rtl:flex-row-reverse"
@@ -33,7 +33,7 @@ export default function Slider({ title, items,offer }: SliderProps) {
 
       {/* Items Slider */}
       <div className="relative w-full">
-        <div className="scrollbar-hide flex w-full overflow-x-visible">
+        <div className="scrollbar-hide flex w-full overflow-x-visible lg:ps-20">
           <Swiper
             slidesPerView={3.5}
             spaceBetween={20}
@@ -49,7 +49,7 @@ export default function Slider({ title, items,offer }: SliderProps) {
           >
             {items &&
               items.map((item) => (
-                <SwiperSlide key={item.id} style={{ width: "420px" }}>
+                <SwiperSlide key={item.id} style={{ width: "420px" }} data-aos="fade-up">
                   <Card
                     item={item}
                     // width="350px"

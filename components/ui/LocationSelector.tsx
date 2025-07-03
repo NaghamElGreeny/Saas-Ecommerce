@@ -66,7 +66,7 @@ export default function LocationSelector({ active = false }: LocationSelectorPro
     <>
       {/* Trigger */}
       <div
-        className="flex items-center space-x-3 cursor-pointer sm:flex-col"
+        className="flex items-center space-x-3 cursor-pointer"
         onClick={() => setOpen(true)}
       >
         <div className="w-12 h-12 rounded-full overflow-hidden">

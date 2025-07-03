@@ -13,17 +13,17 @@ import dayjs from "dayjs";
 import AddressItem from "../shared/AddressItem";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/stores/authStore";
-import { confirmOrder } from "@/services/ClientApiHandler";
-import SuccessModal from "../Success";
+import { orderService } from "@/services/ClientApiHandler";
 import Success from "../Success";
 import { useLoyalityStore } from "@/stores/loyalityStore";
+import { Spinner } from "../atoms";
 
 type OrderFormProps = {
   params: Record<string, string | string[]>;
 };
 
 const OrderForm = ({ params }: OrderFormProps) => {
-  const { points, fetchLoyality ,setUsePoints} = useLoyalityStore();
+  const { points, fetchLoyality, setUsePoints } = useLoyalityStore();
   const { usePoints } = useLoyalityStore();
   const { addresses, fetchAddresses } = useAddressStore();
   const { stores, selectedStore, setSelectedStore } = useStore();
@@ -39,14 +39,6 @@ const OrderForm = ({ params }: OrderFormProps) => {
     const pay_type = [];
     const total_price = cart.price!.total!;
 
-    // if (usePoints) {
-    //   pay_type.push(
-    //     { wallet: total_price - user!.points },
-    //     { points: user!.points }
-    //   );
-    // } else {
-    //   pay_type.push({ credit: total_price });
-    // }
     if (usePoints) {
       pay_type.push({ credit: total_price - points }, { points: points });
     } else {
@@ -90,14 +82,16 @@ const OrderForm = ({ params }: OrderFormProps) => {
     (async () => {
       if (params.status === "success") {
         try {
-          const res = await confirmOrder({
+          const res = await orderService.confirmOrder({
             ...params,
-            //  pay_type: JSON.stringify([{ [String(params?.pay_type)]: cart.price.total }])
+            pay_type: JSON.stringify([
+              { [String(params?.pay_type)]: cart.price.total },
+            ]),
           });
           setOpen(true);
           setOrderId(res.data.orderId as string);
           fetchCart();
-          setUsePoints(false)
+          setUsePoints(false);
         } catch (error) {
           toast.error(error?.message || "Failed to confirm order");
         }
@@ -110,8 +104,6 @@ const OrderForm = ({ params }: OrderFormProps) => {
   const validationSchema = Yup.object().shape({
     orderType: Yup.string().required("Order type is required"),
     is_schedule: Yup.boolean(),
-    // order_date: Yup.string().required("Date is required"),
-    // order_time: Yup.string().required("Time is required"),
     pay_type: Yup.string().required("Payment method is required"),
     selectedAddressId: Yup.number().required("Address is required"),
     selectedStoreId: Yup.number().required("Store is required"),
@@ -153,13 +145,13 @@ const OrderForm = ({ params }: OrderFormProps) => {
           await cridetPaymet(payload);
           return;
         }
-        const res = await confirmOrder(payload);
+        const res = await orderService.confirmOrder(payload);
         if (res?.status === "success") {
           setOpen(true);
           setOrderId(res.data.id);
           fetchLoyality();
           fetchCart();
-          setUsePoints(false)
+          setUsePoints(false);
         }
       } catch (err) {
         console.error("Error confirming order:", err);
@@ -261,10 +253,12 @@ const OrderForm = ({ params }: OrderFormProps) => {
                 />
                 <div>
                   <h2 className="font-bold">{selectedAddress?.title}</h2>
-                  <p className="text-primary">{selectedAddress?.desc}</p>
+                  <p className="text-text-website-font">
+                    {selectedAddress?.desc}
+                  </p>
                 </div>
               </div>
-              <Edit className="text-primary" />
+              <Edit className="text-text-website-font" />
             </div>
             {touched.selectedAddressId && errors.selectedAddressId && (
               <p className="text-sm text-red-500">{errors.selectedAddressId}</p>
@@ -290,12 +284,12 @@ const OrderForm = ({ params }: OrderFormProps) => {
                 />
                 <div>
                   <h2 className="font-bold">{selectedBranch?.name}</h2>
-                  <p className="text-primary">
+                  <p className="text-text-website-font">
                     {selectedBranch?.location_description}
                   </p>
                 </div>
               </div>
-              <ChevronDown className="text-primary" />
+              <ChevronDown className="text-text-website-font" />
             </div>
             {touched.selectedStoreId && errors.selectedStoreId && (
               <p className="text-sm text-red-500">{errors.selectedStoreId}</p>
@@ -425,11 +419,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
             type="submit"
             className="bg-primary w-1/4 rounded-full py-3 text-white hover:bg-blue-700"
           >
-            {isSubmitting ? (
-              <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
-            ) : (
-              "Confirm"
-            )}
+            {isSubmitting ? <Spinner /> : "Confirm"}
           </button>
         </div>
 

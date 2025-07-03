@@ -11,10 +11,9 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/components/ui/dialog"; 
+} from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import { ShareButtons } from "./ShareButtons";
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ProductHeaderClient({ product }: any) {
@@ -41,7 +40,7 @@ export default function ProductHeaderClient({ product }: any) {
         </DialogTrigger>
 
         <DialogContent
-          className=" w-full max-w-md -translate-x-1/2 rounded-t-3xl bg-[#FBFAFC] px-4 pt-3 pb-4 shadow-lg"
+          className="w-full max-w-md -translate-x-1/2 rounded-t-3xl bg-[#FBFAFC] px-4 pt-3 pb-4 shadow-lg"
           showCloseButton={false}
         >
           <DialogHeader>
@@ -51,7 +50,7 @@ export default function ProductHeaderClient({ product }: any) {
               </DialogTitle>
               <DialogClose asChild>
                 <button>
-                  <X className="h-6 w-6 text-gray-600 cursor-pointer" />
+                  <X className="h-6 w-6 cursor-pointer text-gray-600" />
                 </button>
               </DialogClose>
             </div>
@@ -71,7 +70,7 @@ export default function ProductHeaderClient({ product }: any) {
           className="cursor-pointer"
         >
           {liked ? (
-            <AiFillHeart className="text-primary size-8" />
+            <AiFillHeart className="text-text-website-font size-8" />
           ) : (
             <AiOutlineHeart className="size-8 text-gray-400 transition-colors hover:text-blue-400" />
           )}

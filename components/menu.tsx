@@ -55,7 +55,8 @@ const Menu = ({
 
   return (
     <div className="col-span-3 space-y-8 w-full">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 w-full content-baseline place-items-center">
+      <div className="mb-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 w-full content-baseline place-items-center"> */}
         {currentItems.map((item) => (
           <Card key={item.id} item={item} width="full" offer={offer} />
         ))}

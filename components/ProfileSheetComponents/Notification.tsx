@@ -4,7 +4,7 @@ import { Switch } from "../ui/switch";
 import { useState } from "react";
 import GlobalAlertDialog from "../shared/GlobalAlertDialog";
 import { useAuthStore } from "@/stores/authStore";
-import { changeNotification } from "@/services/ClientApiHandler";
+import { notificationService } from "@/services/ClientApiHandler";
 
 export default function NotificationToggle() {
   const { userData, fetchUserData } = useAuthStore();
@@ -12,7 +12,7 @@ export default function NotificationToggle() {
   const [notifiable, setNotifiable] = useState(userData.notifiable);
 
   const handleToggle = async () => {
-    await changeNotification();
+    await notificationService.changeNotification();
     fetchUserData();
     setNotifiable(!notifiable);
   };

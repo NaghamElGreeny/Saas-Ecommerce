@@ -39,9 +39,9 @@ export default function GlobalSheet({
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
       <SheetContent
         side={side}
-        className="bg-bg w-full items-center rounded-l-2xl sm:min-w-[550px] min-h-[80vh]"
+        className={`bg-bg w-full  items-center rounded-l-2xl sm:min-w-[550px] min-h-[80vh]`}
       >
-        <SheetHeader className="relative w-full rounded-tl-2xl bg-white text-start bottom-0">
+        <SheetHeader className="relative w-full rounded-2xl  bg-white text-start bottom-0">
           {title ? (
             <SheetTitle className="text-2xl font-bold">{title}</SheetTitle>
           ) : (

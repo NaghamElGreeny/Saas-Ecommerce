@@ -1,10 +1,9 @@
-
 import Link from "next/link";
 import React from "react";
 import OverlappingImages from "./Overlapp";
 
 const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
-    // console.log("order Sent ", order);
+  // console.log("order Sent ", order);
   return (
     <div className="max-h-48 animate-[zoomIn_1.3s] rounded-3xl bg-white p-5 shadow-md">
       {/* Top Row */}
@@ -52,7 +51,10 @@ const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
           {order.type === "order" ? (
             <div className="flex flex-col gap-1">
               {order.item.map((productItem: any) => (
-                <p key={productItem.id} className="text-primary text-sm">
+                <p
+                  key={productItem.id}
+                  className="text-text-website-font text-sm"
+                >
                   {productItem.product.name}
                 </p>
               ))}
@@ -66,7 +68,11 @@ const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
 
         {/* Right: Details Button */}
         <Link
-          href= {order.type === "order" ?`order/${order.id}`:`reservations/${order.id}`}
+          href={
+            order.type === "order"
+              ? `order/${order.id}`
+              : `reservations/${order.id}`
+          }
           className="ms-auto mt-auto flex h-[52px] w-[52px] items-center justify-center rounded-full bg-blue-600 text-white transition hover:bg-blue-700"
         >
           <svg

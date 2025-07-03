@@ -19,12 +19,8 @@ interface FilterProps {
 }
 
 const Filter: React.FC<FilterProps> = ({ categories }) => {
-  const {
-    mainCategory,
-    subCategory,
-    setMainCategory,
-    setSubCategory,
-  } = useMenuFilterStore();
+  const { mainCategory, subCategory, setMainCategory, setSubCategory } =
+    useMenuFilterStore();
 
   const handleMainCategory = (name: string) => {
     setMainCategory(name);
@@ -34,40 +30,44 @@ const Filter: React.FC<FilterProps> = ({ categories }) => {
   const handleSubCategory = (name: string) => {
     setSubCategory(name);
   };
-console.log(categories)
+  console.log(categories);
   return (
-    <div className="col-span-1 pr-6 border-r space-y-6">
+    <div className="col-span-1 space-y-6 border-r pr-6">
       <h3 className="text-xl font-semibold">Categories</h3>
 
-    {Array.isArray(categories) && categories.map((cat,index) => (
-  <div key={index} className="space-y-2">
-    <button
-      onClick={() => handleMainCategory(cat.name)}
-      className={`font-bold transition ${
-        mainCategory === cat.name ? "text-primary" : "text-gray-700"
-      }`}
-    >
-      {cat.name}
-    </button>
+      {Array.isArray(categories) &&
+        categories.map((cat, index) => (
+          <div key={index} className="space-y-2">
+            <button
+              onClick={() => handleMainCategory(cat.name)}
+              className={`font-bold transition ${
+                mainCategory === cat.name
+                  ? "text-text-website-font"
+                  : "text-gray-700"
+              }`}
+            >
+              {cat.name}
+            </button>
 
-    {mainCategory === cat.name && cat.subCategories && (
-      <div className="ml-4 space-y-1">
-        {cat.subCategories.map((sub) => (
-          <button
-            key={sub.id}
-            onClick={() => handleSubCategory(sub.name)}
-            className={`block text-sm transition ${
-              subCategory === sub.name ? "text-primary" : "text-gray-500"
-            } hover:text-primary`}
-          >
-            {sub.name}
-          </button>
+            {mainCategory === cat.name && cat.subCategories && (
+              <div className="ml-4 space-y-1">
+                {cat.subCategories.map((sub) => (
+                  <button
+                    key={sub.id}
+                    onClick={() => handleSubCategory(sub.name)}
+                    className={`block text-sm transition ${
+                      subCategory === sub.name
+                        ? "text-text-website-font"
+                        : "text-gray-500"
+                    } hover:text-text-website-font`}
+                  >
+                    {sub.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
-      </div>
-    )}
-  </div>
-))}
-
     </div>
   );
 };

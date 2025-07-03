@@ -8,7 +8,8 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { ChevronDown, Eye, EyeOff } from "lucide-react";
 
-import { getCountryCodes, login } from "@/services/ClientApiHandler";
+import { locationService } from "@/services/ClientApiHandler";
+import { authService } from "@/services/ClientApiHandler";
 import { useAuthStore } from "@/stores/authStore";
 import { useVerificationStore } from "@/stores/useVerificationStore";
 import { BrandCountry } from "@/utils/types";
@@ -28,7 +29,7 @@ export default function LoginForm() {
   useEffect(() => {
     const fetchCountryCodes = async () => {
       try {
-        const codes = await getCountryCodes();
+        const codes = await locationService.getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);
         formik.setFieldValue("phone_code", codes[0].phone_code);
@@ -39,7 +40,6 @@ export default function LoginForm() {
     };
 
     fetchCountryCodes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -74,8 +74,8 @@ export default function LoginForm() {
       toast.dismiss();
 
       try {
-        const response = await login({ ...values, device_type: "web" });
-        const { token, user } = response.data;
+        const response = await authService.login({ ...values, device_type: "web" }) as { data: any };
+        const { token } = response.data;
 
         setToken(token);
         setUserData(response.data);
@@ -85,7 +85,7 @@ export default function LoginForm() {
 
         toast.success("Login successful!");
         router.push("/");
-      } catch (error: any) {
+      } catch (error) {
         console.error(error);
         toast.error(error?.response?.data?.message || "Login failed");
       } finally {

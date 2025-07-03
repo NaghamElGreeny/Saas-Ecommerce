@@ -2,20 +2,36 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
 @import "react-datepicker/dist/react-datepicker.css";
+
 @custom-variant dark (&:is(.dark *));
+
 @theme inline {
   --color-primary: #5A6AE8;
-  --color-sub: #828ABA;
-  --color-bg:#f8f8f3;
-  --color-scndbg:#f6f6f6;
+  --color-secondary: #F6F6FD;
+  --color-tertiary: #FAFAFC;
+  --color-light-border: #EFF0F1;
+  --color-font: #171717;
+  --color-light-font: #828ABA;
+  --color-success: #06D6A0;
+  --color-warning: #FF445B;
+  --color-dark-border: #797979;
+  --color-white: #F6F6F6;
+  --color-footer: #E4E4E7;
+
+  --color-bg: #f8f8f3;
+  --color-scndbg: #f6f6f6;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-mainFont:#111111;
---color-subFont:#edededa5;
---color-bgPrimary:#FBFAFC;
 
+  --color-mainFont: #111111;
+  --color-subFont: #edededa5;
+  --color-bgPrimary: #FBFAFC;
+
+  /* البريكبوينتات */
   --breakpoint-xs: 475px;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
@@ -23,6 +39,8 @@
   --breakpoint-xl: 1200px;
   --breakpoint-2xl: 1500px;
   --breakpoint-3xl: 1600px;
+
+  /* البقية حسب الكود عندك */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -55,76 +73,105 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
 }
+
 .scrollbar-hide {
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
 @theme {
   --font-allura: "Allura", sans-serif; 
 }
-body{
-  /* font-family: "Allura"; */
-  /* background-color: green; */
-  background: #f8f8f3;
-  form{
-    input,select{
-      border-color: var(--color-sub);
-      @apply p-3 w-full border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 ;
-    }
-    input[type='radio'] {
-  @apply  size-5 rounded-full  focus:outline-none focus:ring-0;
-  
+
+/* متغيرات ألوان الويبسايت من الداتا */
+:root {
+  --website-primary-color: #5A6AE8;
+  --website-secondary-color: #F6F6FD;
+  --website-tertiary-color: #FAFAFC;
+  --website-light-border-color: #EFF0F1;
+  --website-font-color: #171717;
+  --website-light-font-color: #828ABA;
+  --website-success-color: #06D6A0;
+  --website-warning-color: #FF445B;
+  --website-dark-border-color: #797979;
+  --website-white-color: #F6F6F6;
+  --website-footer-color: #E4E4E7;
 }
-  }
-  .reserve-form{
-     input,select,.time-picker{
-      border-radius: 0;
-      background: transparent;
-      border: 0;
-      border-bottom: 1px solid  #0b173c; 
-      border-style: solid;
-      outline: none;
-    }
-      .reserve{
-    border: 0;
-    border-bottom:1px solid #0b173c ;
-   }
-    }
+
+/* كلاسات Tailwind-like لاستخدام الألوان */
+.bg-website-primary {
+  background-color: var(--website-primary-color);
 }
-/* @utility container {
-  margin-inline: auto;
-  padding-inline: 3rem;
-  @media (min-width: 475px) {
-    max-width: 100%;
-  }
-  @media (min-width: 576px) {
-    max-width: 100%;
-  }
-  @media (min-width: 768px) {
-    max-width: 100%;
-  }
-  @media (min-width: 992px) {
-    max-width: 992px;
-  }
-  @media (min-width: 1200px) {
-    max-width: 1200px;
-  }
-  @media (min-width: 1400px) {
-    max-width: 1400px;
-  }
-  @media (min-width: 1200px) {
-    padding-inline: 0;
-  }
-} */
+.bg-website-secondary {
+  background-color: var(--website-secondary-color);
+}
+.bg-website-tertiary {
+  background-color: var(--website-tertiary-color);
+}
+.bg-website-white {
+  background-color: var(--website-white-color);
+}
+.bg-website-footer {
+  background-color: var(--website-footer-color);
+}
+
+.text-website-font {
+  color: var(--website-font-color);
+}
+.text-website-light-font {
+  color: var(--website-light-font-color);
+}
+.text-website-success {
+  color: var(--website-success-color);
+}
+.text-website-warning {
+  color: var(--website-warning-color);
+}
+
+.border-website-light-border {
+  border-color: var(--website-light-border-color);
+}
+.border-website-dark-border {
+  border-color: var(--website-dark-border-color);
+}
+
+body {
+  background: var(--color-bg);
+  font-family: var(--font-sans);
+}
+
+form input,
+form select {
+  border-color: var(--color-sub);
+  @apply p-3 w-full border rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-400;
+}
+
+input[type='radio'] {
+  @apply size-5 rounded-full focus:outline-none focus:ring-0;
+}
+
+.reserve-form input,
+.reserve-form select,
+.reserve-form .time-picker {
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #0b173c;
+  outline: none;
+}
+
+.reserve-form .reserve {
+  border: 0;
+  border-bottom: 1px solid #0b173c;
+}
 
 @layer utilities {
   .container-custom {
-                     margin-inline: auto;
+    margin-inline: auto;
     padding-inline: 3rem;
   }
 
@@ -136,91 +183,8 @@ body{
   }
 
   @media (min-width: 1400px) {
-                               .container-custom {
+    .container-custom {
       max-width: 1400px;
     }
   }
-}
-
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-
-  }
-  body {
-    @apply bg-background text-foreground;
-
-  }
-
 }

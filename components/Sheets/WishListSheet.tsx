@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import Image from "next/image";
 import { useLikedStore } from "@/stores/likedStore";
 import WishlistCard from "../cards/WishlistCard";
@@ -8,9 +8,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@heroui/spinner";
 import GlobalSheet from "@/components/shared/GlobalSheet";
 export default function WishList({
+  triggerr,
   open,
   onOpenChange,
 }: {
+  triggerr?: ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
@@ -23,7 +25,9 @@ export default function WishList({
   const totalItems = likedItems.length;
   const hasProducts = totalItems > 0;
 
-  const trigger = (
+  const trigger = triggerr ? (
+    triggerr
+  ) : (
     <div className="relative cursor-pointer">
       <Image
         src="/assets/icons/navheart.png"
@@ -42,7 +46,7 @@ export default function WishList({
 
   const content = loading ? (
     <div className="flex h-[60vh] w-full items-center justify-center">
-      <Spinner size="lg" className="text-primary" />
+      <Spinner size="lg" className="text-text-website-font" />
     </div>
   ) : hasProducts ? (
     <ScrollArea className="w-[97%] overflow-y-auto rounded-md p-4">
@@ -65,7 +69,7 @@ export default function WishList({
         <>
           WishList
           {hasProducts && (
-            <span className="text-primary ms-2 text-sm font-medium">
+            <span className="text-text-website-font ms-2 text-sm font-medium">
               ({totalItems} items)
             </span>
           )}

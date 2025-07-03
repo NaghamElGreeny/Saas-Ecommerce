@@ -25,8 +25,8 @@ function ToggleLang() {
         alt="Language icon"
         width={24}
         height={24}
-              className="text-primary"
-              color="blue"
+        className="text-text-website-font"
+        color="blue"
       />
       {locale === "en" ? "ع" : "EN"}
     </button>

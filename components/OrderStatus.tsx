@@ -33,17 +33,17 @@ export default function OrderStatusStepper({
         return (
           <div
             key={step.key}
-            className="relative z-10 flex flex-col items-center w-full"
+            className="relative z-10 flex w-full flex-col items-center"
           >
             {/* lines */}
             {index !== statusList.length - 1 && (
               <div
                 className={clsx(
-                  "absolute top-5 left-[62%] h-0.5 z-10",
-                  (statusList[index + 1].status === "done" ||
-                    statusList[index + 1].status === "in_progress")
+                  "absolute top-5 left-[62%] z-10 h-0.5",
+                  statusList[index + 1].status === "done" ||
+                    statusList[index + 1].status === "in_progress"
                     ? "bg-primary"
-                    : "bg-gray-300"
+                    : "bg-gray-300",
                 )}
                 style={{
                   width: "75%",
@@ -52,15 +52,15 @@ export default function OrderStatusStepper({
               />
             )}
 
-      {/* icon */}
+            {/* icon */}
             <div
               className={clsx(
-                "h-10 w-10 rounded-full flex items-center justify-center border-2 bg-white",
+                "flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white",
                 isDone
                   ? "border-primary"
                   : isInProgress
-                  ? "border-primary"
-                  : "border-gray-300"
+                    ? "border-primary"
+                    : "border-gray-300",
               )}
             >
               <Image
@@ -69,16 +69,18 @@ export default function OrderStatusStepper({
                 width={24}
                 height={24}
                 className={clsx(
-                  isDone || isInProgress ? "opacity-100" : "opacity-50"
+                  isDone || isInProgress ? "opacity-100" : "opacity-50",
                 )}
               />
             </div>
 
-          {/* status name */}
+            {/* status name */}
             <span
               className={clsx(
-                "mt-2 text-xs font-medium text-center",
-                isDone || isInProgress ? "text-primary" : "text-gray-400"
+                "mt-2 text-center text-xs font-medium",
+                isDone || isInProgress
+                  ? "text-text-website-font"
+                  : "text-gray-400",
               )}
             >
               {step.value}

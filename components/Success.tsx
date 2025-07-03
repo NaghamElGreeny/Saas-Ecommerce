@@ -3,11 +3,13 @@
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/Button";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface SuccessDialogProps {
   open: boolean;
@@ -22,6 +24,9 @@ interface SuccessDialogProps {
 const Success = ({ open, onOpenChange,firstTitle,firstLink,secondTitle,secondLink }: SuccessDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogHeader>
+        <DialogTitle></DialogTitle>
+      </DialogHeader>
       <DialogContent showCloseButton={false} className="max-w-[90vw] md:max-w-[450px] h-[70vh] rounded-3xl bg-[#fbfafc] text-center space-y-5">
         <div className="flex justify-between items-center">
           <div></div>

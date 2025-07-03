@@ -1,125 +1,127 @@
-'use client';
+"use client";
 
 // import { useEffect, useState } from "react";
 // import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 // import toast from "react-hot-toast";
-import { useVerificationStore } from '@/stores/useVerificationStore';
+import { useVerificationStore } from "@/stores/useVerificationStore";
 // import { verifyCode } from "@/services/ClientApiHandler";
 import VerifyCode from "../components/verifyCode";
 import PhoneInput from "../components/PhoneInput";
 import { useState } from "react";
 
 export default function VerifyPage() {
-//     const [code, setCode] = useState<string[]>(['', '', '', '']);
-//     const [timeLeft, setTimeLeft] = useState(96);
-//     const router = useRouter();
-//     const pathname = usePathname();
-//     const locale = pathname.split('/')[1];
+  //     const [code, setCode] = useState<string[]>(['', '', '', '']);
+  //     const [timeLeft, setTimeLeft] = useState(96);
+  //     const router = useRouter();
+  //     const pathname = usePathname();
+  //     const locale = pathname.split('/')[1];
 
-    const verificationType = useVerificationStore(state => state.verificationType);
-    const [status, setStatus] = useState<'phone'|'verify'>(verificationType==='register'?'verify':'phone'); // For future use if needed
-            // toast.error("Verification type not specified, please try again.");
-//     const phone = useVerificationStore(state => state.phone);
-//     const phoneCode = useVerificationStore(state => state.phoneCode);
+  const verificationType = useVerificationStore(
+    (state) => state.verificationType,
+  );
+  const [status, setStatus] = useState<"phone" | "verify">(
+    verificationType === "register" ? "verify" : "phone",
+  ); // For future use if needed
+  // toast.error("Verification type not specified, please try again.");
+  //     const phone = useVerificationStore(state => state.phone);
+  //     const phoneCode = useVerificationStore(state => state.phoneCode);
 
-//     // useEffect(() => {
-//     //     if (!phoneCode|| !phone) {
-//     //         toast.error("Verification info missing, please try again.");
-//     //         router.push(`/${locale}/`);
-//     //     }
-//     // }, [verificationType, phone, phoneCode, router, locale]);   
+  //     // useEffect(() => {
+  //     //     if (!phoneCode|| !phone) {
+  //     //         toast.error("Verification info missing, please try again.");
+  //     //         router.push(`/${locale}/`);
+  //     //     }
+  //     // }, [verificationType, phone, phoneCode, router, locale]);
 
-//     useEffect(() => {
-//         if (timeLeft > 0) {
-//             const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-//             return () => clearTimeout(timer);
-//         }
-//     }, [timeLeft]);
+  //     useEffect(() => {
+  //         if (timeLeft > 0) {
+  //             const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+  //             return () => clearTimeout(timer);
+  //         }
+  //     }, [timeLeft]);
 
-//     const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
+  //     const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
 
-//     const handleChange = (index: number, value: string) => {
-//         if (/^\d*$/.test(value) && value.length <= 1) {
-//             const newCode = [...code];
-//             newCode[index] = value;
-//             setCode(newCode);
+  //     const handleChange = (index: number, value: string) => {
+  //         if (/^\d*$/.test(value) && value.length <= 1) {
+  //             const newCode = [...code];
+  //             newCode[index] = value;
+  //             setCode(newCode);
 
-//             if (value && index < 3) {
-//                 const nextInput = document.getElementById(`code-${index + 1}`) as HTMLInputElement;
-//                 if (nextInput) nextInput.focus();
-//             }
-//         }
-//     };
+  //             if (value && index < 3) {
+  //                 const nextInput = document.getElementById(`code-${index + 1}`) as HTMLInputElement;
+  //                 if (nextInput) nextInput.focus();
+  //             }
+  //         }
+  //     };
 
-//     const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-//         if (e.key === 'Backspace' && !code[index] && index > 0) {
-//             const prevInput = document.getElementById(`code-${index - 1}`) as HTMLInputElement;
-//             if (prevInput) prevInput.focus();
-//         }
-//     };
+  //     const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  //         if (e.key === 'Backspace' && !code[index] && index > 0) {
+  //             const prevInput = document.getElementById(`code-${index - 1}`) as HTMLInputElement;
+  //             if (prevInput) prevInput.focus();
+  //         }
+  //     };
 
-//     const handleSubmit = async (e: React.FormEvent) => {
-//   e.preventDefault();
+  //     const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-//   if (!verificationType) {
-//     toast.error('Verification type not specified');
-//     return;
-//   }
+  //   if (!verificationType) {
+  //     toast.error('Verification type not specified');
+  //     return;
+  //   }
 
-//   const fullCode = code.join('');
+  //   const fullCode = code.join('');
 
-//   try {
-//     const data = await verifyCode({
-//       phone_code: phoneCode,
-//       phone:phone,
-//       verification_code: fullCode,
-//       verificationType,
-//     });
-//     console.log('Verification response:', data);
-//     toast.success('Phone verified successfully!');
-//     router.push(`/${locale}/`);
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   } catch (error: any) {
-//     toast.error(error.message || 'Something went wrong');
-//   }
-// };
+  //   try {
+  //     const data = await verifyCode({
+  //       phone_code: phoneCode,
+  //       phone:phone,
+  //       verification_code: fullCode,
+  //       verificationType,
+  //     });
+  //     console.log('Verification response:', data);
+  //     toast.success('Phone verified successfully!');
+  //     router.push(`/${locale}/`);
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   } catch (error: any) {
+  //     toast.error(error.message || 'Something went wrong');
+  //   }
+  // };
 
-    return (
-        <div className="bg-white flex w-full h-screen overflow-hidden">
-            {/* Left Image Section */}
-            <div className="w-1/2 hidden md:block relative">
-                <Image
-                    src="/assets/images/auth-image.png"
-                    alt="login"
-                    fill
-                    className="object-cover"
-                    priority
-                />
-            </div>
+  return (
+    <div className="flex h-screen w-full overflow-hidden bg-white">
+      {/* Left Image Section */}
+      <div className="relative hidden w-1/2 md:block">
+        <Image
+          src="/assets/images/auth-image.png"
+          alt="login"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
 
-            {/* Right Form Section */}
-            <div className="bg-white w-full md:w-1/2 relative flex items-center justify-center">
-                <div className="rtl:left-3.5 ltr:right-3.5 absolute w-full h-full px-[120px] py-[320px] rounded-2xl z-20 bg-white flex flex-col justify-center">
-                    <div className="flex mb-6">
-                        <Image
-                            src="/assets/images/mea-logo.png"
-                            alt="Logo"
-                            width={154}
-                            height={115}
-                            className="w-[154px] h-[115px]"
-                            priority
-                        />
-                    </div>
-{
-    (status==='verify'?
-<VerifyCode />
-:
-<PhoneInput setStatus={setStatus}/>
-    )
-}
+      {/* Right Form Section */}
+      <div className="relative flex w-full items-center justify-center bg-white md:w-1/2">
+        <div className="absolute z-20 flex h-full w-full flex-col justify-center rounded-2xl bg-white px-[120px] py-[320px] ltr:right-3.5 rtl:left-3.5">
+          <div className="mb-6 flex">
+            <Image
+              src="/assets/images/mea-logo.png"
+              alt="Logo"
+              width={154}
+              height={115}
+              className="h-[115px] w-[154px]"
+              priority
+            />
+          </div>
+          {status === "verify" ? (
+            <VerifyCode />
+          ) : (
+            <PhoneInput setStatus={setStatus} />
+          )}
 
-                    {/* <h2 className="text-xl font-bold mb-4">Enter Verification Code</h2>
+          {/* <h2 className="text-xl font-bold mb-4">Enter Verification Code</h2>
                     <p className="text-sm mb-6">
                         We&apos;ve sent a code to your phone number: <strong>{phone}</strong>
                     </p>
@@ -137,7 +139,7 @@ export default function VerifyPage() {
                                     value={digit}
                                     onChange={(e) => handleChange(index, e.target.value)}
                                     onKeyDown={(e) => handleKeyDown(index, e)}
-                                    className="size-[88px] text-3xl text-center border-2 text-primary border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                                    className="size-[88px] text-3xl text-center border-2 text-text-website-font border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
                                     placeholder="_"
                                 />
                             ))}
@@ -166,8 +168,8 @@ export default function VerifyPage() {
                             Verify
                         </button>
                     </form> */}
-                </div>
-            </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

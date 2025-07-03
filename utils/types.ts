@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+// Auth Related Interfaces
 export interface LoginPayload {
   phone_code: string;
   phone: string;
   password: string;
-  device_type: "web" | "ios" | "android";
+  device_type: DeviceType;
   device_token?: string;
 }
 
 export interface LogoutPayload {
-  device_type: "web" | "ios" | "android";
+  device_type: DeviceType;
   device_token?: string;
 }
 
@@ -19,7 +21,7 @@ export interface RegisterPayload {
   full_name: string;
   password_confirmation: string;
   email: string;
-  device_type: "web" | "ios" | "android";
+  device_type: DeviceType;
   device_token?: string;
 }
 
@@ -29,9 +31,12 @@ export interface ResetPasswordPayload {
   reset_code: string;
   password: string;
   password_confirmation: string;
-  device_type?: "web" | "ios" | "android";
+  device_type?: DeviceType;
 }
 
+type DeviceType = "web" | "ios" | "android";
+
+// Reservation Interface
 export interface ReservationPayload {
   name: string;
   phone: string;
@@ -43,6 +48,7 @@ export interface ReservationPayload {
   guests_number: number;
 }
 
+// Location Interfaces
 export interface BrandCountry {
   id: number;
   name: string;
@@ -62,8 +68,8 @@ export interface Store {
   location_description: string;
 }
 
-export interface CmsPages { 
-  
+// CMS Interfaces
+export interface CmsPageBase {
   created_at: string;
   icon: string;
   id: number;
@@ -73,19 +79,22 @@ export interface CmsPages {
   user_type: "both" | "guest" | "registered";
 }
 
-export interface CmsPage extends CmsPages {
+export interface CmsPage extends CmsPageBase {
   desc: string;
   image: string;
   heading: string;
-  addition_data: Array<{
-    id: number;
-    image: string;
-    heading: string;
-    desc: string;
-    created_at: string;
-  }>;
+  addition_data: CmsAdditionalData[];
 }
 
+export interface CmsAdditionalData {
+  id: number;
+  image: string;
+  heading: string;
+  desc: string;
+  created_at: string;
+}
+
+// Product Interfaces
 export interface CardItem {
   id: number;
   name: string;
@@ -94,6 +103,7 @@ export interface CardItem {
   image: string;
   rating: number;
 }
+
 export interface Slider {
   id: number;
   title: string;
@@ -107,7 +117,7 @@ export interface WebContent {
   title: string;
   desc: string;
   image: string;
-    google_play?: string;
+  google_play?: string;
   app_store?: string;
 }
 
@@ -117,24 +127,24 @@ export interface HomePageData {
   web_content: WebContent;
   popular_products: any[]; 
   web_content_link: WebContent;
-  products: any[]; 
-  subscription_content: any | null; 
+  products: any[];
+  subscription_content: any | null;
   offers: any[];
 }
 
-
-export interface Category  {
+// Category Interfaces
+export interface Category {
   id: number;
   name: string;
   subCategories?: SubCategory[];
-};
+}
 
-export interface SubCategory  {
+export interface SubCategory {
   id: number;
   name: string;
-};
+}
 
-export interface ApiCategories{
+export interface ApiCategories {
   subCategories: any;
   id: number;
   name: string;
@@ -142,6 +152,8 @@ export interface ApiCategories{
   image: string;
   icon: string;
 }
+
+// Review Interfaces
 export interface Review {
   id: number;
   rate: number;
@@ -166,32 +178,148 @@ export interface ReviewResponse {
     value: number;
   }[];
 }
+
+// Modifier Interfaces
 export interface Modifier {
   id: number;
   name: string;
   selections_type: "exact" | "min_max";
   min_num_of_selection: number | null;
   max_num_of_selection: number | null;
-  item_modifiers: {
-    id: number;
-    name: string;
-    image: string;
-    price: { price: number; currency: string } | null;
-  }[];
-};
+  item_modifiers: ItemModifier[];
+}
 
-export interface Store {
+export interface ItemModifier {
+  id: number;
+  name: string;
+  image: string;
+  price: { price: number; currency: string } | null;
+}
+
+// Order Interfaces
+export interface OrderItemProduct {
+  id: number;
+  name: string;
+  slug: string;
+  desc: string;
+  type: string;
+  image: string;
+  food_icon: FoodIcon[];
+  rating: number;
+  review_count: number;
+  rate: number;
+  is_favourite: boolean;
+  favourite_id: number | null;
+  price: ProductPrice;
+}
+
+export interface FoodIcon {
+  id: number;
+  name: string;
+  image: string;
+}
+
+export interface ProductPrice {
+  price: number;
+  currency: string;
+  percentage: number;
+  discount_value: number;
+  price_after: number;
+  offer: ProductOffer;
+}
+
+export interface ProductOffer {
+  id: number;
+  from_day: string | null;
+  to_day: string | null;
+  from_time: string | null;
+  to_time: string | null;
+}
+
+export interface OrderItemModifier {
+  id: number;
+  name: string;
+  selections_type: string;
+  min_num_of_selection: number;
+  max_num_of_selection: number;
+  item_modifiers: OrderItemModifierDetail[];
+}
+
+export interface OrderItemModifierDetail {
+  id: number;
+  order_item_id: number;
+  price: {
+    price: number;
+    currency: string;
+  };
+  name: string;
+  image: string;
+  quantity: number;
+}
+
+export interface OrderItem {
+  id: number;
+  product: OrderItemProduct;
+  quantity: number;
+  total_price: number;
+  note: string | null;
+  combo: any[];
+  sub_modifiers: OrderItemModifier[];
+  is_rate: boolean;
+  review: {
+    id: number;
+    rate: number;
+    review: string;
+    note: string;
+  };
+}
+
+export interface OrderPriceDetail {
+  total_price: number;
+  discount_value: number;
+  total_item_price_before_discount: number;
+  delivery_price: number;
+  surcharge_value: number;
+  tax_rate_percentage: number;
+  tax_rate_value: number;
+  price_paied_from_wallet: number;
+  points: number;
+  currency: string;
+}
+
+export interface OrderStatus {
+  key: string;
+  value: string;
+  status: string;
+  icon: string;
+}
+
+export interface OrderStore {
   id: number;
   image: string;
   name: string;
+  complete_name: string;
   phone: string;
   phone_code: string;
+  logo: string | null;
   lat: number;
   lng: number;
   location_description: string;
+  location_info: string | null;
+  order_type: {
+    web_delivery: boolean;
+    web_take_away: boolean;
+    app_delivery: boolean;
+    app_take_away: boolean;
+  };
+  payment_method: {
+    id: number;
+    main_type: string;
+    type: string;
+  }[];
 }
 
-export type OrderData = {
+export interface OrderData {
   id: number;
   order_num: string;
   status: string;
@@ -207,125 +335,25 @@ export type OrderData = {
   order_time: string;
   order_date: string;
   can_cancel: boolean;
-  store: {
-    id: number;
-    image: string;
-    name: string;
-    complete_name: string;
-    phone: string;
-    phone_code: string;
-    logo: string | null;
-    lat: number;
-    lng: number;
-    location_description: string;
-    location_info: string | null;
-    order_type: {
-      web_delivery: boolean;
-      web_take_away: boolean;
-      app_delivery: boolean;
-      app_take_away: boolean;
-    };
-    payment_method: {
-      id: number;
-      main_type: string;
-      type: string;
-    }[];
-  };
+  store: OrderStore;
   driver: null;
-  item: {
-    id: number;
-    product: {
-      id: number;
-      name: string;
-      slug: string;
-      desc: string;
-      type: string;
-      image: string;
-      food_icon: {
-        id: number;
-        name: string;
-        image: string;
-      }[];
-      rating: number;
-      review_count: number;
-      rate: number;
-      is_favourite: boolean;
-      favourite_id: number | null;
-      price: {
-        price: number;
-        currency: string;
-        percentage: number;
-        discount_value: number;
-        price_after: number;
-        offer: {
-          id: number;
-          from_day: string | null;
-          to_day: string | null;
-          from_time: string | null;
-          to_time: string | null;
-        };
-      };
-    };
-    quantity: number;
-    total_price: number;
-    note: string | null;
-    combo: any[]; // إذا عايزة تعملي نوع مفصل ليه، ممكن تبعتيلي شكل الـ combo
-    sub_modifiers: {
-      id: number;
-      name: string;
-      selections_type: string;
-      min_num_of_selection: number;
-      max_num_of_selection: number;
-      item_modifiers: {
-        id: number;
-        order_item_id: number;
-        price: {
-          price: number;
-          currency: string;
-        };
-        name: string;
-        image: string;
-        quantity: number;
-      }[];
-    }[];
-    is_rate: boolean;
-    review: {
-      id: number;
-      rate: number;
-      review: string;
-      note: string;
-    };
-  }[];
+  item: OrderItem[];
   item_count: number;
   cancel_reason: string | null;
   desc_cancel_reason: string | null;
-  price_detail: {
-    total_price: number;
-    discount_value: number;
-    total_item_price_before_discount: number;
-    delivery_price: number;
-    surcharge_value: number;
-    tax_rate_percentage: number;
-    tax_rate_value: number;
-    price_paied_from_wallet: number;
-    points: number;
-    currency: string;
-  };
+  price_detail: OrderPriceDetail;
   call_center: string;
   call_center_message: string;
-  order_status: {
-    key: string;
-    value: string;
-    status: string;
-    icon: string;
-  }[];
-};
-export type StaticPage = {
+  order_status: OrderStatus[];
+}
+
+// Static Page Interface
+export interface StaticPage {
   id: number;
   title: string;
   slug: string;
   in_menu: boolean;
   icon: string;
-  user_type: "both" | "guest" | "auth"; // لو فيه تمييز
+  user_type: "both" | "guest" | "auth";
   created_at: string;
-};
+}

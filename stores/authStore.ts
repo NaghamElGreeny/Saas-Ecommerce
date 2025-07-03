@@ -1,4 +1,4 @@
-import { getUser } from '@/services/ClientApiHandler';
+import { userService } from '@/services/ClientApiHandler';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -80,7 +80,7 @@ export const useAuthStore = create<AuthStore>()(
         if (!token) return;
 
         try {
-          const response = await getUser() as { data: UserData };
+          const response = await userService.getUser() as { data: UserData };
           set({ userData: response.data });
         } catch (error) {
           console.error('Failed to fetch user data:', error);

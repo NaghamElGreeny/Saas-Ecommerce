@@ -2,14 +2,14 @@
 
 import { Formik, Form, Field } from "formik";
 import { Minus, Plus } from "lucide-react";
-import { AddToCart } from "@/services/ClientApiHandler";
+import { cartService } from "@/services/ClientApiHandler";
 import ModifierSection from "@/components/Modifiers";
 import { Textarea } from "@/components/ui/textarea";
 import { Modifier } from "@/utils/types";
 import Cookies from "js-cookie";
 import { useRef, useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
-import Success from "./Success"; // Dialog component using shadcn/ui
+import Success from "./Success";
 import toast from "react-hot-toast";
 
 const ProductForm = ({
@@ -19,11 +19,15 @@ const ProductForm = ({
   productId: number;
   modifiers: Modifier[];
 }) => {
-  const getModifiersResultRef = useRef<() => {
-    item_modifier_id: number;
-    sub_modifier_id: number;
-    quantity: number;
-  }[] | null>(null);
+  const getModifiersResultRef = useRef<
+    () =>
+      | {
+          item_modifier_id: number;
+          sub_modifier_id: number;
+          quantity: number;
+        }[]
+      | null
+  >(null);
 
   const [open, setOpen] = useState(false);
   const storeid = Cookies.get("store_id");
@@ -39,45 +43,66 @@ const ProductForm = ({
 
   const handleSubmit = async (values: typeof initialValues) => {
     try {
-    const sub_modifiers = getModifiersResultRef.current?.() ?? [];
+      const sub_modifiers = getModifiersResultRef.current?.() ?? [];
 
-    const payload = {
-      store_id: values.store_id,
-      product_id: values.product_id,
-      quantity: values.quantity,
-      note: values.note,
-      sub_modifiers,
-    };
+      const payload = {
+        store_id: values.store_id,
+        product_id: values.product_id,
+        quantity: values.quantity,
+        note: values.note,
+        sub_modifiers,
+      };
 
-    console.log("payload", payload);
-    await AddToCart(payload);
-    fetchCart();
-    setOpen(true);
+      console.log("payload", payload);
+      await cartService.addToCart(payload);
+      fetchCart();
+      setOpen(true);
+    } catch (error: unknown) {
+      let errorMessage = "Something went wrong";
+      if (typeof error === "object" && error !== null) {
+        if (
+          "response" in error &&
+          typeof (error as { response?: { data?: { message?: string } } })
+            .response === "object" &&
+          (error as { response?: { data?: { message?: string } } }).response !==
+            null
+        ) {
+          const err = error as {
+            response?: { data?: { message?: string } };
+            message?: string;
+          };
+          errorMessage =
+            err.response?.data?.message || err.message || errorMessage;
+        } else if ("message" in error) {
+          const err = error as { message?: string };
+          errorMessage = err.message || errorMessage;
+        }
+      }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-  
-    const errorMessage =
-      error?.response?.data?.message || error?.message || "Something went wrong";
-
-
-    toast.error(errorMessage, {
-      duration: 3000,
-    });
-  }
+      toast.error(errorMessage, {
+        duration: 3000,
+      });
+    }
   };
 
   return (
     <>
       {/* Success Dialog */}
-      <Success open={open} onOpenChange={setOpen} firstTitle="Go to Checkout" firstLink="/checkout" secondTitle="Continue Shopping" secondLink="/" />
+      <Success
+        open={open}
+        onOpenChange={setOpen}
+        firstTitle="Go to Checkout"
+        firstLink="/checkout"
+        secondTitle="Continue Shopping"
+        secondLink="/"
+      />
 
       {/* Formik Form */}
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ values, setFieldValue }) => (
           <Form>
             {/* Note */}
-            <div className="note w-full mb-6">
+            <div className="note mb-6 w-full">
               <h3 className="mb-6 text-2xl font-bold">Note</h3>
               <Field
                 as={Textarea}
@@ -102,7 +127,10 @@ const ProductForm = ({
                   <button
                     type="button"
                     onClick={() =>
-                      setFieldValue("quantity", Math.max(1, values.quantity - 1))
+                      setFieldValue(
+                        "quantity",
+                        Math.max(1, values.quantity - 1),
+                      )
                     }
                     className="flex h-8 w-8 items-center justify-center hover:bg-gray-50"
                   >
@@ -114,7 +142,7 @@ const ProductForm = ({
                     onClick={() =>
                       setFieldValue("quantity", values.quantity + 1)
                     }
-                    className="text-primary flex h-8 w-8 items-center justify-center hover:bg-gray-50"
+                    className="text-text-website-font flex h-8 w-8 items-center justify-center hover:bg-gray-50"
                   >
                     <Plus className="h-4 w-4" />
                   </button>

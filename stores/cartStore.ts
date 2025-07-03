@@ -2,7 +2,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import {  CartResponse } from '@/utils/cartTypes';
-import { getCart, updateCount, deleteItem, ClearCart } from '@/services/ClientApiHandler';
+// import { getCart, updateCount, deleteItem, ClearCart } from '@/services/ClientApiHandler';
+import { cartService } from '@/services/ClientApiHandler';
 
 interface CartStore {
   cart: CartResponse | null;
@@ -28,7 +29,7 @@ export const useCartStore = create<CartStore>()(
       fetchCart: async (params) => {
          set({ loading: true, error: null });
         try {
-          const res = await getCart({params});
+          const res = await cartService.getCart(params);
           set({ cart: res, loading: false });
         } catch (err: any) {
           set({
@@ -43,7 +44,7 @@ export const useCartStore = create<CartStore>()(
       clearCart: async () => {
          set({ actionLoading: true, error: null });
         try {
-          await ClearCart();
+          await cartService.clearCart();
           // set({ cart: null });
           await get().fetchCart();
         } catch (err: any) {
@@ -61,15 +62,8 @@ export const useCartStore = create<CartStore>()(
           _method: 'put' as const
         }
         try {
-          await updateCount(payload);
+          await cartService.updateCount(payload);
           await get().fetchCart();
-          // const cart = get().cart;
-          // if (!cart) return;
-          // const updatedProducts = cart.products.map((p) =>
-          //   p.id === productId ? { ...p, quantity } : p
-          // );
-
-          // set({ cart: { ...cart, products: updatedProducts } });
         } catch (err: any) {
           set({ error: err.message || 'Failed to update quantity' });
         }   finally {
@@ -80,14 +74,8 @@ export const useCartStore = create<CartStore>()(
       removeProduct: async (productId) => {
         set({ actionLoading: true, error: null });
         try {
-          await deleteItem(productId);
+          await cartService.deleteItem(productId);
           await get().fetchCart();
-         // const cart = get().cart;
-          // if (!cart) return;
-
-          // const filteredProducts = cart.products.filter((p) => p.id !== productId);
-
-          // set({ cart: { ...cart, products: filteredProducts } });
         } catch (err: any) {
           set({ error: err.message || 'Failed to remove product' });
         }finally {

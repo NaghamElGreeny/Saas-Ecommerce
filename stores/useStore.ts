@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Store } from '@/utils/types';
-import { getStores } from '@/services/ClientApiHandler';
+import { locationService } from '@/services/ClientApiHandler';
 
 type StoreState = {
   stores: Store[];
@@ -22,7 +22,7 @@ export const useStore = create<StoreState>()(
 
       fetchStores: async () => {
         try {
-          const data = await getStores();
+          const data = await locationService.getStores();
           set({ stores: data });
           return data;
         } catch (error) {

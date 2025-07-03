@@ -14,7 +14,8 @@ type Props = {
 };
 
 export default function AddressItem({ addr }: Props) {
-  const { deleteAddressItem, fetchAddresses , updateAddressItem} = useAddressStore();
+  const { deleteAddressItem, fetchAddresses, updateAddressItem } =
+    useAddressStore();
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -54,22 +55,19 @@ export default function AddressItem({ addr }: Props) {
           <div className="flex gap-2 text-gray-500">
             {/* Edit */}
             <button onClick={() => setIsEditDialogOpen(true)}>
-              <Edit className="text-primary w-5 h-5 cursor-pointer" />
+              <Edit className="text-text-website-font h-5 w-5 cursor-pointer" />
             </button>
 
             {/* Delete */}
             <button onClick={() => setIsAlertOpen(true)}>
-              <Trash2 className="text-red-500 w-5 h-5 cursor-pointer" />
+              <Trash2 className="h-5 w-5 cursor-pointer text-red-500" />
             </button>
           </div>
         </div>
       </div>
 
       {/* Edit Dialog */}
-      <GlobalDialog
-        open={isEditDialogOpen}
-        onOpenChange={setIsEditDialogOpen}
-      >
+      <GlobalDialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <AddressForm
           isUpdate
           initialData={addr}

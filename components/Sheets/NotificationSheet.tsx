@@ -44,7 +44,7 @@ export default function NotificationSheet() {
       <div className="mt-4 space-y-3">
         {loading ? (
           <div className="flex min-h-[300px] w-full items-center justify-center">
-            <Spinner className="text-primary text-2xl" />
+            <Spinner className="text-text-website-font text-2xl" />
           </div>
         ) : notifications.length === 0 ? (
           <div className="flex h-full w-full flex-col items-center justify-center text-center">
@@ -52,7 +52,7 @@ export default function NotificationSheet() {
             <p>You don&apos;t have any Notifications</p>
           </div>
         ) : (
-          <ScrollArea className="h-[80vh] w-[97%] overflow-y-auto rounded-md p-4 scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent max-h-[85vh] py-0">
+          <ScrollArea className="scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent h-[80vh] max-h-[85vh] w-[97%] overflow-y-auto rounded-md p-4 py-0">
             {notifications.map((notif) => (
               <NotificationCard notification={notif} key={notif.id} />
             ))}

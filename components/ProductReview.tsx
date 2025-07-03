@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getProductReviews } from "@/services/ClientApiHandler";
+import { productService } from "@/services/ClientApiHandler";
 
 type Review = {
   id: number;
@@ -33,7 +33,7 @@ function ProductReview({ productId }: Props) {
  useEffect(() => {
   const fetchReviews = async () => {
     try {
-      const data = await getProductReviews(productId);
+      const data = await productService.getProductReviews(productId);
 
       if (data.status === "success") {
         setReviews(data.data);

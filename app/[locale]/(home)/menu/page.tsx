@@ -1,4 +1,4 @@
-import Filter from '@/components/Filter';
+// import Filter from '@/components/Filter';
 import Menu from '@/components/menu';
 import HeroSection from '@/components/shared/HeroSection';
 import { getCategories, getHome, getMenuItem } from '@/services/ApiHandler';
@@ -11,14 +11,14 @@ async function MenuPage() {
   const items = menu||[MenuItem];
 
   const categories = getCategories();
-  const categoriesArr=[categories]
+  // const categoriesArr=[categories]
 console.log('menu items api',categories)
 console.log('categories api',categories)
   return (
     <main className="min-h-screen bg-gray-50">
       <HeroSection title="Menu" />
       <div className="grid grid-cols-4 container py-5">
-        <Filter categories={categoriesArr} />
+        {/* <Filter categories={categoriesArr} /> */}
         <Menu items={items} /> 
       </div>
     </main>

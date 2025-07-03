@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import OrderStatusStepper from "./OrderStatus";
 import InfoCard from "./OrderInfoCard";
-import { reOrder } from "@/services/ClientApiHandler";
+import { orderService } from "@/services/ClientApiHandler";
 import { useCartStore } from "@/stores/cartStore";
 
 type OrderDetailsProps = {
@@ -32,23 +32,23 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
   );
 
   const orderDate = order.order_date;
-    const orderTime = order.order_time;
+  const orderTime = order.order_time;
   const { setCart, fetchCart } = useCartStore();
-  console.log(order)
+  console.log(order);
   const handleClick = async () => {
-      const res = await reOrder(order.id);
-      setCart(res);
-      fetchCart();
+    console.log(order.id);
+    const res = await orderService.reOrder(order.id);
+    setCart(res);
+    fetchCart();
   };
   return (
-    <div className="space-y-6 rounded-2xl bg-whiteee p-4 text-black ">
+    <div className="bg-whiteee space-y-6 rounded-2xl p-4 text-black">
       {/* Order Status */}
       {/* <OrderStatusStepper statusList={order.order_status} /> */}
       <OrderStatusStepper
-  orderType={order.order_type}
-  statusList={order.order_status}
-/>
-
+        orderType={order.order_type}
+        statusList={order.order_status}
+      />
 
       {/* Branch Info -  Location */}
       <div>
@@ -66,7 +66,7 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
           />
           <div>
             <p className="font-medium">{branch.name}</p>
-            <p className="text-primary text-sm">{branch.area}</p>
+            <p className="text-text-website-font text-sm">{branch.area}</p>
           </div>
         </div>
       </div>
@@ -78,10 +78,10 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
           <p> Call Center</p>
         </div>
         <div className="flex h-[50px] items-center justify-between rounded-xl bg-gray-100 px-2 py-4 md:px-6">
-          <a href={`tel:${callCenter}`} className="text-primary">
+          <a href={`tel:${callCenter}`} className="text-text-website-font">
             {callCenter}
           </a>
-          <a href={`tel:${callCenter}`} className="text-primary">
+          <a href={`tel:${callCenter}`} className="text-text-website-font">
             <Phone />
           </a>
         </div>
@@ -123,13 +123,13 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
       </div>
       {/* Reorder Button */}
 
-      {order.status_trans!== "canceled" && (
+      {order.status_trans !== "canceled" && (
         <div className="flex justify-end">
           <button
-        className="bg-primary hover:bg-primary/90 rounded-full px-6 py-2 text-white shadow-md transition"
-        onClick={handleClick}
+            className="bg-primary hover:bg-primary/90 rounded-full px-6 py-2 text-white shadow-md transition"
+            onClick={handleClick}
           >
-        Reorder
+            Reorder
           </button>
         </div>
       )}

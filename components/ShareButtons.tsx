@@ -97,11 +97,11 @@ export const ShareButtons = () => {
               key={option.name}
               onClick={option.onClick}
               aria-label={option.name}
-              className={`flex size-14 items-center justify-center rounded-full p-3 text-white cursor-pointer transition ${option.bgColor}`}
+              className={`flex size-14 cursor-pointer items-center justify-center rounded-full p-3 text-white transition ${option.bgColor}`}
             >
               {option.icon}
             </button>
-            <p className="text-primary text-center text-[14px] font-thin capitalize">
+            <p className="text-text-website-font text-center text-[14px] font-thin capitalize">
               {option.name}
             </p>
           </div>
@@ -119,7 +119,7 @@ export const ShareButtons = () => {
             >
               {option.icon}
             </a>
-            <p className="text-primary text-center text-[14px] font-thin capitalize">
+            <p className="text-text-website-font text-center text-[14px] font-thin capitalize">
               {option.name}
             </p>
           </div>

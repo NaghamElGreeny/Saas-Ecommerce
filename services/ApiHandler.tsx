@@ -73,7 +73,8 @@ export const getCategories = async () => {
     throw error;
   }
 };
-export const getWebSettings = async () => {
+//settings 
+export const getSettings = async () => {
   const res = await axiosInstance.get("/web_settings");
   console.log(res.data)
   return res.data;

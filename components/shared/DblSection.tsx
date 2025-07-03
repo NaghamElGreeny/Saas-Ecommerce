@@ -41,6 +41,7 @@ export function DblSection({
         <div className="grid grid-cols-1 items-center lg:grid-cols-2">
           {/* Image Section */}
           <Image
+            data-aos={`${imageFirst ? "fade-right" : "fade-left"}`}
             src={sectionData.image}
             alt={"section"}
             width={1000}
@@ -51,6 +52,7 @@ export function DblSection({
           />
           {/* Text Section */}
           <div
+            data-aos={`${imageFirst ? "fade-left" : "fade-right"}`}
             className={`mb-4 flex h-full flex-col justify-center px-2 ${imageFirst ? "order-2 lg:order-2" : "order-2 lg:order-1"} ${isRTL ? "items-end text-right" : "items-start text-left"} `}
           >
             {topMsg && (
@@ -58,7 +60,7 @@ export function DblSection({
                 className={`mb-4 flex w-full items-center ${isRTL ? "justify-end" : "justify-start"}`}
               >
                 <p
-                  className={`text-primary uppercase ${isRTL ? "ml-4" : "mr-4"}`}
+                  className={`text-text-website-font uppercase ${isRTL ? "ml-4" : "mr-4"}`}
                 >
                   {topMsg}
                 </p>

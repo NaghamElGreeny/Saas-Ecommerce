@@ -12,20 +12,20 @@ import { Spinner } from "@heroui/spinner";
 import { useLikedStore } from "@/stores/likedStore";
 import WishlistCard from "../cards/WishlistCard";
 function WishListContent() {
-      const { likedItems, fetchLikedItems, loading } = useLikedStore();
-      useEffect(() => {
-        fetchLikedItems();
-      }, [fetchLikedItems]);
-      const totalItems = likedItems.length;
-      const hasProducts = totalItems > 0;
+  const { likedItems, fetchLikedItems, loading } = useLikedStore();
+  useEffect(() => {
+    fetchLikedItems();
+  }, [fetchLikedItems]);
+  const totalItems = likedItems.length;
+  const hasProducts = totalItems > 0;
   return (
-      <>
-           <SheetContent className="bg-bg w-full items-center rounded-l-2xl sm:min-w-[550px]">
+    <>
+      <SheetContent className="bg-bg w-full items-center rounded-l-2xl sm:min-w-[550px]">
         <SheetHeader className="w-full rounded-tl-2xl bg-white">
           <SheetTitle className="text-2xl font-bold">
             WishList
             {hasProducts && (
-              <span className="text-primary ms-2 text-sm font-medium">
+              <span className="text-text-website-font ms-2 text-sm font-medium">
                 ({totalItems} items)
               </span>
             )}
@@ -34,7 +34,7 @@ function WishListContent() {
 
         {loading ? (
           <div className="flex h-[60vh] w-full items-center justify-center">
-            <Spinner size="lg" className="text-primary" />
+            <Spinner size="lg" className="text-text-website-font" />
           </div>
         ) : hasProducts ? (
           <>
@@ -55,8 +55,8 @@ function WishListContent() {
           </div>
         )}
       </SheetContent>
-      </>
-  )
+    </>
+  );
 }
 
-export default WishListContent
+export default WishListContent;

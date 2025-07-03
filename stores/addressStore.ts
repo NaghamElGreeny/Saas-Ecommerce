@@ -1,5 +1,5 @@
 
-import { getAddress, updateAddress, deleteAddress } from '@/services/ClientApiHandler';
+import { addressService } from '@/services/ClientApiHandler';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -40,7 +40,7 @@ export const useAddressStore = create<AddressStore>()(
 
       fetchAddresses: async () => {
         try {
-          const res = await getAddress();
+          const res = await addressService.getAddresses();
           set({ addresses: (res as { data: Address[] }).data });
         } catch (error) {
           console.error('Fetch error:', error);
@@ -57,7 +57,7 @@ export const useAddressStore = create<AddressStore>()(
 
       deleteAddressItem: async (id) => {
         try {
-          await deleteAddress(id);
+          await addressService.deleteAddress(id);
           const current = get().addresses;
           const filtered = current.filter((addr) => addr.id !== id);
           set({ addresses: filtered });

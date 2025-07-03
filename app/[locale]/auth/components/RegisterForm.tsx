@@ -3,17 +3,15 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  BrandCountry,
-  register,
-  getCountryCodes,
-  RegisterPayload,
-} from "@/services/ClientApiHandler";
+import { authService } from "@/services/ClientApiHandler";
+import { locationService } from "@/services/ClientApiHandler";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/authStore";
 import toast from "react-hot-toast";
 import { useVerificationStore } from "@/stores/useVerificationStore";
 import { ChevronDown } from "lucide-react";
+import { BrandCountry } from "@/stores/countryCodesStore";
+import { RegisterPayload } from "@/utils/types";
 
 export default function RegisterForm() {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
@@ -33,7 +31,7 @@ export default function RegisterForm() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const codes = await getCountryCodes();
+        const codes = await locationService.getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);
         formik.setFieldValue("phone_code", codes[0].phone_code);
@@ -92,7 +90,7 @@ export default function RegisterForm() {
         console.log("Register Payload:", payload);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const data = await register(payload);
+        const data = await authService.register(payload);
 
         setFormData({
           full_name: values.full_name,

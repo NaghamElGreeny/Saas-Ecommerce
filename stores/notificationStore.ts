@@ -1,13 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+"use client";
 
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import toast from 'react-hot-toast';
-import {
-  getNotifications,
-  deleteNotification,
-} from '@/services/ClientApiHandler'; 
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import toast from "react-hot-toast";
+import { notificationService } from "@/services/ClientApiHandler";
 
 type Notification = {
   id: string;
@@ -42,16 +38,16 @@ export const useNotificationStore = create<NotificationStore>()(
         set({ loading: true, error: null });
 
         try {
-          const res = await getNotifications();
+          const res = await notificationService.getNotifications();
 
           set({
             notifications: res.data,
             unreadCount: res.unread_count,
             loading: false,
           });
-        } catch (error: any) {
+        } catch (error) {
           set({
-            error: error?.message || 'فشل في تحميل الإشعارات',
+            error: error?.message || "فشل في تحميل الإشعارات",
             loading: false,
           });
         }
@@ -59,28 +55,28 @@ export const useNotificationStore = create<NotificationStore>()(
 
       deleteNotification: async (id: string) => {
         try {
-          await deleteNotification(id);
+          await notificationService.deleteNotification(id);
 
           set({
-            notifications: get().notifications.filter(n => n.id !== id),
+            notifications: get().notifications.filter((n) => n.id !== id),
           });
 
-          toast.success('تم حذف الإشعار بنجاح');
-        } catch (error: any) {
+          toast.success("تم حذف الإشعار بنجاح");
+        } catch (error) {
           set({
-            error: error?.message || 'فشل في حذف الإشعار',
+            error: error?.message || "فشل في حذف الإشعار",
           });
 
-          toast.error('حدث خطأ أثناء حذف الإشعار');
+          toast.error("حدث خطأ أثناء حذف الإشعار");
         }
       },
     }),
     {
-      name: 'notification-storage',
+      name: "notification-storage",
       partialize: (state) => ({
         notifications: state.notifications,
         unreadCount: state.unreadCount,
       }),
-    }
-  )
+    },
+  ),
 );

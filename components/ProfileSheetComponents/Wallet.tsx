@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import CreditCard from "../cards/CreditCard";
-import { getWallet } from "@/services/ClientApiHandler";
+import { loyaltyService } from "@/services/ClientApiHandler";
 import GlobalDialog from "@/components/shared/GlobalDialog";
 
 export default function Wallet() {
@@ -12,7 +12,7 @@ export default function Wallet() {
 
   useEffect(() => {
     const fetchWallet = async () => {
-      const w = await getWallet();
+      const w = await loyaltyService.getWallet();
       setWallet((w as { data: { balance: number; currency: string } }).data);
     };
     fetchWallet();

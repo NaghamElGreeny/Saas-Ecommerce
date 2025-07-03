@@ -1,4 +1,4 @@
-import { getLoyality } from "@/services/ClientApiHandler";
+import { loyaltyService } from "@/services/ClientApiHandler";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -38,7 +38,7 @@ export const useLoyalityStore = create<LoyaltyState>()(
   try {
     set({ loading: true, error: null });
 
-    const res = await getLoyality();
+    const res = await loyaltyService.getLoyality() as { status: string; data?: LoyaltyState };
 
     if (res.status !== "success" || !res.data) {
       throw new Error("Failed to fetch loyalty");
@@ -54,7 +54,7 @@ export const useLoyalityStore = create<LoyaltyState>()(
       transactions: data.transactions,
       loading: false,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("loyalty error:", error);
     set({
       error: error.message || "Unknown error",

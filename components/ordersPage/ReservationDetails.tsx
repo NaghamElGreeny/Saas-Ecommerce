@@ -49,7 +49,7 @@ export default function ReservationDetails({ order }: any) {
           />
           <div>
             <p className="font-medium">{branch.name}</p>
-            <p className="text-primary text-sm">{branch.area}</p>
+            <p className="text-text-website-font text-sm">{branch.area}</p>
           </div>
         </div>
       </div>
@@ -62,10 +62,10 @@ export default function ReservationDetails({ order }: any) {
             <p> Call Center</p>
           </div>
           <div className="flex h-fit min-h-[80px] items-center justify-between rounded-xl bg-gray-100 px-2 py-4 md:px-6">
-            <a href={`tel:${callCenter}`} className="text-primary">
+            <a href={`tel:${callCenter}`} className="text-text-website-font">
               {callCenter}
             </a>
-            <a href={`tel:${callCenter}`} className="text-primary">
+            <a href={`tel:${callCenter}`} className="text-text-website-font">
               <Phone />
             </a>
           </div>
@@ -75,25 +75,24 @@ export default function ReservationDetails({ order }: any) {
         <InfoCard title="Name" icon={""}>
           {order.name}
         </InfoCard>
-          </div>
-          {/* persons  */}
-        <InfoCard
-          title="Number Of Persons"
-          icon={<Calendar size={20} color="blue" />}
-        >
-          {order.guests_number}
-          </InfoCard>
-          
-          {/* date  */}
-        <InfoCard
-          title="Date Of Booking"
-          icon={<Calendar size={20} color="blue" />}
-        >
-          {order.date}
-        </InfoCard>
+      </div>
+      {/* persons  */}
+      <InfoCard
+        title="Number Of Persons"
+        icon={<Calendar size={20} color="blue" />}
+      >
+        {order.guests_number}
+      </InfoCard>
+
+      {/* date  */}
+      <InfoCard
+        title="Date Of Booking"
+        icon={<Calendar size={20} color="blue" />}
+      >
+        {order.date}
+      </InfoCard>
       {/* Order Info */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-    
         <InfoCard
           title="Time Of Booking  from"
           icon={<Clock size={20} color="blue" />}
@@ -108,7 +107,10 @@ export default function ReservationDetails({ order }: any) {
         </InfoCard>
       </div>
       {/* Reorder Button */}
-<span className="w-full text-red-600">Booked successfully. To cancel your reservation, contact our call center!</span>
+      <span className="w-full text-red-600">
+        Booked successfully. To cancel your reservation, contact our call
+        center!
+      </span>
       <div className="flex justify-end">
         <button
           className="bg-primary hover:bg-primary/90 rounded-full px-6 py-2 text-white shadow-md transition"

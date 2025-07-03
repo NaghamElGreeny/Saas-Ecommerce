@@ -9,7 +9,6 @@ import AddressItem from "../shared/AddressItem";
 import AddressForm from "../Forms/AddAdressForm";
 import GlobalDialog from "../shared/GlobalDialog";
 
-
 export default function AddressSheet() {
   const { addresses, fetchAddresses } = useAddressStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -20,18 +19,19 @@ export default function AddressSheet() {
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-
   };
 
   return (
     <>
       <SheetHeader className="flex items-center justify-between">
-        <SheetTitle className="start-0 text-2xl font-bold">My Address</SheetTitle>
+        <SheetTitle className="start-0 text-2xl font-bold">
+          My Address
+        </SheetTitle>
         <div style={{ width: 24 }} />
       </SheetHeader>
 
       <div className="flex-grow overflow-hidden p-4">
-        <ScrollArea className="flex h-full w-full overflow-y-auto cscrollbar scrollbar-thumb-primary scrollbar-track-transparent px-4 py-2">
+        <ScrollArea className="cscrollbar scrollbar-thumb-primary scrollbar-track-transparent flex h-full w-full overflow-y-auto px-4 py-2">
           <div className="flex w-full flex-col space-y-4">
             {addresses?.length > 0 ? (
               addresses.map((address) => (
@@ -51,7 +51,7 @@ export default function AddressSheet() {
           onClick={() => {
             setIsDialogOpen(true);
           }}
-          className="mt-4 flex h-10 w-[80%] items-center justify-center gap-2 rounded-full bg-primary border border-primary text-white cursor-pointer hover:bg-white hover:text-primary"
+          className="bg-primary border-primary hover:text-text-website-font mt-4 flex h-10 w-[80%] cursor-pointer items-center justify-center gap-2 rounded-full border text-white hover:bg-white"
         >
           Add new address
         </button>
@@ -62,7 +62,6 @@ export default function AddressSheet() {
         onOpenChange={(open) => {
           if (!open) handleDialogClose();
         }}
-     
       >
         <AddressForm
           onSuccess={() => {

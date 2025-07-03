@@ -8,9 +8,11 @@ import { useLoyalityStore } from "@/stores/loyalityStore";
 export default function TotalOrder({
   priceDetail,
   total,
+  sheet,
 }: {
   priceDetail?: PriceSummary & { total?: number };
-  total?: number;
+    total?: number;
+    sheet?: boolean;
 }) {
   const CartResponse = useCartStore();
   const cart = CartResponse.cart;
@@ -42,7 +44,7 @@ export default function TotalOrder({
     priceDetail?.delivery_price !== undefined;
   return (
     <>
-     {points &&
+     {!sheet&&points &&
         points < cart.price.total && (
           <LoyaltyCheckbox
             points={points}
@@ -86,13 +88,6 @@ export default function TotalOrder({
             </h3>
           </div>
         )}
-        {/* 
-        {(cart?.data?.order_type === "delivery" || priceDetail) && deliveryFee > 0 && (
-          <div className="DeliveryFee flex w-full justify-between">
-            <h3>Delivery Fee</h3>
-            <h3>{deliveryFee.toFixed(2)} <span>{currency}</span></h3>
-          </div>
-        )} */}
         {isDelivery && deliveryFee > 0 && (
           <div className="DeliveryFee flex w-full justify-between">
             <h3>Delivery Fee</h3>

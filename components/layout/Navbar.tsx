@@ -5,7 +5,6 @@ import Image from "next/image";
 import NavLinks from "./NavLinks";
 import CmsLinks from "./CmsLinks";
 import ReservationDialog from "./ReservationDialog";
-// import LogoutButton from "./LogoutButton";
 import CartSheet from "../Sheets/CartSheet";
 import NotificationSheet from "../Sheets/NotificationSheet";
 import ProfileSheet from "../Sheets/ProfileSheet";
@@ -15,23 +14,13 @@ import MobileNav from "./MobileNav";
 import { useAuthStore } from "@/stores/authStore";
 import WishList from "../Sheets/WishListSheet";
 import ToggleLang from "./ToggleLang";
-import LogoutBtn from "../ProfileSheetComponents/LogoutBtn";
+import { useWebsiteStore } from "@/stores/useWebsiteStore";
 export default function Navbar({ cms }) {
   const logged = !!useAuthStore((state) => state.token);
-  return (
-    <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-between px-4 md:px-10 lg:px-14">
-      {/* Logo */}
-      <Link href="/" className="flex shrink-0 items-center">
-        <Image
-          src="/assets/logo/logo.svg"
-          width={80}
-          height={56}
-          className="h-14 w-20"
-          alt="shebl-logo"
-          priority
-        />
-      </Link>
+  const { getSetting } = useWebsiteStore();
 
+  return (
+    <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-end 2xl:justify-between px-4 md:px-10 lg:px-14">
       {/* Desktop Navigation Links */}
       <div className="linksdiv hidden min-w-0 flex-1 items-center gap-6 ps-8 2xl:flex">
         <NavLinks />
@@ -43,18 +32,40 @@ export default function Navbar({ cms }) {
       <div className="iconsdiv flex items-center gap-4">
         <WishList />
         <CartSheet />
-        <NotificationSheet />
         {logged ? (
           <>
+          <NotificationSheet />
             <ProfileSheet />
-            <LocationSelector />
+            <div className="hidden 2xl:flex">
+              <LocationSelector />
+            </div>
           </>
         ) : (
-          <LogoutBtn />
+          <>
+            <Link
+              href={"/auth"}
+              className={`bg-primary hover:text-primary hover:border-primary w-26 cursor-pointer rounded-full border py-3 text-center text-white transition hover:bg-white`}
+            >
+              Log in
+            </Link>
+          </>
         )}
-        <div className="flex flex-col h-full items-center justify-between">
+
         <ToggleLang />
-        <MobileNav logged={logged} cms={cms} /></div>
+        <MobileNav cms={cms} />
+        {/* Logo */}
+        <Link href="/" className="flex shrink-0 items-center">
+          {getSetting("website_logo") && (
+            <Image
+              src={getSetting("website_logo")}
+              width={56}
+              height={56}
+              className="h-14"
+              alt="logo"
+              priority
+            />
+          )}
+        </Link>
       </div>
 
       {/* Mobile Navigation */}

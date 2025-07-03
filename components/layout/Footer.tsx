@@ -1,118 +1,189 @@
-'use client';
-import { usePagesStore } from '@/stores/usePagesStore';
-import Link from 'next/link';
-import { useEffect } from 'react';
+"use client";
+
+import { usePagesStore } from "@/stores/usePagesStore";
+import { useWebsiteStore } from "@/stores/useWebsiteStore";
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect } from "react";
+import WishList from "../Sheets/WishListSheet";
+import ReservationForm from "../sections/Reservation";
+import { useTranslations } from "next-intl";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { PhoneNumber } from "@/utils/webSettingsTypes";
 
 export default function Footer() {
-      const { pages, fetchPages } = usePagesStore();
+  const { pages, fetchPages } = usePagesStore();
+  const { data, fetchSettings, getContact, getSetting } = useWebsiteStore();
+  const t = useTranslations("NAV");
 
   useEffect(() => {
-    if (!pages.length) fetchPages();
-  }, [pages, fetchPages]);
-    const socials = [
-        'facebook',
-        'twitter',
-        'messenger',
-        'instagram'
-    ]
-    return (
-        <footer className="bg-gray-900 w-full text-white py-12 px-4 sm:px-6 lg:px-8 bottom-0 left-0">
-            <div className="max-w-7xl mx-auto">
-                {/* Top Section */}
-                <div className="
-                    grid 
-                    grid-cols-1 
-                    sm:grid-cols-2 
-                    md:grid-cols-2 
-                    lg:grid-cols-5 
-                    gap-8 
-                    mb-8
-                ">
-                    {/* Brand Info (takes 2 columns on lg) */}
-                    <div className="lg:col-span-2 space-y-4">
-                        <img src="/assets/images/MEA_Telecom.png" alt="mea telecome" className='w-36 h-24' />
-                        <p className="text-gray-300">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo libero viverra dapibus odio sit malesuada in quis. Arcu tristique elementum viverra integer id.
-                        </p>
-                    </div>
+    if (!data) {
+      fetchSettings();
+      fetchPages();
+    }
+  }, [data, fetchSettings, fetchPages]);
 
-                    {/* Sections */}
-                    <div>
-                        <h3 className="text-lg font-semibold mb-4">Sections</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                                    Menu
-                                </Link>
-                            </li>
-                            <li className="">
-                                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                                    Offers
-                                </Link>
-                            </li>
-                            <li className="">
-                                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                                    Reservation
-                                </Link>
-                            </li>
-                            <li className="">
-                                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                                    Favorit
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                    {/* Links */}
-                    <div>
-                        <h3 className="text-lg font-semibold mb-4">Links</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                                    Privacy policy
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                                    FAQs
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
-                                    Terms & conditions
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                    {/* Contact */}
-                    <div className="space-y-6">
-                        <div>
-                            <h3 className="text-lg font-semibold mb-4">Contact</h3>
-                            <ul className="space-y-2">
-                                <li className="text-gray-300">Call Center <br />
-                                    <span className='text-subFont'>(13) 3078-6114</span></li>
-                                <div className="border-t-[.5px] border-gray-800 my-6"></div>
-                                <li className="text-gray-300">Email <br />
-                                    <span className='text-subFont'> michelle.rivera@example.com</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+  const phoneNumbers = getContact("phone_number") as PhoneNumber[];
+  const firstPhone =
+    Array.isArray(phoneNumbers) && phoneNumbers.length > 0
+      ? phoneNumbers[0]
+      : null;
 
-                {/* Divider */}
-                <div className="border-t border-gray-700 my-6"></div>
+  const emails = getContact("email");
+  const email = Array.isArray(emails) && emails.length > 0 ? emails[0] : null as string[];
 
-                {/* Copyright & Social*/}
-                <div className="flex justify-between">
-                    <div className="text-center text-gray-400">
-                        © {new Date().getFullYear()} All Rights Reserved
-                    </div>
-                    <div className="flex w-56 gap-4">
-                        {socials.map((social, index) => {
-                            return <Link key={index} className='size-11 border rounded-full flex items-center justify-center' href={`${social}.com`}><img src={`/assets/icons/${social}.svg`} alt={`${social}`} /></Link>
-                        })}
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
+  const renderReservationDialog = () => (
+    <Dialog>
+      <DialogTrigger className="w-fit cursor-pointer text-start hover:text-primary">
+        {t("reservation")}
+      </DialogTrigger>
+      <DialogContent className="mx-auto flex items-center justify-center rounded-[20px] p-0">
+        <DialogHeader>
+          <DialogTitle>{/* يمكنك إضافة عنوان هنا */}</DialogTitle>
+        </DialogHeader>
+        <ReservationForm show={false} className="!w-full p-0" />
+      </DialogContent>
+    </Dialog>
+  );
+
+  const socialLinks = ["facebook", "twitter", "messenger", "instagram"];
+  const cmsPages = pages.filter((page) => page.in_menu);
+
+  return (
+    <footer className="bg-gray-900 px-4 py-12 text-white sm:px-6 lg:px-8 text-third">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            {getSetting("website_logo") && (
+              <Image
+                src={getSetting("website_logo")}
+                alt="mea telecom"
+                width={96}
+                height={96}
+                className="h-24"
+              />
+            )}
+            {getSetting("footer_desc") && (
+              <p className="pt-3 text-third">{getSetting("footer_desc")}</p>
+            )}
+          </div>
+
+          {/* Static Sections */}
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Sections</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="#" className="text-third hover:text-primary">
+                  Menu
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-third hover:text-primary">
+                  Offers
+                </Link>
+              </li>
+              <li>{renderReservationDialog()}</li>
+              <li>
+                <WishList
+                  triggerr={
+                    <p className="cursor-pointer text-third hover:text-primary">
+                      Favourites
+                    </p>
+                  }
+                />
+              </li>
+            </ul>
+          </div>
+
+          {/* Dynamic Pages */}
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Links</h3>
+            <ul className="space-y-2">
+              {cmsPages.length > 0 ? (
+                cmsPages.map((page) => (
+                  <li key={page.id}>
+                    <Link
+                      href={`/pages/${page.slug}`}
+                      className="flex items-center gap-2 text-third hover:text-primary"
+                    >
+                      {page.title}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-400">No pages available</li>
+              )}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Contact</h3>
+            <ul className="space-y-4 text-third">
+              {firstPhone &&
+                typeof firstPhone === "object" &&
+                "phone_code" in firstPhone &&
+                "phone" in firstPhone && (
+                  <li>
+                    <strong>Call Center:</strong>
+                    <br />
+                    <a
+                      href={`tel:+${firstPhone.phone_code}${firstPhone.phone}`}
+                      className="text-subFont hover:text-primary"
+                    >
+                      +{firstPhone.phone_code} {firstPhone.phone}
+                    </a>
+                  </li>
+                )}
+
+              {email && (
+                <li>
+                  <strong>Email:</strong>
+                  <br />
+                  <a
+                    href={`mailto:${email}`}
+                    className="text-subFont hover:text-primary"
+                  >
+                    {email as string}
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+
+        <div className="my-6 border-t border-gray-700"></div>
+
+        <div className="flex flex-col items-center justify-between gap-4 text-gray-400 md:flex-row">
+          <div>© {new Date().getFullYear()} All Rights Reserved</div>
+          <div className="flex gap-4">
+            {socialLinks.map((social, idx) => (
+              <Link
+                key={idx}
+                href={`https://${social}.com`}
+                className="flex h-11 w-11 items-center justify-center rounded-full border transition hover:bg-gray-800"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={`/assets/icons/${social}.svg`}
+                  alt={social}
+                  width={20}
+                  height={20}
+                  className="h-5 w-5"
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }

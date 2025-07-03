@@ -2,32 +2,32 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/stores/cartStore";
-import { applyCoupon } from "@/services/ClientApiHandler";
+import { cartService } from "@/services/ClientApiHandler";
 import { Loader } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function PromoCodeInput() {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const { cart, fetchCart ,setCart} = useCartStore();
+  const { cart, fetchCart, setCart } = useCartStore();
   const [isApplied, setIsApplied] = useState(false);
 
   const handleApply = async () => {
     if (!code.trim()) return;
     setLoading(true);
     try {
-      const res = await applyCoupon(code);
+      const res = await cartService.applyCoupon(code);
       if (res.status === "success") {
-        setCart(res)
+        setCart(res);
         // await fetchCart();
         setIsApplied(true);
         toast.success("Coupon applied successfully");
       } else {
         toast.error(res.message || "Failed to apply coupon");
-        console.log('copoun res msg',res.message)
+        console.log("copoun res msg", res.message);
       }
     } catch (err) {
-        console.log('copoun res msg',res.message)
+      console.log("copoun res msg", res.message);
       console.error("Failed to apply coupon", err);
       toast.error("Failed to apply coupon");
     } finally {
@@ -50,19 +50,26 @@ export default function PromoCodeInput() {
 
   return (
     <div className="w-full p-5">
-      <h2 className="text-xl font-bold mb-2">Promo Code</h2>
+      <h2 className="mb-2 text-xl font-bold">Promo Code</h2>
       {isApplied ? (
-        <div className="flex items-center justify-between rounded-2xl px-4 py-3 border border-green-200">
+        <div className="flex items-center justify-between rounded-2xl border border-green-200 px-4 py-3">
           <div className="flex items-center">
-    <svg
-              className="me-2 bg-white text-green-500  border-green-500 rounded-full"
+            <svg
+              className="me-2 rounded-full border-green-500 bg-white text-green-500"
               width="20"
               height="20"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <circle cx="10" cy="10" r="9" fill="white" stroke="#22C55E" strokeWidth="2" />
+              <circle
+                cx="10"
+                cy="10"
+                r="9"
+                fill="white"
+                stroke="#22C55E"
+                strokeWidth="2"
+              />
               <path
                 d="M6 10.5L9 13.5L14 8.5"
                 stroke="#22C55E"
@@ -72,13 +79,14 @@ export default function PromoCodeInput() {
               />
             </svg>
 
-            <h2 className=" font-medium">{cart?.coupon_code} <br />
+            <h2 className="font-medium">
+              {cart?.coupon_code} <br />
               <span className="text-gray-400">-{cart?.price.coupon_price}</span>
             </h2>
           </div>
           <button
             onClick={handleRemove}
-            className="text-red-600 hover:text-red-800 font-semibold"
+            className="font-semibold text-red-600 hover:text-red-800"
             disabled={loading}
           >
             {loading ? <Loader className="animate-spin" /> : "Remove"}
@@ -86,24 +94,24 @@ export default function PromoCodeInput() {
         </div>
       ) : (
         <div className="flex items-center justify-between rounded-2xl bg-gray-100 px-4 py-3">
-          <Image 
-            src="/assets/icons/promocode.svg" 
-            alt="promo" 
-            width={35} 
-            height={35} 
-            className="me-2" 
+          <Image
+            src="/assets/icons/promocode.svg"
+            alt="promo"
+            width={35}
+            height={35}
+            className="me-2"
           />
           <input
             type="text"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Enter Promo Code"
-            className="w-full h-10 bg-transparent outline-none placeholder:text-gray-400"
+            className="h-10 w-full bg-transparent outline-none placeholder:text-gray-400"
           />
           <button
             disabled={loading || !code.trim()}
             onClick={handleApply}
-            className="text-primary font-semibold"
+            className="text-text-website-font font-semibold"
           >
             {loading ? <Loader className="animate-spin" /> : "Apply"}
           </button>

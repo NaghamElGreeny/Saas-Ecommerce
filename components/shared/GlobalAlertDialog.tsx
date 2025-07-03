@@ -54,7 +54,7 @@ export default function GlobalAlertDialog({
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="bg-primary hover:text-primary hover:border-primary h-10 w-1/2 cursor-pointer rounded-full text-white transition hover:border hover:bg-white"
+            className="bg-primary hover:text-text-website-font hover:border-primary h-10 w-1/2 cursor-pointer rounded-full text-white transition hover:border hover:bg-white"
           >
             {confirmText}
           </AlertDialogAction>

@@ -1,42 +1,19 @@
 "use client";
 import React, { useState } from "react";
-import { FiMenu, FiX } from "react-icons/fi";
 import Link from "next/link";
-import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ReservationForm from "../sections/Reservation";
-import { CmsPages } from "@/utils/types";
+import { CmsPage } from "@/utils/types";
 import ToggleLang from "./ToggleLang";
 import GlobalSheet from "@/components/shared/GlobalSheet";
-import LogoutBtn from "../ProfileSheetComponents/LogoutBtn";
+import { Menu, X } from "lucide-react";
+import LocationSelector from "../ui/LocationSelector";
 
-const NAV_LINKS = [
-  { href: "/menu", labelKey: "menu" },
-];
+const NAV_LINKS = [{ href: "/menu", labelKey: "menu" }];
 
-const cmsTranslationMap: Record<string, { en: string; ar: string }> = {
-  "تواصل معنا": {
-    en: "Contact Us",
-    ar: "تواصل معنا",
-  },
-  "من نحن": {
-    en: "About Us",
-    ar: "من نحن",
-  },
-  "الشروط والاحكام": {
-    en: "Terms and Conditions",
-    ar: "الشروط والأحكام",
-  },
-  "سياسة الخصوصية": {
-    en: "Privacy Policy",
-    ar: "سياسة الخصوصية",
-  },
-};
-
-function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
+function MobileNav({ cms }: {  cms: CmsPage[] }) {
   const t = useTranslations("NAV");
-  const locale = useLocale();
   const [openSheet, setOpenSheet] = useState(false);
 
   const renderNavLinks = () =>
@@ -59,8 +36,6 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
 
   const renderCmsPages = () =>
     cms.map((page) => {
-      const translatedTitle =
-        cmsTranslationMap[page.title]?.[locale] || page.title;
 
       return (
         <Link
@@ -68,7 +43,7 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
           href={`/pages/${page.slug}`}
           className="whitespace-nowrap hover:opacity-80"
         >
-          {translatedTitle}
+          {t(`${page.slug}`)}
         </Link>
       );
     });
@@ -77,12 +52,16 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
     <>
       {/* Mobile Menu Toggle */}
       <div className="flex items-center gap-4 2xl:hidden">
-        <button id="toggleBtn" onClick={() => setOpenSheet((prev) => !prev)} className="z-50 2xl:hidden">
-          <div className="border-primary hover:bg-primary/20 active:bg-primary/40 flex h-10 w-10 items-center justify-center rounded-full border-2">
+        <button
+          id="toggleBtn"
+          onClick={() => setOpenSheet((prev) => !prev)}
+          className="z-50 2xl:hidden"
+        >
+          <div className="cursor-pointer flex h-10 w-10 items-center justify-center text-2xl">
             {openSheet ? (
-              <FiX size={25} className="text-primary" />
+              <X size={25} className="text-text-website-font" />
             ) : (
-              <FiMenu size={25} className="text-primary" />
+              <Menu size={25} className="text-text-website-font" />
             )}
           </div>
         </button>
@@ -92,31 +71,15 @@ function MobileNav({ cms, logged }: { logged: boolean; cms: CmsPages[] }) {
       <GlobalSheet
         open={openSheet}
         onOpenChange={setOpenSheet}
-        // side="left"
         title={t("menu")}
-        footer= {logged ? (
-            <LogoutBtn onClose={() => setOpenSheet(false)} />
-          ) : (
-            <Link
-              href={`/${locale}/auth`}
-              className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#5A6AE8] text-white"
-            >
-              <Image
-                src="/assets/icons/login.png"
-                alt="login"
-                width={24}
-                height={24}
-              />
-              <span>{t("login")}</span>
-            </Link>
-          )}
+        // side="left"
       >
-        <div className="flex flex-col gap-4 p-4 w-full">
+        <div className="flex w-full flex-col gap-6 p-4">
+          <LocationSelector />
           {renderNavLinks()}
           {renderReservationDialog()}
           {renderCmsPages()}
           <ToggleLang />
-         
         </div>
       </GlobalSheet>
     </>

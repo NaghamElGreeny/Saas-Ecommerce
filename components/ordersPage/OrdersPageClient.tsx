@@ -9,9 +9,15 @@ export default function OrdersPageClient() {
   const [status, setStatus] = useState("in_progress");
 
   return (
-    <div className="p-4 w-full flex flex-col justify-center">
+    <div className="flex w-full flex-col justify-center p-4">
       <OrderStatusTabs onStatusChange={setStatus} />
-      <Suspense fallback={<div className="flex justify-center items-center h-64"><Spinner className="text-primary"/></div>}>
+      <Suspense
+        fallback={
+          <div className="flex h-64 items-center justify-center">
+            <Spinner className="text-text-website-font" />
+          </div>
+        }
+      >
         <OrdersList status={status} />
       </Suspense>
     </div>

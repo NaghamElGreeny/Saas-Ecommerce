@@ -2,31 +2,31 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getOrder } from "@/services/ClientApiHandler";
+import { orderService } from "@/services/ClientApiHandler";
 import TotalOrder from "./shared/TotalOrder";
 import { ScrollArea } from "./ui/scroll-area";
 import CheckoutCartItem from "./shared/CheckoutCartItem";
 import OrderDetails from "./OrderDetails";
-import { Spinner } from "@heroui/spinner";
 import { Loader } from "lucide-react";
+import { OrderItem } from "@/utils/types";
 
 type OrderProps = {
   slugg: number;
 };
 
 const Order: React.FC<OrderProps> = ({ slugg }) => {
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<OrderItem>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrder = async () => {
       try {
         console.log("🔍 Fetching order...");
-        const data = await getOrder(slugg);
-        console.log("✅ order:", data);
+        const data = await orderService.getOrder(slugg);
+        console.log("order:", data);
         setOrder(data);
       } catch (error) {
-        console.error("❌ Failed to fetch order", error);
+        console.error("failed to fetch order", error);
       } finally {
         setLoading(false);
       }

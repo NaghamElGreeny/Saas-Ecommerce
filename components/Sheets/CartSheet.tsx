@@ -58,7 +58,7 @@ export default function CartSheet() {
 
   const content = loading ? (
     <div className="flex h-[60vh] w-full items-center justify-center">
-      <Spinner size="lg" className="text-primary" />
+      <Spinner size="lg" className="text-text-website-font" />
     </div>
   ) : hasProducts ? (
     <>
@@ -67,7 +67,7 @@ export default function CartSheet() {
           <CartItemCard cartProduct={product} key={product.id} />
         ))}
       </ScrollArea>
-      <TotalOrder />
+      <TotalOrder sheet={true} />
     </>
   ) : (
     <div className="flex h-full w-full flex-col items-center justify-center text-center">
@@ -84,7 +84,7 @@ export default function CartSheet() {
         <>
           My Cart
           {hasProducts && (
-            <span className="text-primary ms-2 text-sm font-medium">
+            <span className="text-text-website-font ms-2 text-sm font-medium">
               ({totalItems} items)
             </span>
           )}
