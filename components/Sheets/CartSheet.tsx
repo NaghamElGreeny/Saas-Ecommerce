@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import CartItemCard from "../cards/CartItem";
 import TotalOrder from "../shared/TotalOrder";
-import { Spinner } from "@heroui/spinner";
+import { Spinner } from "@/components/atoms";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import GlobalSheet from "@/components/shared/GlobalSheet"; // adjust path if needed
+import GlobalSheet from "@/components/shared/GlobalSheet";
 
 export default function CartSheet() {
   const { cart, fetchCart, loading } = useCartStore();
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetchCart();
@@ -21,7 +23,7 @@ export default function CartSheet() {
   const hasProducts = products.length > 0;
   const totalItems = products.reduce(
     (total, product) => total + product.quantity,
-    0,
+    0
   );
 
   const trigger = (
@@ -42,9 +44,12 @@ export default function CartSheet() {
   );
 
   const footer = hasProducts && (
-    <Link
-      href="/checkout"
-      className="bg-primary flex h-16 w-full items-center justify-center gap-2 rounded-full text-white"
+    <button
+      onClick={() => {
+        setOpen(false);          // Close the sheet
+        router.push("/checkout"); // Navigate to checkout
+      }}
+      className="confirm-btn  flex h-16 w-full items-center justify-center gap-2 rounded-full"
     >
       <span className="text-2xl">Checkout</span>
       <Image
@@ -52,13 +57,16 @@ export default function CartSheet() {
         alt="checkout"
         width={24}
         height={24}
+      className="confirm-btn rounded-full"
       />
-    </Link>
+    </button>
   );
 
   const content = loading ? (
-    <div className="flex h-[60vh] w-full items-center justify-center">
-      <Spinner size="lg" className="text-text-website-font" />
+    <div className="flex h-full w-full items-center justify-center">
+      <span className="animate-pulse">
+        <Spinner variant="primary" size="large" />
+      </span>
     </div>
   ) : hasProducts ? (
     <>
@@ -67,7 +75,7 @@ export default function CartSheet() {
           <CartItemCard cartProduct={product} key={product.id} />
         ))}
       </ScrollArea>
-      <TotalOrder sheet={true} />
+      <TotalOrder sheet />
     </>
   ) : (
     <div className="flex h-full w-full flex-col items-center justify-center text-center">
@@ -78,8 +86,8 @@ export default function CartSheet() {
 
   return (
     <GlobalSheet
-      open={undefined} // if you're using internal state, set it
-      onOpenChange={() => {}} // optional: if you need controlled behavior
+      open={open}
+      onOpenChange={setOpen}
       title={
         <>
           My Cart

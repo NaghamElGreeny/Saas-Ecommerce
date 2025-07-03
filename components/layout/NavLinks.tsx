@@ -8,7 +8,7 @@ export default function NavLinks() {
   return (
     <>
       {NAV_LINKS.map(({ href, labelKey }) => (
-        <Link key={href} href={href} className="hover:opacity-80">
+        <Link key={href} href={href} className="hover:text-primary">
           {t(labelKey)}
         </Link>
       ))}

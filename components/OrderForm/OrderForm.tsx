@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Image from "next/image";
-import { TimePicker } from "antd";
 import { ChevronDown, Edit } from "lucide-react";
 import { useAddressStore } from "@/stores/addressStore";
 import { useStore } from "@/stores/useStore";
 import { useCartStore } from "@/stores/cartStore";
-import dayjs from "dayjs";
 import AddressItem from "../shared/AddressItem";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/stores/authStore";
@@ -17,6 +15,8 @@ import Success from "../Success";
 import { useLoyalityStore } from "@/stores/loyalityStore";
 import { Spinner } from "../atoms";
 import GlobalDialog from "../shared/GlobalDialog";
+import ScheduleSelector from "./ScheduleSelector";
+import OrderTypeSelector from "./OrderTypeSelector";
 
 type OrderFormProps = {
   params: Record<string, string | string[]>;
@@ -164,50 +164,6 @@ const OrderForm = ({ params }: OrderFormProps) => {
   const selectedBranch =
     stores.find((s) => s.id === values.selectedStoreId) || selectedStore;
 
-  const handleTimeChange = (order_time: dayjs.Dayjs | null) => {
-    if (order_time) {
-      const formatted = order_time.format("h:mm A");
-      setFieldValue("order_time", formatted);
-    }
-  };
-
-  const renderOrderTypeOption = (type: string) => (
-    <div key={type} className="w-full">
-      <label
-        htmlFor={type}
-        className="flex h-full cursor-pointer items-center rounded-2xl bg-white px-5 py-4"
-      >
-        <div className="flex w-full items-center justify-between">
-          <div className="flex w-full items-center gap-2">
-            <Image
-              src={`/assets/icons/${type === "delivery" ? "delivery" : "takeaway"}.svg`}
-              alt={type}
-              width={32}
-              height={32}
-            />
-            <h3 className="flex-grow capitalize">
-              {type === "delivery" ? "Delivery" : "Takeaway"}
-            </h3>
-          </div>
-          <input
-            type="radio"
-            id={type}
-            name="orderType"
-            value={type}
-            checked={values.orderType === type}
-            onChange={() => {
-              setFieldValue("orderType", type);
-              fetchCart({
-                order_type: type,
-                address_id: selectedAddress?.id?.toString(),
-              });
-            }}
-            className="h-5 w-5"
-          />
-        </div>
-      </label>
-    </div>
-  );
 
   return (
     <>
@@ -222,10 +178,17 @@ const OrderForm = ({ params }: OrderFormProps) => {
       />
 
       <form onSubmit={handleSubmit} className="mx-auto w-full space-y-6 p-6">
-        {/* Order Type */}
-        <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
-          {["delivery", "take_away"].map(renderOrderTypeOption)}
-        </div>
+
+        <OrderTypeSelector
+          value={values.orderType}
+          onChange={(type: string) => {
+            setFieldValue("orderType", type);
+            fetchCart({
+              order_type: type,
+              address_id: selectedAddress?.id?.toString(),
+            });
+          }}
+        />
 
         {/* Address (if delivery) */}
         {values.orderType === "delivery" && (
@@ -236,7 +199,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
                 setSelectedDialogAddressId(values.selectedAddressId);
                 setOpenAddressDialog(true);
               }}
-              className="flex cursor-pointer items-center justify-between rounded-lg bg-website-white p-3"
+              className="flex cursor-pointer items-center justify-between rounded-2xl bg-website-white p-3"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -267,7 +230,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
             <h2 className="text-lg font-semibold">Select Branch</h2>
             <div
               onClick={() => setOpenStoreDialog(true)}
-              className="flex cursor-pointer items-center justify-between rounded-lg bg-gray-100 p-3"
+              className="flex cursor-pointer items-center justify-between rounded-2xl bg-gray-100 p-3"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -293,62 +256,12 @@ const OrderForm = ({ params }: OrderFormProps) => {
         )}
 
         {/* Schedule Time */}
-        <div>
-          <div className="mb-2 flex gap-4 font-medium">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="is_schedule"
-                checked={!values.is_schedule}
-                onChange={() => setFieldValue("is_schedule", false)}
-              />
-              Order Now
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="is_schedule"
-                checked={values.is_schedule}
-                onChange={() => setFieldValue("is_schedule", true)}
-              />
-              Schedule Order
-            </label>
-          </div>
-          <div className="flex gap-4">
-            <input
-              type="date"
-              value={values.order_date}
-              onChange={(e) => setFieldValue("order_date", e.target.value)}
-              className="!w-1/2 rounded-lg !border-none p-3 text-gray-600"
-            />
-
-            <TimePicker
-              use12Hours
-              format="h:mm A"
-              onChange={handleTimeChange}
-              placeholder="Select Time"
-              className="order_time-picker w-1/2 !rounded-lg !border-none !p-3"
-            />
-          </div>
-          {values.is_schedule && (
-            <>
-              <div className="flex w-full">
-                <div className="order_dateerror w-1/2">
-                  {" "}
-                  {errors.order_date && (
-                    <p className="text-sm text-red-500">{errors.order_date}</p>
-                  )}
-                </div>
-                <div className="order_timeerror w-1/2">
-                  {errors.order_time && (
-                    <p className="text-sm text-red-500">{errors.order_time}</p>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-
+  <ScheduleSelector
+        values={values}
+        errors={errors}
+        setFieldValue={setFieldValue}
+        />
+        
         {/* Payment Method */}
         <div>
           <h2 className="mb-2 text-lg font-semibold">Payment Methods</h2>

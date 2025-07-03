@@ -18,14 +18,14 @@ function MobileNav({ cms }: {  cms: CmsPage[] }) {
 
   const renderNavLinks = () =>
     NAV_LINKS.map(({ href, labelKey }) => (
-      <Link key={href} href={href} className="hover:opacity-80">
-        {t(labelKey)}
+      <Link key={href} href={href} className="hover:text-primary">
+        {t(labelKey)} 
       </Link>
     ));
 
   const renderReservationDialog = () => (
     <Dialog>
-      <DialogTrigger className="w-fit cursor-pointer text-start hover:opacity-80">
+      <DialogTrigger className="w-fit cursor-pointer text-start hover:text-primary">
         {t("reservation")}
       </DialogTrigger>
       <DialogContent className="mx-auto flex items-center justify-center rounded-[20px] p-0">
@@ -41,7 +41,7 @@ function MobileNav({ cms }: {  cms: CmsPage[] }) {
         <Link
           key={page.id}
           href={`/pages/${page.slug}`}
-          className="whitespace-nowrap hover:opacity-80"
+          className="whitespace-nowrap hover:text-primary"
         >
           {t(`${page.slug}`)}
         </Link>

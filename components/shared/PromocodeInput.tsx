@@ -5,31 +5,31 @@ import { useCartStore } from "@/stores/cartStore";
 import { cartService } from "@/services/ClientApiHandler";
 import { Loader } from "lucide-react";
 import toast from "react-hot-toast";
+import { CartResponse } from "@/utils/cartTypes";
 
 export default function PromoCodeInput() {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const { cart, fetchCart, setCart } = useCartStore();
-  const [isApplied, setIsApplied] = useState(false);
+  const { fetchCart, setCart, couponCode, couponValue } = useCartStore();
+
+  const isApplied = !!couponCode;
+  const isInvalid = !code.trim();
 
   const handleApply = async () => {
-    if (!code.trim()) return;
+    if (isInvalid) return;
     setLoading(true);
     try {
-      const res = await cartService.applyCoupon(code);
+      const res: CartResponse = (await cartService.applyCoupon(code)) as CartResponse;
       if (res.status === "success") {
         setCart(res);
-        // await fetchCart();
-        setIsApplied(true);
-        toast.success("Coupon applied successfully");
+        toast.success(res.message);
       } else {
+        console.error("Coupon error:", res.message);
         toast.error(res.message || "Failed to apply coupon");
-        console.log("copoun res msg", res.message);
       }
     } catch (err) {
-      console.log("copoun res msg", res.message);
       console.error("Failed to apply coupon", err);
-      toast.error("Failed to apply coupon");
+      toast.error(err);
     } finally {
       setLoading(false);
     }
@@ -37,11 +37,9 @@ export default function PromoCodeInput() {
 
   const handleRemove = async () => {
     try {
-      // You might need an API to remove coupon, or just refetch cart without coupon
-      await fetchCart(); // This should fetch cart without coupon if you pass empty coupon code
-      setIsApplied(false);
+      await fetchCart();
+      toast.success("Coupon removed successfully");
       setCode("");
-      toast.success("Coupon removed");
     } catch (err) {
       console.error("Failed to remove coupon", err);
       toast.error("Failed to remove coupon");
@@ -51,11 +49,12 @@ export default function PromoCodeInput() {
   return (
     <div className="w-full p-5">
       <h2 className="mb-2 text-xl font-bold">Promo Code</h2>
+
       {isApplied ? (
-        <div className="flex items-center justify-between rounded-2xl border border-green-200 px-4 py-3">
+        <div className="bg-website-footer flex items-center justify-between rounded-2xl border-2 border-green-200 px-4 py-3">
           <div className="flex items-center">
             <svg
-              className="me-2 rounded-full border-green-500 bg-white text-green-500"
+              className="me-2 rounded-full bg-white text-green-500"
               width="20"
               height="20"
               viewBox="0 0 20 20"
@@ -78,22 +77,21 @@ export default function PromoCodeInput() {
                 strokeLinejoin="round"
               />
             </svg>
-
             <h2 className="font-medium">
-              {cart?.coupon_code} <br />
-              <span className="text-gray-400">-{cart?.price.coupon_price}</span>
+              {couponCode} <br />
+              <span className="text-gray-400">-{couponValue ?? 0}</span>
             </h2>
           </div>
           <button
             onClick={handleRemove}
-            className="font-semibold text-red-600 hover:text-red-800"
             disabled={loading}
+            className="font-semibold text-red-600 hover:text-red-800"
           >
             {loading ? <Loader className="animate-spin" /> : "Remove"}
           </button>
         </div>
       ) : (
-        <div className="flex items-center justify-between rounded-2xl bg-gray-100 px-4 py-3">
+        <div className="bg-website-footer flex items-center justify-between rounded-2xl px-4 py-3">
           <Image
             src="/assets/icons/promocode.svg"
             alt="promo"
@@ -109,9 +107,9 @@ export default function PromoCodeInput() {
             className="h-10 w-full bg-transparent outline-none placeholder:text-gray-400"
           />
           <button
-            disabled={loading || !code.trim()}
+            disabled={loading || isInvalid}
             onClick={handleApply}
-            className="text-text-website-font font-semibold"
+            className="text-primary font-semibold"
           >
             {loading ? <Loader className="animate-spin" /> : "Apply"}
           </button>

@@ -201,11 +201,14 @@ body {
 .confirm-btn {
   background-color: var(--website-primary-color);
   color: white;
+  border-width: 1px;
+
 }
 .confirm-btn:hover {
   background-color: white;
-  border: 1px var(--website-primary-color);
+border:2px solid var(--website-primary-color);
   color: var(--website-primary-color);
+  cursor: pointer;
 }
 .label_with_check {
   border-radius: 0.75rem;

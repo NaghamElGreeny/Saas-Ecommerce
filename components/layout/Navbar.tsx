@@ -15,10 +15,18 @@ import { useAuthStore } from "@/stores/authStore";
 import WishList from "../Sheets/WishListSheet";
 import ToggleLang from "./ToggleLang";
 import { useWebsiteStore } from "@/stores/useWebsiteStore";
+import { useEffect, useState } from "react";
 export default function Navbar({ cms }) {
   const logged = !!useAuthStore((state) => state.token);
   const { getSetting } = useWebsiteStore();
+  const [logo, setLogo] = useState<string | null>(null);
 
+  useEffect(() => {
+    const src = getSetting("website_logo");
+    if (src) setLogo(src);
+  }, [getSetting]);
+
+  if (!logo) return null;
   return (
     <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-end 2xl:justify-between px-4 md:px-10 lg:px-14">
       {/* Desktop Navigation Links */}
@@ -55,16 +63,16 @@ export default function Navbar({ cms }) {
         <MobileNav cms={cms} />
         {/* Logo */}
         <Link href="/" className="flex shrink-0 items-center">
-          {getSetting("website_logo") && (
+         
             <Image
-              src={getSetting("website_logo")}
+              src={logo}
               width={56}
               height={56}
               className="h-14"
               alt="logo"
               priority
             />
-          )}
+  
         </Link>
       </div>
     </nav>

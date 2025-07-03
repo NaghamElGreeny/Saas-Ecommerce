@@ -4,7 +4,7 @@ import { usePagesStore } from "@/stores/usePagesStore";
 import { useWebsiteStore } from "@/stores/useWebsiteStore";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import WishList from "../Sheets/WishListSheet";
 import ReservationForm from "../sections/Reservation";
 import { useTranslations } from "next-intl";
@@ -21,6 +21,12 @@ export default function Footer() {
   const { pages, fetchPages } = usePagesStore();
   const { data, fetchSettings, getContact, getSetting } = useWebsiteStore();
   const t = useTranslations("NAV");
+  const [logo, setLogo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const src = getSetting("website_logo");
+    if (src) setLogo(src);
+  }, [getSetting]);
 
   useEffect(() => {
     if (!data) {
@@ -28,6 +34,7 @@ export default function Footer() {
       fetchPages();
     }
   }, [data, fetchSettings, fetchPages]);
+  if (!logo) return null;
 
   const phoneNumbers = getContact("phone_number") as PhoneNumber[];
   const firstPhone =
@@ -61,15 +68,15 @@ export default function Footer() {
         <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-2">
-            {getSetting("website_logo") && (
+          
               <Image
-                src={getSetting("website_logo")}
+                src={logo}
                 alt="mea telecom"
                 width={96}
                 height={96}
                 className="h-24"
               />
-            )}
+           
             {getSetting("footer_desc") && (
               <p className="pt-3 text-third">{getSetting("footer_desc")}</p>
             )}

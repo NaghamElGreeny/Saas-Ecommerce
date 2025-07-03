@@ -11,7 +11,7 @@ export default function CmsLinks({ cms }: { cms: CmsPage[] }) {
       {cms.map((page) => {
     
         return (
-          <Link key={page.id} href={`/pages/${page.slug}`} className="hover:opacity-80 whitespace-nowrap">
+          <Link key={page.id} href={`/pages/${page.slug}`} className="hover:text-primary whitespace-nowrap">
              {t(`${page.slug}`)}
           </Link>
         );

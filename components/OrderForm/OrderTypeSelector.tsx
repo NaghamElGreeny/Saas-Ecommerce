@@ -5,7 +5,7 @@ const OrderTypeSelector = ({ value, onChange }) => {
   const orderTypes = ["delivery", "take_away"];
 
   return (
-    <div className="grid grid-cols-1 gap-5 font-semibold md:grid-cols-2">
+    <div className="grid grid-cols-2 gap-5 font-semibold ">
       {orderTypes.map((type) => (
         <div key={type} className="w-full">
           <label
@@ -19,6 +19,7 @@ const OrderTypeSelector = ({ value, onChange }) => {
                   alt={type}
                   width={32}
                   height={32}
+                  className="w-8 h-8"
                 />
                 <h3 className="flex-grow capitalize">
                   {type === "delivery" ? "Delivery" : "Takeaway"}

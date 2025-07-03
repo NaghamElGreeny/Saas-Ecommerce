@@ -9,13 +9,13 @@ const spinner = tv({
     base: 'animate-spin rounded-full',
     variants: {
         color: {
-            primary: 'border border-white',
+            primary: 'border border-primary',
             danger: 'border-primary',
         },
         size: {
             small: 'h-4 w-4 border-b-2',
             medium: 'h-6 w-6 border-b-4',
-            large: 'h-8 w-8 border-b-4',
+            large: 'h-10 w-10 border-b-4',
         },
     },
     defaultVariants: {
@@ -32,7 +32,7 @@ export const Spinner = ({
     size = 'medium',
     className,
 }: {
-    variant?: 'primary' | 'danger'|string;
+    variant?: 'primary' | 'danger';
     size?: 'small' | 'medium' | 'large';
     className?: string;
 }) => {

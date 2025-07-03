@@ -3,6 +3,7 @@ import { Slider } from "@/utils/types";
 import "@/styles/hero.css";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState, useEffect, useRef } from "react";
 
@@ -11,12 +12,7 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
   const [current, setCurrent] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  //   const images = [
-  //     "url('/assets/images/img1.jpg')",
-  //     "url('/assets/images/img2.jpg')",
-  //     "url('/assets/images/img3.jpg')",
-  //     "url('/assets/images/img4.jpg')",
-  //   ];
+
   const images = sliders.map((s) => `url(${s.image})`);
 
   //   useEffect(() => {
@@ -55,47 +51,24 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
     >
       <div className="h-full w-full bg-black/50 px-16 sm:px-6 lg:px-32">
         <div className="mx-auto flex h-4/5 max-w-2xl flex-col items-center justify-center text-center">
-          <h1 className="mb-4 font-[Allura] text-4xl text-white md:text-6xl lg:text-7xl">
+          <h1 className="mb-4 font-[Allura] text-4xl text-white md:text-6xl lg:text-7xl"  data-aos="fade-up" data-aos-delay="500">
             Exotic and Delicious
           </h1>
 
-          <p className="mb-6 text-white">
+          <p className="mb-6 text-white"  data-aos="fade-up" data-aos-delay="700">
             Food is the foundation of true happiness, lorem ipsum
             <br />
             dolor sit amet, consectetur adipiscing elit aenean.
           </p>
 
           <Link
-            href="/discover"
+            href="/" data-aos="fade-up" data-aos-delay="900"
             className="flex font-medium text-white md:text-xl rtl:flex-row-reverse"
           >
-            <p className="underline"> Discover More </p>
+            <p className="underline" > Discover More </p>
             <ArrowUpRight />
           </Link>
         </div>
-        {/* {sliders &&
-                  sliders.map((slider) => {
-              return(
-            <div key={slider.id} className="mx-auto flex h-4/5 max-w-2xl flex-col items-center justify-center text-center">
-              <h1 className="mb-4 font-[Allura] text-4xl text-white md:text-6xl lg:text-7xl">
-                Exotic and Delicious
-              </h1>
-
-              <p className="mb-6 text-white">
-                Food is the foundation of true happiness, lorem ipsum
-                <br />
-                dolor sit amet, consectetur adipiscing elit aenean.
-              </p>
-
-              <Link
-                href="/discover"
-                className="flex font-medium text-white md:text-xl rtl:flex-row-reverse"
-              >
-                <p className="underline"> Discover More </p>
-                <ArrowUpRight />
-              </Link>
-            </div>);
-          })} */}
 
         <div className="flex justify-between">
           <div className="flex w-56 gap-4">
@@ -103,9 +76,14 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
               <Link
                 key={index}
                 className="flex size-11 items-center justify-center rounded-full border border-white"
-                href={`${social}.com`}
-              >
-                <img src={`/assets/icons/${social}.svg`} alt={social} />
+                href={`${social}.com`}>
+                <Image
+                  src={`/assets/icons/${social}.svg`}
+                  alt={social}
+                  width={32}
+                  height={32}
+                  style={{ objectFit: "contain" }}
+                />
               </Link>
             ))}
           </div>
