@@ -20,7 +20,7 @@ const ToppingItem = ({
   disableRemove = false,
 }: ToppingItemProps) => {
   return (
-    <div className="flex items-center justify-between rounded-xl border border-[#F0F0F0] bg-white px-4 py-3 shadow-sm">
+    <div className="flex items-center justify-between rounded-2xl border border-[#F0F0F0] bg-card px-4 py-3 shadow-sm">
       <div className="flex flex-col">
         <div className="font-semibold text-black text-[15px]">
           {name}
@@ -42,9 +42,9 @@ const ToppingItem = ({
           type="button"
           onClick={onRemove}
           disabled={disableRemove}
-          className={`w-8 h-8 rounded-md text-center text-xl font-bold transition-colors ${
+          className={`w-8 h-8 cursor-pointer rounded-md text-center text-xl font-bold transition-colors ${
             disableRemove
-              ? "bg-[#F5F5F5] text-gray-300 cursor-not-allowed"
+              ? "bg-[#F5F5F5] text-gray-300 !cursor-not-allowed"
               : "bg-white text-black border border-gray-200"
           }`}
         >
@@ -57,9 +57,9 @@ const ToppingItem = ({
           type="button"
           onClick={onAdd}
           disabled={disableAdd}
-          className={`w-8 h-8 rounded-[6px] text-center text-xl font-bold transition-colors ${
+          className={`cursor-pointer w-8 h-8 rounded-[6px] text-center text-xl font-bold transition-colors ${
             disableAdd
-              ? "bg-[#F5F5F5] text-gray-300 cursor-not-allowed"
+              ? "bg-[#F5F5F5] text-gray-300 !cursor-not-allowed"
               : "bg-primary text-white"
           }`}
         >

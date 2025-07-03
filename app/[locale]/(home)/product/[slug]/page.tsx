@@ -35,7 +35,7 @@ const ProductDetails: React.FC = async ({ params }: Props) => {
   const spicy = true;
   return (
     <section className="flex w-full justify-center bg-[#FBFAFC]">
-      <div className="mt-16 flex w-4/5 flex-col gap-10 sm:w-11/12">
+      <div className="mt-16 flex w-4/5 flex-col gap-4 sm:w-11/12">
         {/* Header */}
         <div className="item">
           <h1 className="mb-4 text-4xl font-bold text-gray-900 lg:text-5xl">

@@ -9,7 +9,7 @@ function CheckoutOrders() {
   const products = cart?.data?.products || [];
   return (
     <>
-      <ScrollArea className="max-h-[350px] w-[97%] overflow-y-auto rounded-md p-4">
+      <ScrollArea className="scrollArea max-h-[350px] w-[97%] overflow-y-auto rounded-md p-4">
         {products.map((product) => (
           <CheckoutCartItem cartProduct={product} key={product.id} />
         ))}

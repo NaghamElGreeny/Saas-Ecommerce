@@ -1,7 +1,7 @@
 "use client";
 
 import { Formik, Form, Field } from "formik";
-import { Minus, Plus } from "lucide-react";
+import {  Minus, Plus, ShoppingBag } from "lucide-react";
 import { cartService } from "@/services/ClientApiHandler";
 import ModifierSection from "@/components/Modifiers";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,8 @@ import { useRef, useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
 import Success from "./Success";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
+import { Spinner } from "./atoms";
 
 const ProductForm = ({
   productId,
@@ -31,8 +33,9 @@ const ProductForm = ({
 
   const [open, setOpen] = useState(false);
   const storeid = Cookies.get("store_id");
-  const { fetchCart } = useCartStore();
-
+  const { cart,fetchCart } = useCartStore();
+  const [loading, setLoading] = useState(false);
+  const t = useTranslations("cart");
   const initialValues = {
     store_id: parseInt(storeid || "1"),
     product_id: productId,
@@ -42,6 +45,7 @@ const ProductForm = ({
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setLoading(true);
     try {
       const sub_modifiers = getModifiersResultRef.current?.() ?? [];
 
@@ -82,6 +86,8 @@ const ProductForm = ({
       toast.error(errorMessage, {
         duration: 3000,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,7 +129,7 @@ const ProductForm = ({
             {/* Quantity & Submit */}
             <div className="p-6">
               <div className="flex h-12 items-center justify-end gap-2">
-                <div className="flex h-full items-center space-x-3 rounded-lg border border-[#F1F1FF]">
+                <div className="flex h-full items-center space-x-3 rounded-2xl  bg-bg">
                   <button
                     type="button"
                     onClick={() =>
@@ -132,7 +138,7 @@ const ProductForm = ({
                         Math.max(1, values.quantity - 1),
                       )
                     }
-                    className="flex h-8 w-8 items-center justify-center hover:bg-gray-50"
+                    className="cursor-pointer flex h-8 w-8 items-center justify-center hover:bg-gray-50"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
@@ -142,7 +148,7 @@ const ProductForm = ({
                     onClick={() =>
                       setFieldValue("quantity", values.quantity + 1)
                     }
-                    className="text-text-website-font flex h-8 w-8 items-center justify-center hover:bg-gray-50"
+                    className="cursor-pointer text-text-website-font flex h-8 w-8 items-center justify-center hover:bg-gray-50"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
@@ -150,9 +156,17 @@ const ProductForm = ({
 
                 <button
                   type="submit"
-                  className="bg-primary hover:bg-primary/85 h-full rounded-lg px-8 text-white"
+                  className="cartadd h-full gap-1 rounded-md !px-2 !py-1 md:w-[410px] md:gap-3 md:px-5 md:py-4 "
                 >
-                  Add to cart
+                  {loading ? (
+                    <span className="animate-pulse"><Spinner variant="blue"/></span>
+                  ) : (
+                      <>
+                        <ShoppingBag size={20}/>
+                        <p>{t("add-to-cart")}</p>
+                        <p className="text-[22px] font-bold">{cart.price.total} <span className="ms-1 text-[14px] font-thin">{ cart.currency}</span> </p>
+                      </> 
+                  )}
                 </button>
               </div>
             </div>

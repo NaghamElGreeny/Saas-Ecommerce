@@ -19,6 +19,7 @@ type GlobalDialogProps = {
   children: ReactNode;
   height?: string;
   footer?: ReactNode;
+  custom?: string;
 };
 
 export default function GlobalDialog({
@@ -28,12 +29,13 @@ export default function GlobalDialog({
   children,
   height,
   footer,
+  custom,
 }: GlobalDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className={`h-[90vh] max-h-[90vh] min-w-[60vw] ${height} m-0 rounded-3xl border-none bg-white p-2 shadow-xl sm:max-w-[600px]`}
+        className={`h-[90vh] max-h-[90vh] min-w-[60vw] ${custom} ${height} m-0 rounded-3xl border-none bg-white p-2 shadow-xl sm:max-w-[600px]`}
       >
         <DialogHeader className="relative flex items-center justify-center">
           <DialogTitle className="m-0 w-full p-0 text-center text-xl font-bold">
@@ -53,9 +55,9 @@ export default function GlobalDialog({
         <ScrollArea className="scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent max-h-[70vh] overflow-y-auto px-4 py-0">
           {children}
         </ScrollArea>
-        <DialogFooter className="flex h-20 w-full !items-center !justify-center">
+        {footer&&<DialogFooter className="flex h-20 w-full !items-center !justify-center">
           {footer}
-        </DialogFooter>
+        </DialogFooter>}
       </DialogContent>
     </Dialog>
   );

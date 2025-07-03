@@ -1,22 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Allura&display=swap");
+@import "tailwindcss";
 @import "tw-animate-css";
 @import "react-datepicker/dist/react-datepicker.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-primary: #5A6AE8;
-  --color-secondary: #F6F6FD;
-  --color-tertiary: #FAFAFC;
-  --color-light-border: #EFF0F1;
+  --color-primary: #5a6ae8;
+  --color-secondary: #f6f6fd;
+  --color-tertiary: #fafafc;
+  --color-light-border: #eff0f1;
   --color-font: #171717;
-  --color-light-font: #828ABA;
-  --color-success: #06D6A0;
-  --color-warning: #FF445B;
+  --color-light-font: #828aba;
+  --color-success: #06d6a0;
+  --color-warning: #ff445b;
   --color-dark-border: #797979;
-  --color-white: #F6F6F6;
-  --color-footer: #E4E4E7;
+  --color-white: #f6f6f6;
+  --color-footer: #e4e4e7;
 
   --color-bg: #f8f8f3;
   --color-scndbg: #f6f6f6;
@@ -29,7 +29,7 @@
 
   --color-mainFont: #111111;
   --color-subFont: #edededa5;
-  --color-bgPrimary: #FBFAFC;
+  --color-bgPrimary: #fbfafc;
 
   /* البريكبوينتات */
   --breakpoint-xs: 475px;
@@ -71,7 +71,7 @@
   --color-card: var(--card);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-lg: calc(var(--radius) - 3px);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
@@ -84,24 +84,37 @@
 }
 
 @theme {
-  --font-allura: "Allura", sans-serif; 
+  --font-allura: "Allura", sans-serif;
 }
 
 /* متغيرات ألوان الويبسايت من الداتا */
 :root {
-  --website-primary-color: #5A6AE8;
-  --website-secondary-color: #F6F6FD;
-  --website-tertiary-color: #FAFAFC;
-  --website-light-border-color: #EFF0F1;
+  --website-primary-color: #5a6ae8;
+  --website-secondary-color: #f6f6fd;
+  --website-tertiary-color: #fafafc;
+  --website-light-border-color: #eff0f1;
   --website-font-color: #171717;
-  --website-light-font-color: #828ABA;
-  --website-success-color: #06D6A0;
-  --website-warning-color: #FF445B;
+  --website-light-font-color: #828aba;
+  --website-success-color: #06d6a0;
+  --website-warning-color: #ff445b;
   --website-dark-border-color: #797979;
-  --website-white-color: #F6F6F6;
-  --website-footer-color: #E4E4E7;
+  --website-white-color: #f6f6f6;
+  --website-footer-color: #e4e4e7;
+  --toast-background-color: #06d6a0;
+  --v-theme-success: #06d6a0;
+  --v-theme-on-success: #06d6a0;
+  --toastify-color-success: #06d6a0;
+  --toastify-color-progress-success: #06d6a0;
+  --toastify-icon-color-success: #06d6a0;
 }
-
+.success-toast {
+  --toast-background-color: #06d6a0;
+  --v-theme-success: #06d6a0;
+  --v-theme-on-success: #06d6a0;
+  --toastify-color-success: #06d6a0;
+  --toastify-color-progress-success: #06d6a0;
+  --toastify-icon-color-success: #06d6a0;
+}
 .bg-website-primary {
   background-color: var(--website-primary-color);
 }
@@ -138,17 +151,82 @@
   border-color: var(--website-dark-border-color);
 }
 
- body {
+body {
+  /* overflow: hidden !important; */
   background: var(--color-bg);
-  font-family: var(--font-sans);
+  /* font-family: var(--font-sans); */
+  /* font-family: "Alura"; */
+  /* font-family: "Allura"; */
 }
-/*
+.confirm-btn {
+  background-color: var(--website-primary-color);
+  color: white;
+}
+.confirm-btn:hover {
+  background-color: white;
+  border-width: 1px;
+  border: var(--website-primary-color);
+  color: var(--website-primary-color);
+}
+.cartadd{
+      align-items: center;
+    border-radius: 20px;
+    border-width: 1px;
+    display: flex;
+    gap: .75rem;
+    justify-content: center;
+    --tw-border-opacity: 1;
+    border-color: white;
+    color: white;
+    background-color: var(--website-primary-color);
+    font-weight: 500;
+    padding: .75rem 2rem;
+    transition-duration: .3s;
+}
+.cartadd:hover{   
+    border-color: var(--website-primary-color);
+    color: var(--website-primary-color);
+    background-color: white;
+    font-weight: 500;
+}
+.cancel-btn {
+  background-color: white;
+  border: 1px var(--website-primary-color);
+  color: var(--website-primary-color);
+}
+.cancel-btn:hover {
+  background-color: var(--website-primary-color);
+  color: white;
+}
+.confirm-btn {
+  background-color: var(--website-primary-color);
+  color: white;
+}
+.confirm-btn:hover {
+  background-color: white;
+  border: 1px var(--website-primary-color);
+  color: var(--website-primary-color);
+}
+.label_with_check {
+  border-radius: 0.75rem;
+  border-width: 1px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  --tw-border-opacity: 1;
+  background-color: var(--website-tertiary-color);
+  /* border-color: var(--tw-border-opacity); */
+  padding: 0.5rem 1.25rem;
+}
+.label_with_check:focus,.label_with_check:active{
+  border-color: var(--website-primary-color);
+}
 form input,
 form select {
-  border-color: var(--color-sub);
-  @apply p-3 w-full border rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-400;
+  border-color: var(--website-white-color);
+  @apply w-full rounded-2xl border bg-white p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none;
 }
-
 
 .reserve-form input,
 .reserve-form select,
@@ -163,11 +241,10 @@ form select {
 .reserve-form .reserve {
   border: 0;
   border-bottom: 1px solid #0b173c;
-} */
+}
 
-
-input[type='radio'] {
-  @apply size-5 rounded-full focus:outline-none focus:ring-0;
+input[type="radio"] {
+  @apply size-5 rounded-full focus:ring-0 focus:outline-none;
 }
 @layer utilities {
   .container-custom {

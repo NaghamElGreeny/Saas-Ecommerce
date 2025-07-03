@@ -34,7 +34,7 @@ export default function AddressItem({ addr }: Props) {
 
   return (
     <>
-      <div className="rounded-lg border p-4 shadow hover:bg-gray-50">
+      <div className="rounded-lg border-border p-4 shadow hover:bg-gray-50">
         <div className="flex items-center justify-between">
           {/* Address info */}
           <div className="flex items-center gap-2">
@@ -70,7 +70,11 @@ export default function AddressItem({ addr }: Props) {
       <GlobalDialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <AddressForm
           isUpdate
-          initialData={addr}
+          initialData={{
+            ...addr,
+            lat: Number(addr.lat),
+            lng: Number(addr.lng),
+          }}
           onSuccess={handleEditSuccess}
         />
       </GlobalDialog>

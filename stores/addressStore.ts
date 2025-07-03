@@ -15,6 +15,7 @@ export type Address = {
   floor: string;
   apartment: string;
   created_at: string;
+[key: string]: unknown;
 };
 
 type AddressStore = {

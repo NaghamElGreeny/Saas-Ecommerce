@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import ToppingItem from "./ui/ToppingItem";
+import ToppingItem from "@/components/ui/ToppingItem";
 import { useTranslations } from "next-intl";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Modifier = {
   id: number;
@@ -37,7 +38,7 @@ export default function ModifierSection({
     [key: number]: number | null;
   }>({});
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
-
+console.log(modifiers)
   const handleSizeSelect = (modifierId: number, index: number) => {
     setSelectedModifiers((prev) => ({ ...prev, [modifierId]: index }));
   };
@@ -106,30 +107,30 @@ export default function ModifierSection({
 
   useEffect(() => {
     onGetCurrentResult(modifiersResults);
-  }, [modifiersResults]); // ✅ دا التعديل المهم
+  }, [modifiersResults]); 
 
   const t = useTranslations();
 
   return (
-    <div className="mmm">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div className="modifiers">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
         {modifiers.map((modifier) => {
           const isExact = modifier.selections_type === "exact";
 
           return (
-            <div className="has-[.exact]:col-span-2" key={modifier.id}>
+            <div className={`${ isExact ? 'lg:col-span-2 2xl:col-span-3': ''}`} key={modifier.id}>
               <h3 className="mb-3 text-2xl font-bold text-gray-900">
                 {modifier.name}&nbsp;&nbsp;
                 <span className="text-[16px] font-normal text-[#FCC230]">
                   {t("LABELS.selectItem", {
-                    value: isExact ? modifier.max_num_of_selection : `(02)`,
+                    value: isExact ? modifier.max_num_of_selection : `(${ modifier.min_num_of_selection||'0'} ~ ${ modifier.max_num_of_selection})`,
                     name: t("LABELS.Topping"),
                   })}
                   {/* Select {modifier.max_num_of_selection} {modifier.name}* */}
                 </span>
               </h3>
 
-              <div className="max-h-[250px] overflow-y-auto">
+              <ScrollArea className={` ${ isExact ? 'min-h-[100px]': 'h-[300px]'}  w-full overflow-y-auto rounded-md px-4 py-4  flex gap-5`}>
                 {isExact ? (
                   <div>
                     <div
@@ -140,9 +141,9 @@ export default function ModifierSection({
                           type="button"
                           key={item.id}
                           onClick={() => handleSizeSelect(modifier.id, index)}
-                          className={`rounded-lg border p-3 text-center transition-colors ${
+                          className={`label_with_check rounded-2xl border border-[#F0F0F0] bg-card  ${
                             selectedModifiers[modifier.id] === index
-                              ? "border-blue-500 bg-blue-50 text-blue-700"
+                              ? "border-primary/70 bg-blue-50 text-primary"
                               : "border-gray-200 hover:border-gray-300"
                           }`}
                         >
@@ -182,8 +183,8 @@ export default function ModifierSection({
                     })}
                   </div>
                 )}
+            </ScrollArea>
               </div>
-            </div>
           );
         })}
       </div>

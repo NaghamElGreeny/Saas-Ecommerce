@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-// import { addAddress, updateAddress } from "@/services/ClientApiHandler";
 import { addressService } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
 import GoogleMapSelector from "../shared/GoogleMap";
@@ -93,7 +92,7 @@ const AddressForm = ({
         }}
       >
         {({ isSubmitting }) => (
-          <Form className="space-y-4">
+          <Form className="space-y-4 h-full">
             <div className="flex items-center gap-2">
               <Field type="checkbox" name="isDefault" className="!size-5" />
               <label htmlFor="isDefault">Default Address</label>
@@ -182,7 +181,7 @@ const AddressForm = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-primary hover:text-text-website-font hover:border-primary w-full rounded-full py-3 text-white hover:border-2 hover:bg-white"
+              className="bg-primary hover:text-primary hover:border-primary w-full rounded-full py-3 text-white hover:border-2 hover:bg-white"
             >
               {isSubmitting ? "Saving..." : "Save"}
             </button>

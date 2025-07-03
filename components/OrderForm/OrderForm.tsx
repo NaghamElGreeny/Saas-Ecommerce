@@ -236,7 +236,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
                 setSelectedDialogAddressId(values.selectedAddressId);
                 setOpenAddressDialog(true);
               }}
-              className="flex cursor-pointer items-center justify-between rounded-lg bg-gray-100 p-3"
+              className="flex cursor-pointer items-center justify-between rounded-lg bg-website-white p-3"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -275,7 +275,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
                   alt="branch"
                   width={64}
                   height={64}
-                  className="rounded-lg"
+                  className="rounded-lg h-16"
                 />
                 <div>
                   <h2 className="font-bold">{selectedBranch?.name}</h2>
@@ -356,9 +356,9 @@ const OrderForm = ({ params }: OrderFormProps) => {
             {["credit", "cash"].map((method) => (
               <label
                 key={method}
-                className="flex cursor-pointer items-center justify-between rounded-xl border p-4"
+                className="flex cursor-pointer items-center justify-between rounded-2xl  p-4"
               >
-                <div className="flex items-center gap-2 font-semibold">
+                <div className= "flex items-center gap-2 font-semibold rounded-2xl bg-website-white">
                   <Image
                     src={`/assets/icons/${method}.svg`}
                     alt={method}
@@ -379,7 +379,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
             {points && points > cart?.price.total ? (
               <label
                 key={"points"}
-                className="flex cursor-pointer items-center justify-between rounded-xl border p-4"
+                className="flex cursor-pointer items-center justify-between rounded-2xl  p-4"
               >
                 <div className="flex items-center gap-2 font-semibold">
                   <Image

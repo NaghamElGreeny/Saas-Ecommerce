@@ -32,7 +32,7 @@ export const Spinner = ({
     size = 'medium',
     className,
 }: {
-    variant?: 'primary' | 'danger';
+    variant?: 'primary' | 'danger'|string;
     size?: 'small' | 'medium' | 'large';
     className?: string;
 }) => {

@@ -26,7 +26,7 @@ export default function CheckoutCartItem({ cartProduct }: Props) {
     ) ?? [];
 
   return (
-    <div className="products-center border-line mb-4 flex justify-between gap-3 rounded-xl border p-2">
+    <div className="products-center border border-border mb-4 flex justify-between gap-3 rounded-2xl  p-2">
       <Image
         src={product.image}
         alt={product.name}
