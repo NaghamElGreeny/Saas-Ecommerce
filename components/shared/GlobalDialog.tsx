@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogClose,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { X } from "lucide-react";
@@ -16,6 +17,8 @@ type GlobalDialogProps = {
   onOpenChange: (open: boolean) => void;
   title?: string;
   children: ReactNode;
+  height?: string;
+  footer?: ReactNode;
 };
 
 export default function GlobalDialog({
@@ -23,29 +26,36 @@ export default function GlobalDialog({
   onOpenChange,
   title,
   children,
+  height,
+  footer,
 }: GlobalDialogProps) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} >
-      <DialogContent showCloseButton={false} className="max-h-[90vh] min-w-[70vw] h-[90vh] rounded-3xl border-none bg-white !p-0 m-0 sm:max-w-[600px] shadow-xl">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        showCloseButton={false}
+        className={`h-[90vh] max-h-[90vh] min-w-[60vw] ${height} m-0 rounded-3xl border-none bg-white p-2 shadow-xl sm:max-w-[600px]`}
+      >
         <DialogHeader className="relative flex items-center justify-center">
-         
-            <DialogTitle className="text-xl font-bold text-center w-full p-0 m-0">
-              {title}
-            </DialogTitle>
-      
+          <DialogTitle className="m-0 w-full p-0 text-center text-xl font-bold">
+            {title}
+          </DialogTitle>
+
           <DialogClose asChild>
             <button
               aria-label="Close"
-              className="absolute right-4 top-4 rounded-full  text-gray-500 transition hover:bg-gray-100 hover:text-gray-700"
+              className="absolute top-4 right-4 rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-700"
             >
               <X className="h-5 w-5" />
             </button>
           </DialogClose>
         </DialogHeader>
 
-        <ScrollArea className="max-h-[70vh] overflow-y-auto px-4 py-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent">
+        <ScrollArea className="scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent max-h-[70vh] overflow-y-auto px-4 py-0">
           {children}
         </ScrollArea>
+        <DialogFooter className="flex h-20 w-full !items-center !justify-center">
+          {footer}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

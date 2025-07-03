@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Image from "next/image";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { TimePicker } from "antd";
 import { ChevronDown, Edit } from "lucide-react";
 import { useAddressStore } from "@/stores/addressStore";
@@ -17,6 +16,7 @@ import { orderService } from "@/services/ClientApiHandler";
 import Success from "../Success";
 import { useLoyalityStore } from "@/stores/loyalityStore";
 import { Spinner } from "../atoms";
+import GlobalDialog from "../shared/GlobalDialog";
 
 type OrderFormProps = {
   params: Record<string, string | string[]>;
@@ -47,8 +47,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
     const checkoutPayload = {
       ...data,
       cartProducts: cart.data.products,
-      total:
-        pay_type.length == 2 ? total_price - (user?.points || 0) : total_price,
+      total: pay_type.length == 2 ? total_price - (points || 0) : total_price,
     };
 
     const response = await fetch("/api/create-order", {
@@ -124,8 +123,6 @@ const OrderForm = ({ params }: OrderFormProps) => {
       setIsSubmitting(true);
       const payload = {
         order_type: values.orderType,
-        // has_loyal: userData?.points,
-        // has_wallet: userData?.wallet,
         is_schedule: values.is_schedule ? 1 : 0,
         address_id: selectedAddress.id,
         order_date: values.is_schedule ? values.order_date : undefined,
@@ -136,8 +133,6 @@ const OrderForm = ({ params }: OrderFormProps) => {
               { points: points },
             ])
           : JSON.stringify([{ [values.pay_type]: cart.price.total }]),
-
-        // pay_type: JSON.stringify([{ [values.pay_type]: cart.price.total }]),
       };
 
       try {
@@ -180,7 +175,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
     <div key={type} className="w-full">
       <label
         htmlFor={type}
-        className="flex h-full cursor-pointer items-center rounded-xl bg-white px-5 py-4"
+        className="flex h-full cursor-pointer items-center rounded-2xl bg-white px-5 py-4"
       >
         <div className="flex w-full items-center justify-between">
           <div className="flex w-full items-center gap-2">
@@ -424,29 +419,13 @@ const OrderForm = ({ params }: OrderFormProps) => {
         </div>
 
         {/* Address Dialog */}
-        <Dialog open={openAddressDialog} onOpenChange={setOpenAddressDialog}>
-          <DialogContent className="max-w-md">
-            <h2 className="mb-4 text-lg font-bold">Select Address</h2>
-            <div className="max-h-72 space-y-4 overflow-y-auto">
-              {addresses.map((address) => {
-                const isSelected = selectedDialogAddressId === address.id;
-                return (
-                  <div
-                    key={address.id}
-                    onClick={() => setSelectedDialogAddressId(address.id)}
-                    className={`rounded-lg border p-2 transition ${
-                      isSelected
-                        ? "border-primary bg-blue-50"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    <AddressItem addr={address} />
-                  </div>
-                );
-              })}
-            </div>
+        <GlobalDialog
+          open={openAddressDialog}
+          onOpenChange={setOpenAddressDialog}
+          title="Select Address"
+          footer={
             <button
-              className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-white"
+              className="hover:text-primary hover:border-primary h-10 w-5/6 rounded-full border bg-blue-600 py-2 text-white hover:bg-white"
               onClick={() => {
                 if (selectedDialogAddressId) {
                   setFieldValue("selectedAddressId", selectedDialogAddressId);
@@ -456,33 +435,35 @@ const OrderForm = ({ params }: OrderFormProps) => {
             >
               Confirm
             </button>
-          </DialogContent>
-        </Dialog>
-
-        {/* Store Dialog */}
-        <Dialog open={openStoreDialog} onOpenChange={setOpenStoreDialog}>
-          <DialogContent className="max-w-md">
-            <h2 className="mb-4 text-lg font-bold">Select Branch</h2>
-            <div className="max-h-72 space-y-4 overflow-y-auto">
-              {stores.map((store) => (
+          }
+        >
+          <div className="space-y-4">
+            {addresses.map((address) => {
+              const isSelected = selectedDialogAddressId === address.id;
+              return (
                 <div
-                  key={store.id}
-                  onClick={() => setFieldValue("selectedStoreId", store.id)}
-                  className={`cursor-pointer rounded-lg border p-4 ${
-                    store.id === values.selectedStoreId
-                      ? "border-blue-500 bg-blue-50"
-                      : "hover:bg-gray-100"
+                  key={address.id}
+                  onClick={() => setSelectedDialogAddressId(address.id)}
+                  className={`rounded-lg border p-2 transition ${
+                    isSelected ? "border-primary bg-blue-50" : "border-gray-200"
                   }`}
                 >
-                  <h3 className="font-semibold">{store.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    {store.location_description}
-                  </p>
+                  <AddressItem addr={address} />
                 </div>
-              ))}
-            </div>
+              );
+            })}
+          </div>
+        </GlobalDialog>
+
+        {/* Store Dialog */}
+        <GlobalDialog
+          open={openStoreDialog}
+          onOpenChange={setOpenStoreDialog}
+          title="Select Branch"
+          height="!h-fit"
+          footer={
             <button
-              className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-white"
+              className="hover:text-primary hover:border-primary h-10 w-5/6 rounded-full border bg-blue-600 py-2 text-white hover:bg-white"
               onClick={() => {
                 const selected = stores.find(
                   (s) => s.id === values.selectedStoreId,
@@ -493,8 +474,27 @@ const OrderForm = ({ params }: OrderFormProps) => {
             >
               Confirm
             </button>
-          </DialogContent>
-        </Dialog>
+          }
+        >
+          <div className="space-y-4">
+            {stores.map((store) => (
+              <div
+                key={store.id}
+                onClick={() => setFieldValue("selectedStoreId", store.id)}
+                className={`cursor-pointer rounded-lg border p-4 ${
+                  store.id === values.selectedStoreId
+                    ? "border-blue-500 bg-blue-50"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                <h3 className="font-semibold">{store.name}</h3>
+                <p className="text-sm text-gray-600">
+                  {store.location_description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </GlobalDialog>
       </form>
     </>
   );

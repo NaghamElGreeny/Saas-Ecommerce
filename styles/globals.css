@@ -102,7 +102,6 @@
   --website-footer-color: #E4E4E7;
 }
 
-/* كلاسات Tailwind-like لاستخدام الألوان */
 .bg-website-primary {
   background-color: var(--website-primary-color);
 }
@@ -139,20 +138,17 @@
   border-color: var(--website-dark-border-color);
 }
 
-body {
+ body {
   background: var(--color-bg);
   font-family: var(--font-sans);
 }
-
+/*
 form input,
 form select {
   border-color: var(--color-sub);
   @apply p-3 w-full border rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-400;
 }
 
-input[type='radio'] {
-  @apply size-5 rounded-full focus:outline-none focus:ring-0;
-}
 
 .reserve-form input,
 .reserve-form select,
@@ -167,8 +163,12 @@ input[type='radio'] {
 .reserve-form .reserve {
   border: 0;
   border-bottom: 1px solid #0b173c;
-}
+} */
 
+
+input[type='radio'] {
+  @apply size-5 rounded-full focus:outline-none focus:ring-0;
+}
 @layer utilities {
   .container-custom {
     margin-inline: auto;

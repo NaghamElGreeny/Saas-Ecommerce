@@ -51,7 +51,7 @@ export default function LocationSelector({ active = false }: LocationSelectorPro
     init().catch(() => {
       toast.error('Failed to load stores');
     });
-  }, [active, fetchStores, selectedStore, setSelectedStore, stores]);
+  }, [active, selectedStore, setSelectedStore]);
 
   const handleConfirm = () => {
     const selected = stores.find((s) => s.id === tempSelectedId);

@@ -11,7 +11,7 @@ const CreditCard = ({
 }) => {
   return (
     <div className="relative h-[317px] overflow-hidden rounded-[30px] bg-[#5E6BF2] text-white">
-      {/* Top-left circleس */}
+      {/* Top-left circle */}
 
       <div className="absolute  -start-[25%] aspect-square h-full rounded-full bg-white/20 flex items-center justify-center">
         <div className="aspect-square w-[75%] rounded-full bg-white/10" />

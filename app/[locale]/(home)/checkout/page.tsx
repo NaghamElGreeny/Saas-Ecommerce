@@ -1,7 +1,7 @@
 import React from "react";
 import TotalOrder from "@/components/shared/TotalOrder";
 import CheckoutOrders from "@/components/shared/CheckoutOrders";
-import OrderForm from "@/components/sections/OrderForm";
+import OrderForm from "@/components/OrderForm/OrderForm";
 import PromoCodeInput from "@/components/shared/PromocodeInput";
 
 

@@ -67,8 +67,6 @@ export default function Navbar({ cms }) {
           )}
         </Link>
       </div>
-
-      {/* Mobile Navigation */}
     </nav>
   );
 }
