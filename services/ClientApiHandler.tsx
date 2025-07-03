@@ -99,15 +99,7 @@ export const locationService = {
     return res.data;
   },
   
-  getReservation: async (slug: number) => {
-    try {
-      const res = await axiosClient.get<{ data: any }>(`/reservations/${slug}`);
-      return res.data.data;
-    } catch (error) {
-      console.error("Fetch error at: Reservation", error);
-      throw error;
-    }
-  },
+
 };
 
 // Product Services
@@ -183,6 +175,42 @@ export const orderService = {
     try {
       const res = await axiosClient.get<{ data: OrderData }>(`/orders/${slug}`);
       return res.data.data;
+    } catch (error) {
+      console.error("Fetch error at: Order", error);
+      throw error;
+    }
+  },
+  getReservation: async (slug: number) => {
+    try {
+      const res = await axiosClient.get<{ data: any }>(`/reservations/${slug}`);
+      return res.data.data;
+    } catch (error) {
+      console.error("Fetch error at: Reservation", error);
+      throw error;
+    }
+  },
+  getCancelReasons: async () => {
+    try {
+      const res = await axiosClient.get<{ data: any }>(`/cancel_reasons`);
+      return res.data;
+    } catch (error) {
+      console.error("Fetch error at: Order", error);
+      throw error;
+    }
+  }, 
+  cancelOrder: async (slug: number,payload) => {
+    try {
+      const res = await axiosClient.post<{ data: OrderData }>(`/orders/${slug}/cancel`,payload);
+      return res.data;
+    } catch (error) {
+      console.error("Fetch error at: Order", error);
+      throw error;
+    }
+  },
+  cancelReservation: async (slug: number,payload) => {
+    try {
+      const res = await axiosClient.post<{ data: OrderData }>(`/reservations/${slug}/cancel`,payload);
+      return res.data;
     } catch (error) {
       console.error("Fetch error at: Order", error);
       throw error;

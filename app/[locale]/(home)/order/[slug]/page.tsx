@@ -4,7 +4,6 @@ type Props = {
     slug: number;
   }>;
 };
-
 const OrderPage: React.FC = async ({ params }: Props) => {
   const slugg = (await params).slug;
   console.log("slug", slugg);

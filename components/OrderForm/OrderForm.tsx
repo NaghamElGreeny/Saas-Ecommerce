@@ -325,9 +325,9 @@ const OrderForm = ({ params }: OrderFormProps) => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-primary w-1/4 rounded-full py-3 text-white hover:bg-blue-700"
+            className={`confirm-btn ${isSubmitting ?'!bg-white':''} w-1/4 rounded-full py-3 `}
           >
-            {isSubmitting ? <Spinner /> : "Confirm"}
+            {isSubmitting ? <Spinner variant="primary"/> : "Confirm"}
           </button>
         </div>
 

@@ -69,10 +69,10 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: calc(var(--radius) - 3px);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) - 4px); */
 }
 
 .scrollbar-hide {
@@ -151,12 +151,34 @@
   border-color: var(--website-dark-border-color);
 }
 
+/* scroll */
+::-webkit-scrollbar {
+  width: 6px; 
+  height: 6px; 
+}
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--website-primary-color); 
+  border-radius: 8px; 
+  border: 2px transparent; 
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #3b4ddb; 
+}
+
 body {
   /* overflow: hidden !important; */
   background: var(--color-bg);
   /* font-family: var(--font-sans); */
   /* font-family: "Alura"; */
   /* font-family: "Allura"; */
+  /* scrollbar-thumb-primary scrollbar-track-transparent */
+scrollbar-color: var(--website-primary-color);
+scrollbar-width: 2px;
+/* scrollbar-base-color: transparent; */
 }
 .confirm-btn {
   background-color: var(--website-primary-color);
@@ -210,7 +232,7 @@ border:2px solid var(--website-primary-color);
   color: var(--website-primary-color);
   cursor: pointer;
 }
-.label_with_check {
+.label_with_check:not(.custom-switch){
   border-radius: 0.75rem;
   border-width: 1px;
   cursor: pointer;
@@ -222,13 +244,24 @@ border:2px solid var(--website-primary-color);
   /* border-color: var(--tw-border-opacity); */
   padding: 0.5rem 1.25rem;
 }
-.label_with_check:focus,.label_with_check:active{
+.label_with_check:not(.custom-switch):focus,.label_with_check:not(.custom-switch):active{
   border-color: var(--website-primary-color);
 }
 form input,
 form select {
   border-color: var(--website-white-color);
-  @apply w-full rounded-2xl border bg-white p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none;
+  width: 100%;
+  border-radius: 1rem;
+  border-width: 1px;
+  background-color: white;
+  padding: 0.75rem;
+  outline: none;
+}
+
+form input:focus,
+form select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #60a5fa; /* blue-400 */
 }
 
 .reserve-form input,

@@ -15,7 +15,7 @@ import { orderService } from "@/services/ClientApiHandler";
 import { useCartStore } from "@/stores/cartStore";
 
 type OrderDetailsProps = {
-  order: any; // استبدل بـ type مضبوط لو عندك
+  order: any;
 };
 
 export default function OrderDetails({ order }: OrderDetailsProps) {
@@ -123,7 +123,8 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
       </div>
       {/* Reorder Button */}
 
-      {order.status_trans !== "canceled" && (
+      {order.status_trans !== "finished" ? (<>
+      </>) : (
         <div className="flex justify-end">
           <button
             className="bg-primary hover:bg-primary/90 rounded-full px-6 py-2 text-white shadow-md transition"

@@ -6,13 +6,18 @@ import {
   MapPin,
   Calendar,
   Clock,
-  Wallet,
-  ShoppingBag,
 } from "lucide-react";
-import { reOrder } from "@/services/ClientApiHandler";
-import { useCartStore } from "@/stores/cartStore";
-import InfoCard from "../OrderInfoCard";
 
+import InfoCard from "../OrderInfoCard";
+import {  useState } from "react";
+import { orderService } from "@/services/ClientApiHandler";
+
+
+// Components
+
+import CancelOrderDialog from "@/components/shared/CancelOrderDialog";
+import { toast } from "react-hot-toast";
+import { CancelReason } from "../Order";
 export default function ReservationDetails({ order }: any) {
   const branch = {
     image: order.store.image,
@@ -20,24 +25,82 @@ export default function ReservationDetails({ order }: any) {
     area: order.store.location_description,
   };
   const callCenter = `+${order.phone_code} - ${order.phone}`;
-  const orderType = order.order_type === "take_away" ? "Takeaway" : "Delivery";
-
-  const orderDate = order.order_date;
-  const orderTime = order.order_time;
-  const { setCart, fetchCart } = useCartStore();
-  const handleClick = async () => {
-    //pay now
-    //   const res = await reOrder(order.id);
-    //   setCart(res);
-    //   fetchCart();
+    const [isCancelOpen, setIsCancelOpen] = useState<boolean>(false);
+    const [reasons, setReasons] = useState<CancelReason[]>([]);
+  const isPending = order.status === "pending";
+    const isFinished = order.status === "finished";
+  // Fetch cancel reasons
+  const fetchCancelReasons = async () => {
+    try {
+      const res = await orderService.getCancelReasons();
+      setReasons(res.data);
+    } catch (error) {
+      console.error("Failed to fetch cancel reasons:", error);
+    }
   };
+
+  // Handle cancel confirm
+  const handleCancelConfirm = async (reasonKey: string, reasonNote: string) => {
+    const isOther = reasonKey === "other";
+    if (isOther && !reasonNote.trim()) {
+      toast.error("Please provide a reason for cancellation.");
+      return;
+    }
+
+    const payload = {
+      ...(isOther
+        ? { desc_cancel_reason: reasonNote }
+        : { cancel_reason_id: reasonKey }),
+      _method: "patch",
+    };
+
+    try {
+      const res = await orderService.cancelReservation(order!.id, payload);
+      toast.success(res.message || "Order cancelled successfully");
+      setIsCancelOpen(false);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (err: any) {
+      console.error("Cancel failed", err);
+      toast.error(err?.message || "Something went wrong");
+    }
+  };
+
+  function handleClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    window.location.href = `/payment?orderId=${order.id}`;
+  }
   return (
     <div className="bg-whiteee space-y-6 rounded-2xl p-4 text-black">
       {/* Branch Info -  Location */}
       <div>
-        <div className="mb-3 flex items-center gap-2 text-xl font-semibold">
-          <MapPin size={19} color="blue" />
-          Branch
+        <div className="mb-3 flex items-center justify-between gap-2 text-xl font-semibold">
+          <h2>Branch</h2>   
+           {isPending ? (
+                        <button
+                          onClick={() => {
+                            fetchCancelReasons();
+                            setIsCancelOpen(true);
+                          }}
+                          className="px-3 py-1 text-red-500 cursor-pointer"
+                        >
+                          Cancel Reservation
+                        </button>
+                      ) : (
+                        <div className="flex">
+                          <Image
+                            src={`/assets/icons/${isFinished ? "completed" : "cancelled"}.svg`}
+                            alt={order.status}
+                            width={24}
+                            height={24}
+                          />
+                          <p className={isFinished ? "" : "text-red-500"}>
+                            {isFinished ? "Completed" : "Cancelled"}
+                          </p>
+                        </div>
+                      )}
         </div>
         <div className="flex items-center gap-3 rounded-xl bg-gray-100 p-3">
           <Image
@@ -119,6 +182,13 @@ export default function ReservationDetails({ order }: any) {
           PayNow
         </button>
       </div>
+                 {/* Cancel Reservation Dialog */}
+      <CancelOrderDialog
+        open={isCancelOpen}
+        onClose={() => setIsCancelOpen(false)}
+        reasons={reasons}
+        onConfirm={handleCancelConfirm}
+      />
     </div>
   );
 }

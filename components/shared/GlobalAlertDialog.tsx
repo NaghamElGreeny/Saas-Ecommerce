@@ -33,7 +33,7 @@ export default function GlobalAlertDialog({
 }: GlobalAlertDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="flex h-56 flex-col justify-around rounded-2xl px-6 py-4 text-center">
+      <AlertDialogContent className="flex h-56 flex-col justify-around rounded-2xl px-6 py-4 text-center !bg-white">
         <X
           className="hover:bg-muted top-4 right-4 size-6 cursor-pointer p-1 transition"
           onClick={() => onOpenChange(false)}
@@ -49,12 +49,12 @@ export default function GlobalAlertDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter className="flex flex-col gap-2 pt-4">
-          <AlertDialogCancel className="border-muted text-muted-foreground hover:bg-primary h-10 w-1/2 cursor-pointer rounded-full border bg-white transition hover:text-white">
+          <AlertDialogCancel className="cancel-btn border-muted text-muted-foreground h-10 w-1/2 cursor-pointer rounded-full border transition">
             {cancelText}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="bg-primary hover:text-text-website-font hover:border-primary h-10 w-1/2 cursor-pointer rounded-full text-white transition hover:border hover:bg-white"
+            className="confirm-btn h-10 w-1/2 cursor-pointer rounded-full  transition hover:border "
           >
             {confirmText}
           </AlertDialogAction>

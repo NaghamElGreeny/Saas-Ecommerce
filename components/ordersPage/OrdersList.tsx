@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getOrdersByStatus } from "@/services/ClientApiHandler";
+import { orderService } from "@/services/ClientApiHandler";
 import { Spinner } from "../atoms";
 import Order from "./Order";
 import Pagination from "../Pagination";
@@ -18,7 +18,7 @@ export default function OrdersList({ status }: Props) {
   const fetchOrders = async ({page,status}) => {
     setLoading(true);
     try {
-      const res = await getOrdersByStatus({status, page});
+      const res = await orderService.getOrdersByStatus({status, page});
       setOrders(res.data); 
       setMeta(res.meta); 
     } catch (err) {

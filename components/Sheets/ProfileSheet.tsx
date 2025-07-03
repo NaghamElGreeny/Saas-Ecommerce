@@ -68,8 +68,8 @@ export default function ProfileSheet() {
         }
       >
         {!openAddress && (
-          <>
-            <ScrollArea className="w-full overflow-y-auto rounded-md px-4 py-4 h-[90vh] flex gap-5">
+          <div className="w-full flex flex-col gap-4  px-4 py-4 h-[90vh] overflow-scroll scrollbar-thumb-primary scrollbar-track-transparent">
+            
             <SheetItem
               icon="/assets/icons/address.svg"
               label="My Address"
@@ -93,8 +93,7 @@ export default function ProfileSheet() {
 
             <DeleteAccountBtn onClose={() => setOpenProfile(false)} />
             <LogoutBtn onClose={() => setOpenProfile(false)} />
-            </ScrollArea>
-          </>
+          </div>
         )}
       </GlobalSheet>
 

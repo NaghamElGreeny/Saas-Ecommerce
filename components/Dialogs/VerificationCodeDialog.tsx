@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Button } from "../atoms";
 
 import toast from "react-hot-toast";
-import { sendVerificationCode, updatePhone } from "@/services/ClientApiHandler";
-import { useAuthStore } from "@/stores/authStore";
+import { userService } from "@/services/ClientApiHandler";
+
 
 interface Props {
   newPhone: { phone: string; phone_code: string } | null;
@@ -14,7 +13,6 @@ interface Props {
 const VerificationCodeDialog = ({ newPhone, onClose }: Props) => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { userData, setUserData } = useAuthStore();
   const handleInputChange = (index: number, value: string) => {
     if (/^\d?$/.test(value)) {
       const newCode = [...code];
@@ -43,15 +41,10 @@ const VerificationCodeDialog = ({ newPhone, onClose }: Props) => {
         phone_code: newPhone?.phone_code || "",
         verification_code: finalCode,
       };
-      await updatePhone(payload);
+      await userService.updatePhone(payload);
         toast.success("Phone updated successfully");
-        // setUserData((data: typeof userData) => ({
-        //   ...(typeof data === "object" && data !== null ? data : {}),
-        //   phone: newPhone?.phone,
-        //   phone_code: newPhone?.phone_code,
-        // }));
       onClose();
-    } catch (error: any) {
+    } catch (error) {
       const msg = error?.response?.data?.message || "Verification failed";
       toast.error(msg);
     } finally {

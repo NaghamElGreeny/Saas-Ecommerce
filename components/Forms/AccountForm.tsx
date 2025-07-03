@@ -10,12 +10,9 @@ import { Button } from "../atoms";
 import { useAuthStore } from "@/stores/authStore";
 import Image from "next/image";
 import {
-  changePassword,
-  getCountryCodes,
-  getUser,
-  sendVerificationCode,
-  updateUserInfo,
-  uploadImage,
+  locationService,
+  userService,
+  authService,
 } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
 import { BrandCountry } from "@/utils/types";
@@ -43,9 +40,9 @@ const AccountForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = await getUser();
+        const user = await userService.getUser();
         if (user) setUserData(user.data);
-        const codes = await getCountryCodes();
+        const codes = await locationService.getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);
         // formik.setFieldValue("phone_code", codes[0].phone_code);
@@ -78,7 +75,7 @@ const AccountForm = () => {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const uploaded = await uploadImage(file);
+        const uploaded = await userService.uploadImage(file);
         const uploadedUrl = uploaded.data.avatar_url || uploaded.data;
         setUploadedAvatar(uploadedUrl);
         setAvatarUrl(URL.createObjectURL(file)); // معاينة
@@ -100,7 +97,7 @@ const AccountForm = () => {
         validationSchema={validationSchema}
         onSubmit={async (values) => {
           try {
-            const updated = await updateUserInfo({
+            const updated = await userService.updateUserInfo({
               ...values,
               avatar: uploadedAvatar || userData.avatar, // ← استخدمي الجديد لو موجود
             });
@@ -256,7 +253,7 @@ const AccountForm = () => {
               onSubmit={async (values, { setSubmitting, setErrors }) => {
                 try {
                   setSubmitting(true);
-                  const res = await sendVerificationCode(values);
+                  const res = await authService.verifyCode(values);
                   setNewPhone(values);
                   setShowVerification(true); // عرض فورم الكود
                 } catch (error: any) {
@@ -348,7 +345,7 @@ const AccountForm = () => {
             validationSchema={passwordSchema}
             onSubmit={async (values, { resetForm }) => {
               try {
-                const res = await changePassword(values); // الريكويست
+                const res = await authService.resetPassword(values); // الريكويست
                 toast.success("Password changed successfully");
                 setUserData(res.data);
                 resetForm();

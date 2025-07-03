@@ -1,8 +1,9 @@
 import Link from "next/link";
 import React from "react";
 import OverlappingImages from "./Overlapp";
+import { OrderItem } from "@/utils/orderTypes";
 
-const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
+const Order: React.FC<{ order: OrderItem }> = ({ order }) => {
   // console.log("order Sent ", order);
   return (
     <div className="max-h-48 animate-[zoomIn_1.3s] rounded-3xl bg-white p-5 shadow-md">
@@ -18,10 +19,8 @@ const Order: React.FC<{ order: any; status: any }> = ({ order, status }) => {
 
       {/* Content */}
       <div className="flex flex-wrap justify-between gap-2">
-        {/* Left: Image + Item Count */}
         <div className="flex flex-col items-center gap-3">
           <div className="relative flex h-fit max-w-[100px]">
-            {/* المفروض يلف عالايتمز ويعرض صورهم */}
             <OverlappingImages
               images={
                 order.type === "order"
