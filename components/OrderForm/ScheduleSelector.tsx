@@ -3,6 +3,7 @@ import React from "react";
 import { TimePicker } from "antd"; // لو بتستخدم antd
 import type { FormikErrors } from "formik"; // لو بتستخدم Formik
 import dayjs from "dayjs";
+import { useTranslations } from "next-intl";
 
 interface ScheduleSelectorProps {
   values: {
@@ -24,7 +25,9 @@ export default function ScheduleSelector({
   setFieldValue,
 }: ScheduleSelectorProps) {
 
+  const t = useTranslations("ORDER_FORM");
   const handleTimeChange = (order_time: dayjs.Dayjs | null) => {
+    
     if (order_time) {
       const formatted = order_time.format("h:mm A");
       setFieldValue("order_time", formatted);
@@ -42,7 +45,7 @@ export default function ScheduleSelector({
               checked={!values.is_schedule}
               onChange={() => setFieldValue("is_schedule", false)}
             />
-            Order Now
+{t("order_now")}
           </label>
           <label className="flex items-center gap-2 ">
             <input
@@ -51,7 +54,7 @@ export default function ScheduleSelector({
               checked={values.is_schedule}
               onChange={() => setFieldValue("is_schedule", true)}
             />
-            Schedule Order
+           {t("schedule_order")}
           </label>
         </div>
 

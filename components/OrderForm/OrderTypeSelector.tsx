@@ -1,8 +1,10 @@
 "use client";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 const OrderTypeSelector = ({ value, onChange }) => {
   const orderTypes = ["delivery", "take_away"];
+  const t = useTranslations("ORDER_FORM");
 
   return (
     <div className="grid grid-cols-2 gap-5 font-semibold ">
@@ -22,7 +24,7 @@ const OrderTypeSelector = ({ value, onChange }) => {
                   className="w-8 h-8"
                 />
                 <h3 className="flex-grow capitalize">
-                  {type === "delivery" ? "Delivery" : "Takeaway"}
+                  {type === "delivery" ?  t("delivery") : t("takeaway")}
                 </h3>
               </div>
               <input

@@ -39,7 +39,7 @@ export default function OrderStatusStepper({
             {index !== statusList.length - 1 && (
               <div
                 className={clsx(
-                  "absolute top-5 left-[62%] z-10 h-0.5",
+                  "absolute top-5 left-[62%] rtl:right-[62%] z-10 h-0.5",
                   statusList[index + 1].status === "done" ||
                     statusList[index + 1].status === "in_progress"
                     ? "bg-primary"

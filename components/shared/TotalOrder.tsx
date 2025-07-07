@@ -5,6 +5,7 @@ import { PriceSummary } from "@/utils/cartTypes";
 import React from "react";
 import LoyaltyCheckbox from "../LoyalityCheckBox";
 import { useLoyalityStore } from "@/stores/loyalityStore";
+import { useTranslations } from "next-intl"; // Import useTranslations
 
 type Props = {
   priceDetail?: PriceSummary & { total?: number };
@@ -15,6 +16,7 @@ type Props = {
 export default function TotalOrder({ priceDetail, total, sheet }: Props) {
   const { cart } = useCartStore();
   const { points, usePoints, setUsePoints } = useLoyalityStore();
+  const t = useTranslations("TOTAL_ORDER"); // Initialize useTranslations
 
   const price = (priceDetail || cart?.price || {}) as Partial<PriceSummary>;
   const currency = price.currency || cart?.currency || "currency";
@@ -44,25 +46,25 @@ export default function TotalOrder({ priceDetail, total, sheet }: Props) {
         <LoyaltyCheckbox points={points} checked={usePoints} onChange={setUsePoints} />
       )}
 
-      <h2 className="w-full p-0 px-5 text-2xl font-bold">Order Summary</h2>
+      <h2 className="w-full p-0 px-5 text-2xl font-bold">{t("order_summary_title")}</h2>
 
       <div className="order-summary w-[90%] space-y-4 rounded-2xl bg-website-footer my-2 p-4">
-        <OrderRow label={`Subtotal (${totalItems} items)`} value={subtotal} currency={currency} />
-        <OrderRow label={`VAT (${vatPercent}%)`} value={vatValue} currency={currency} />
-        <OrderRow label="Surcharge" value={surcharge} currency={currency} />
+        <OrderRow label={t("subtotal_label", { totalItems })} value={subtotal} currency={currency} />
+        <OrderRow label={t("vat_label", { vatPercent })} value={vatValue} currency={currency} />
+        <OrderRow label={t("surcharge_label")} value={surcharge} currency={currency} />
 
         {couponDiscount > 0 && (
-          <OrderRow label="Coupon Discount" value={-couponDiscount} currency={currency} />
+          <OrderRow label={t("coupon_discount_label")} value={-couponDiscount} currency={currency} />
         )}
 
         {isDelivery && deliveryFee > 0 && (
-          <OrderRow label="Delivery Fee" value={deliveryFee} currency={currency} />
+          <OrderRow label={t("delivery_fee_label")} value={deliveryFee} currency={currency} />
         )}
 
         <hr />
 
         <OrderRow
-          label="Total Amount"
+          label={t("total_amount_label")}
           value={totalAmount}
           currency={currency}
           bold

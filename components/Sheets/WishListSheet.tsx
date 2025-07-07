@@ -7,6 +7,8 @@ import WishlistCard from "../cards/WishlistCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@heroui/spinner";
 import GlobalSheet from "@/components/shared/GlobalSheet";
+import { useTranslations } from "next-intl";
+
 export default function WishList({
   triggerr,
   open,
@@ -17,6 +19,7 @@ export default function WishList({
   onOpenChange?: (open: boolean) => void;
 }) {
   const { likedItems, fetchLikedItems, loading } = useLikedStore();
+  const t = useTranslations("WISHLIST_SHEET");
 
   useEffect(() => {
     fetchLikedItems();
@@ -31,7 +34,7 @@ export default function WishList({
     <div className="relative cursor-pointer">
       <Image
         src="/assets/icons/navheart.png"
-        alt="wishlist"
+        alt={t("wishlist_title")}
         width={60}
         height={60}
         className="size-[60px] shrink-0"
@@ -56,8 +59,8 @@ export default function WishList({
     </ScrollArea>
   ) : (
     <div className="flex h-full w-full flex-col items-center justify-center text-center">
-      <h2 className="mb-4 text-2xl font-bold">No products</h2>
-      <p>You don&apos;t have any products yet in your wishlist</p>
+      <h2 className="mb-4 text-2xl font-bold">{t("no_products_title")}</h2>
+      <p>{t("no_products_message")}</p>
     </div>
   );
 
@@ -67,10 +70,10 @@ export default function WishList({
       onOpenChange={onOpenChange}
       title={
         <>
-          WishList
+          {t("wishlist_title")}
           {hasProducts && (
             <span className="text-text-website-font ms-2 text-sm font-medium">
-              ({totalItems} items)
+              {t("total_items_label", { totalItems })}
             </span>
           )}
         </>

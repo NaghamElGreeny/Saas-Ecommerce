@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const response = NextResponse.next();
 
-  const token = request.cookies.get("token"); 
+  const token = request.cookies.get("token");
   const guestToken = request.cookies.get("guest_token");
 
   if (!token && !guestToken) {
@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
     response.cookies.set("guest_token", generatedToken, {
       path: "/",
       httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7, 
+      maxAge: 60 * 60 * 24 * 7,
     });
   }
 
@@ -27,8 +27,7 @@ export function middleware(request: NextRequest) {
       maxAge: 0,
     });
   }
-
-  // ignore static files and API routes
+  
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -37,25 +36,38 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-   // Prevent authenticated users from accessing /auth
-  if (token && pathname.startsWith("/auth")) {
+  if (token && pathname.includes("/auth")) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  const ProtectedRoutes = ['profile', 'checkout', 'reservations', 'orders'];
+  const isProtected = ProtectedRoutes.some(route => pathname.includes(route));
+  if (!token && isProtected) {
+    return NextResponse.redirect(new URL("/auth", request.url));
+  }
+
   const pathnameParts = pathname.split("/").filter(Boolean);
-  const hasLocale = locales.includes(pathnameParts[0]);
+  const currentLocale = pathnameParts[0];
+  const hasLocale = locales.includes(currentLocale);
 
-  //  ONLY add locale if it's NOT already in the path
-if (!hasLocale) {
-  const localeFromCookie = request.cookies.get("NEXT_LOCALE")?.value;
+  if (hasLocale) {
+    const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
+    if (cookieLocale !== currentLocale) {
+      response.cookies.set("NEXT_LOCALE", currentLocale, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365, // سنة
+      });
+    }
+  }
 
-  const locale = locales.includes(localeFromCookie ?? "")
-    ? localeFromCookie
-    : defaultLocale;
+  if (!hasLocale) {
+    const localeFromCookie = request.cookies.get("NEXT_LOCALE")?.value;
+    const locale = locales.includes(localeFromCookie ?? "") ? localeFromCookie : defaultLocale;
 
-  const url = request.nextUrl.clone();
-  url.pathname = `/${locale}${pathname}`;
-  return NextResponse.redirect(url);
-}
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}${pathname}`;
+    return NextResponse.redirect(url);
+  }
+
   return response;
 }

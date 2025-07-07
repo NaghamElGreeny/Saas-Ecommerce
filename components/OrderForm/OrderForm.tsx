@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -17,12 +18,16 @@ import { Spinner } from "../atoms";
 import GlobalDialog from "../shared/GlobalDialog";
 import ScheduleSelector from "./ScheduleSelector";
 import OrderTypeSelector from "./OrderTypeSelector";
+import { useTranslations } from "next-intl";
 
 type OrderFormProps = {
   params: Record<string, string | string[]>;
 };
 
 const OrderForm = ({ params }: OrderFormProps) => {
+  const t = useTranslations("ORDER_FORM");
+  const tGlobalDialog = useTranslations("GLOBAL_DIALOG");
+
   const { points, fetchLoyality, setUsePoints } = useLoyalityStore();
   const { usePoints } = useLoyalityStore();
   const { addresses, fetchAddresses } = useAddressStore();
@@ -66,7 +71,6 @@ const OrderForm = ({ params }: OrderFormProps) => {
     }
   };
   const userData = useAuthStore((s) => s.userData) as UserData;
-  console.log("user", userData);
 
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const [openStoreDialog, setOpenStoreDialog] = useState(false);
@@ -92,20 +96,20 @@ const OrderForm = ({ params }: OrderFormProps) => {
           fetchCart();
           setUsePoints(false);
         } catch (error) {
-          toast.error(error?.message || "Failed to confirm order");
+          toast.error(error?.message || t('failed_to_confirm_order'));
         }
       }
     })();
-  }, []);
+  }, [params, cart?.price?.total, fetchCart, setUsePoints, t]);
 
   const defaultAddress = addresses.find((a) => a.is_default);
 
   const validationSchema = Yup.object().shape({
-    orderType: Yup.string().required("Order type is required"),
+    orderType: Yup.string().required(t('order_type_required')),
     is_schedule: Yup.boolean(),
-    pay_type: Yup.string().required("Payment method is required"),
-    selectedAddressId: Yup.number().required("Address is required"),
-    selectedStoreId: Yup.number().required("Store is required"),
+    pay_type: Yup.string().required(t('payment_method_required')),
+    selectedAddressId: Yup.number().required(t('address_required')),
+    selectedStoreId: Yup.number().required(t('store_required')),
   });
 
   const formik = useFormik({
@@ -124,7 +128,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
       const payload = {
         order_type: values.orderType,
         is_schedule: values.is_schedule ? 1 : 0,
-        address_id: selectedAddress.id,
+        address_id: selectedAddress?.id,
         order_date: values.is_schedule ? values.order_date : undefined,
         order_time: values.is_schedule ? values.order_time : undefined,
         pay_type: usePoints
@@ -150,7 +154,9 @@ const OrderForm = ({ params }: OrderFormProps) => {
         }
       } catch (err) {
         console.error("Error confirming order:", err);
-        toast.error(err?.message);
+        toast.error(err?.message || t('failed_to_confirm_order'));
+      } finally {
+        setIsSubmitting(false);
       }
     },
     enableReinitialize: true,
@@ -164,21 +170,18 @@ const OrderForm = ({ params }: OrderFormProps) => {
   const selectedBranch =
     stores.find((s) => s.id === values.selectedStoreId) || selectedStore;
 
-
   return (
     <>
-      {/* Success Dialog */}
       <Success
         open={open}
         onOpenChange={setOpen}
-        firstTitle="Go to Order Details"
+        firstTitle={t('go_to_order_details')}
         firstLink={`order/${orderId}`}
-        secondTitle="Continue Shopping"
+        secondTitle={t('continue_shopping')}
         secondLink="/checkout"
       />
 
       <form onSubmit={handleSubmit} className="mx-auto w-full space-y-6 p-6">
-
         <OrderTypeSelector
           value={values.orderType}
           onChange={(type: string) => {
@@ -190,10 +193,9 @@ const OrderForm = ({ params }: OrderFormProps) => {
           }}
         />
 
-        {/* Address (if delivery) */}
         {values.orderType === "delivery" && (
           <>
-            <h2 className="text-lg font-semibold">Your Shipping Address</h2>
+            <h2 className="text-lg font-semibold">{t('your_shipping_address')}</h2>
             <div
               onClick={() => {
                 setSelectedDialogAddressId(values.selectedAddressId);
@@ -224,10 +226,9 @@ const OrderForm = ({ params }: OrderFormProps) => {
           </>
         )}
 
-        {/* Store (if takeaway) */}
         {values.orderType === "take_away" && (
           <>
-            <h2 className="text-lg font-semibold">Select Branch</h2>
+            <h2 className="text-lg font-semibold">{t('select_branch')}</h2>
             <div
               onClick={() => setOpenStoreDialog(true)}
               className="flex cursor-pointer items-center justify-between rounded-2xl bg-gray-100 p-3"
@@ -255,30 +256,28 @@ const OrderForm = ({ params }: OrderFormProps) => {
           </>
         )}
 
-        {/* Schedule Time */}
-  <ScheduleSelector
-        values={values}
-        errors={errors}
-        setFieldValue={setFieldValue}
+        <ScheduleSelector
+          values={values}
+          errors={errors}
+          setFieldValue={setFieldValue}
         />
-        
-        {/* Payment Method */}
+
         <div>
-          <h2 className="mb-2 text-lg font-semibold">Payment Methods</h2>
+          <h2 className="mb-2 text-lg font-semibold">{t('payment_methods')}</h2>
           <div className="grid grid-cols-2 gap-4">
             {["credit", "cash"].map((method) => (
               <label
                 key={method}
-                className="flex cursor-pointer items-center justify-between rounded-2xl  p-4"
+                className="flex cursor-pointer items-center justify-between rounded-2xl p-4"
               >
-                <div className= "flex items-center gap-2 font-semibold rounded-2xl bg-website-white">
+                <div className="flex items-center gap-2 font-semibold rounded-2xl bg-website-white">
                   <Image
                     src={`/assets/icons/${method}.svg`}
                     alt={method}
                     width={32}
                     height={32}
                   />
-                  {method.charAt(0).toUpperCase() + method.slice(1)}
+                  {method === "credit" ? t('credit_method') : t('cash_method')}
                 </div>
                 <input
                   type="radio"
@@ -292,7 +291,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
             {points && points > cart?.price.total ? (
               <label
                 key={"points"}
-                className="flex cursor-pointer items-center justify-between rounded-2xl  p-4"
+                className="flex cursor-pointer items-center justify-between rounded-2xl p-4"
               >
                 <div className="flex items-center gap-2 font-semibold">
                   <Image
@@ -301,8 +300,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
                     width={32}
                     height={32}
                   />
-                  {/* {method.charAt(0).toUpperCase() + method.slice(1)} */}
-                  {points} Points
+                  {t('points_method', { points: points })}
                 </div>
                 <input
                   type="radio"
@@ -321,21 +319,19 @@ const OrderForm = ({ params }: OrderFormProps) => {
           )}
         </div>
 
-        {/* Submit */}
         <div className="flex justify-end">
           <button
             type="submit"
             className={`confirm-btn ${isSubmitting ?'!bg-white':''} w-1/4 rounded-full py-3 `}
           >
-            {isSubmitting ? <Spinner variant="primary"/> : "Confirm"}
+            {isSubmitting ? <Spinner variant="primary"/> : t('confirm_button')}
           </button>
         </div>
 
-        {/* Address Dialog */}
         <GlobalDialog
           open={openAddressDialog}
           onOpenChange={setOpenAddressDialog}
-          title="Select Address"
+          title={t('select_address')}
           footer={
             <button
               className="hover:text-primary hover:border-primary h-10 w-5/6 rounded-full border bg-blue-600 py-2 text-white hover:bg-white"
@@ -346,7 +342,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
                 }
               }}
             >
-              Confirm
+              {tGlobalDialog('confirm_button')}
             </button>
           }
         >
@@ -368,11 +364,10 @@ const OrderForm = ({ params }: OrderFormProps) => {
           </div>
         </GlobalDialog>
 
-        {/* Store Dialog */}
         <GlobalDialog
           open={openStoreDialog}
           onOpenChange={setOpenStoreDialog}
-          title="Select Branch"
+          title={t('select_branch')}
           height="!h-fit"
           footer={
             <button
@@ -385,7 +380,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
                 setOpenStoreDialog(false);
               }}
             >
-              Confirm
+              {tGlobalDialog('confirm_button')}
             </button>
           }
         >

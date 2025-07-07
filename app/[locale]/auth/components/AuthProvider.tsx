@@ -17,14 +17,3 @@ export default function AuthProvider() {
 
     return null;
 }
-
-
-// const { token, userData } = useAuthStore();
-
-// if (!token) {
-// // المستخدم غير مسجل دخول
-// }
-
-// if (userData && !userData.verified) {
-// // المستخدم لم يحقق رقم هاتفه
-// }

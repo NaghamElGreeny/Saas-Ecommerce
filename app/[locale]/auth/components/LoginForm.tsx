@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { ChevronDown, Eye, EyeOff } from "lucide-react";
+import { useTranslations } from "next-intl"; 
 
 import { locationService } from "@/services/ClientApiHandler";
 import { authService } from "@/services/ClientApiHandler";
@@ -25,6 +26,7 @@ export default function LoginForm() {
   const setUserData = useAuthStore((state) => state.setUserData);
   const setFormData = useAuthStore((state) => state.setFormData);
   const setVerificationData = useVerificationStore((state) => state.setVerificationData);
+  const t = useTranslations('LOGIN_FORM'); 
 
   useEffect(() => {
     const fetchCountryCodes = async () => {
@@ -34,13 +36,13 @@ export default function LoginForm() {
         setSelectedCountry(codes[0]);
         formik.setFieldValue("phone_code", codes[0].phone_code);
       } catch (error) {
-        toast.error("Failed to load country codes");
+        toast.error(t("failed_load_country_codes"));
         console.error(error);
       }
     };
 
     fetchCountryCodes();
-  }, []);
+  }, [t]);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const code = e.target.value;
@@ -64,17 +66,19 @@ export default function LoginForm() {
     },
     validationSchema: Yup.object({
       phone: Yup.string()
-        .required("Phone is required")
-        .matches(/^\d+$/, "Phone must be digits only")
-        .max(selectedCountry?.phone_limit || 10, `Max ${selectedCountry?.phone_limit || 10} digits`),
-      password: Yup.string().required("Password is required"),
+        .required(t("phone_required"))
+        .matches(/^\d+$/, t("phone_digits_only"))
+        .max(selectedCountry?.phone_limit || 10, t("phone_max_digits", { count: selectedCountry?.phone_limit || 10 })),
+      password: Yup.string().required(t("password_required")),
     }),
     onSubmit: async (values) => {
       setLoading(true);
       toast.dismiss();
 
       try {
-        const response = await authService.login({ ...values, device_type: "web" }) as { data: any };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const response = await authService.login({ ...values, device_type: "web" }) as { data:any };
+        console.log('login res :',response)
         const { token } = response.data;
 
         setToken(token);
@@ -83,11 +87,11 @@ export default function LoginForm() {
         Cookies.set("token", token, { expires: 300 });
         Cookies.remove("store_selected_once");
 
-        toast.success("Login successful!");
+        toast.success(t("login_successful"));
         router.push("/");
       } catch (error) {
         console.error(error);
-        toast.error(error?.response?.data?.message || "Login failed");
+        toast.error(error?.response?.data?.message || t("login_failed"));
       } finally {
         setLoading(false);
       }
@@ -120,7 +124,7 @@ export default function LoginForm() {
           {/* Phone Number Input */}
           <input
             type="tel"
-            placeholder="Phone"
+            placeholder={t("phone_placeholder")}
             className="w-full rounded-md border p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
             {...formik.getFieldProps("phone")}
           />
@@ -135,14 +139,14 @@ export default function LoginForm() {
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder={t("password_placeholder")}
             className="w-full rounded-md border px-4 py-2 pr-10"
             {...formik.getFieldProps("password")}
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute top-1/2 right-2 -translate-y-1/2 transform text-gray-500 hover:text-gray-700"
+            className="absolute top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transform rtl:left-2 ltr:right-2"
             aria-label="Toggle password visibility"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -162,14 +166,14 @@ export default function LoginForm() {
             onChange={() => formik.setFieldValue("rememberMe", !formik.values.rememberMe)}
             className="h-4 w-4 accent-blue-600"
           />
-          <span className="select-none">Remember me</span>
+          <span className="select-none">{t("remember_me")}</span>
         </label>
         <button
           type="button"
           className="text-blue-600 hover:underline"
           onClick={handleForgetPassword}
         >
-          Forgot password?
+          {t("forgot_password")}
         </button>
       </div>
 
@@ -181,7 +185,7 @@ export default function LoginForm() {
           loading ? "cursor-not-allowed opacity-60" : ""
         }`}
       >
-        {loading ? "Logging in..." : "Log in"}
+        {loading ? t("logging_in") : t("log_in")}
       </button>
     </form>
   );

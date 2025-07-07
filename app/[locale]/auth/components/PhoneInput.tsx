@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { locationService} from '@/services/ClientApiHandler';
-// import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useVerificationStore } from '@/stores/useVerificationStore';
 import { ChevronDown } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 import { BrandCountry } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 export default function PhoneInput({setStatus}: { setStatus: (status: 'phone' | 'verify') => void }) {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
@@ -18,8 +18,7 @@ export default function PhoneInput({setStatus}: { setStatus: (status: 'phone' | 
 
   const setFormData = useAuthStore((state) => state.setFormData);
   const setVerificationData = useVerificationStore((state) => state.setVerificationData);
-
-  // const router = useRouter();
+  const t = useTranslations('PHONE_INPUT');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,13 +28,13 @@ export default function PhoneInput({setStatus}: { setStatus: (status: 'phone' | 
         setSelectedCountry(codes[0]);
         formik.setFieldValue('phone_code', codes[0].phone_code);
       } catch (err) {
-        toast.error('Failed to load country codes');
+        toast.error(t('failed_load_country_codes'));
         console.error(err);
       }
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [t]);
 
   const formik = useFormik({
     initialValues: {
@@ -43,11 +42,11 @@ export default function PhoneInput({setStatus}: { setStatus: (status: 'phone' | 
       phone: '',
     },
     validationSchema: Yup.object({
-      phone_code: Yup.string().required('Phone code is required'),
+      phone_code: Yup.string().required(t('phone_code_required')),
       phone: Yup.string()
-        .required('Phone is required')
-        .matches(/^\d+$/, 'Phone must be digits only')
-        .max(selectedCountry?.phone_limit || 10, `Max ${selectedCountry?.phone_limit || 10} digits`),
+        .required(t('phone_required'))
+        .matches(/^\d+$/, t('phone_digits_only'))
+        .max(selectedCountry?.phone_limit || 10, t('phone_max_digits', { count: selectedCountry?.phone_limit || 10 })),
     }),
    onSubmit: async (values) => {
   setLoading(true);
@@ -60,19 +59,14 @@ setFormData({
 });
 
   try {
-setVerificationData({
-  phone: values.phone,
-  phoneCode: values.phone_code,
-  verificationType: 'forgot_password',
-});
+    setVerificationData({
+      phone: values.phone,
+      phoneCode: values.phone_code,
+      verificationType: 'forgot_password',
+    });
 
-    // router.push('/auth/verify');
     setStatus('verify');
-    //STATE 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    console.error(err);
-console.log('Register error response:', err.response?.data);
+  } catch (err) {
     console.error(err);
     const resData = err.response?.data;
     if (resData?.messages) {
@@ -84,7 +78,7 @@ console.log('Register error response:', err.response?.data);
     } else if (err instanceof Error) {
       toast.error(err.message);
     } else {
-      toast.error('Registration failed');
+      toast.error(t('registration_failed_toast'));
     }
   } finally {
     setLoading(false);
@@ -102,11 +96,11 @@ console.log('Register error response:', err.response?.data);
 
   return (
     <>
-       <h2 className="font-bold lg:text-4xl text-3xl mb-4">Verify Code</h2>
+       <h2 className="font-bold lg:text-4xl text-3xl mb-4">{t('verify_code_title')}</h2>
          <p className="text-sub mb-3">
-please enter your phone number below to recovery your password.
+           {t('enter_phone_for_recovery_prompt')}
         </p>
-   
+
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full mx-auto p-4 max-w-md">
 
         <div className="phone-dev gap-2 items-center">
@@ -136,7 +130,7 @@ please enter your phone number below to recovery your password.
       {/* Phone Input */}
       <input
         type="tel"
-        placeholder="Phone"
+        placeholder={t('phone_placeholder')}
         className="border p-3 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
         {...formik.getFieldProps("phone")}
       />
@@ -153,7 +147,7 @@ please enter your phone number below to recovery your password.
           loading ? 'opacity-60 cursor-not-allowed' : ''
         }`}
       >
-        {loading ? 'Sending...' : 'Send'}
+        {loading ? t('sending_button') : t('send_button')}
       </button>
     </form>
      </>

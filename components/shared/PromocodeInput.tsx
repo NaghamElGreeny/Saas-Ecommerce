@@ -6,11 +6,13 @@ import { cartService } from "@/services/ClientApiHandler";
 import { Loader } from "lucide-react";
 import toast from "react-hot-toast";
 import { CartResponse } from "@/utils/cartTypes";
+import { useTranslations } from "next-intl";
 
 export default function PromoCodeInput() {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const { fetchCart, setCart, couponCode, couponValue } = useCartStore();
+  const t = useTranslations("PROMO_CODE_INPUT");
 
   const isApplied = !!couponCode;
   const isInvalid = !code.trim();
@@ -19,17 +21,19 @@ export default function PromoCodeInput() {
     if (isInvalid) return;
     setLoading(true);
     try {
-      const res: CartResponse = (await cartService.applyCoupon(code)) as CartResponse;
+      const res: CartResponse = (await cartService.applyCoupon(
+        code,
+      )) as CartResponse;
       if (res.status === "success") {
         setCart(res);
         toast.success(res.message);
       } else {
         console.error("Coupon error:", res.message);
-        toast.error(res.message || "Failed to apply coupon");
+        toast.error(res.message || t("failed_to_apply_coupon"));
       }
     } catch (err) {
       console.error("Failed to apply coupon", err);
-      toast.error(err);
+      toast.error(err.message || t("failed_to_apply_coupon"));
     } finally {
       setLoading(false);
     }
@@ -38,17 +42,20 @@ export default function PromoCodeInput() {
   const handleRemove = async () => {
     try {
       await fetchCart();
+
       toast.success("Coupon removed successfully");
+
       setCode("");
     } catch (err) {
       console.error("Failed to remove coupon", err);
+
       toast.error("Failed to remove coupon");
     }
   };
 
   return (
     <div className="w-full p-5">
-      <h2 className="mb-2 text-xl font-bold">Promo Code</h2>
+      <h2 className="mb-2 text-xl font-bold">{t("promo_code_title")}</h2>
 
       {isApplied ? (
         <div className="bg-website-footer flex items-center justify-between rounded-2xl border-2 border-green-200 px-4 py-3">
@@ -87,7 +94,7 @@ export default function PromoCodeInput() {
             disabled={loading}
             className="font-semibold text-red-600 hover:text-red-800"
           >
-            {loading ? <Loader className="animate-spin" /> : "Remove"}
+            {loading ? <Loader className="animate-spin" /> : t("remove_button")}
           </button>
         </div>
       ) : (
@@ -103,7 +110,7 @@ export default function PromoCodeInput() {
             type="text"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="Enter Promo Code"
+            placeholder={t("enter_promo_code_placeholder")}
             className="h-10 w-full bg-transparent outline-none placeholder:text-gray-400"
           />
           <button
@@ -111,7 +118,7 @@ export default function PromoCodeInput() {
             onClick={handleApply}
             className="text-primary font-semibold"
           >
-            {loading ? <Loader className="animate-spin" /> : "Apply"}
+            {loading ? <Loader className="animate-spin" /> : t("apply_button")}
           </button>
         </div>
       )}

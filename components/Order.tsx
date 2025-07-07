@@ -5,7 +5,6 @@ import Image from "next/image";
 import { orderService } from "@/services/ClientApiHandler";
 import { OrderItem } from "@/utils/orderTypes";
 
-// Components
 import TotalOrder from "./shared/TotalOrder";
 import CheckoutCartItem from "./shared/CheckoutCartItem";
 import OrderDetails from "./OrderDetails";
@@ -13,6 +12,7 @@ import CancelOrderDialog from "./shared/CancelOrderDialog";
 import { ScrollArea } from "./ui/scroll-area";
 import { Loader } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 type OrderProps = {
   slugg: number;
@@ -28,39 +28,37 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
 
   const [isCancelOpen, setIsCancelOpen] = useState<boolean>(false);
   const [reasons, setReasons] = useState<CancelReason[]>([]);
+  const t = useTranslations("ORDER_PAGE");
 
-  // Fetch order
   useEffect(() => {
     const fetchOrder = async () => {
       try {
         const data = await orderService.getOrder(slugg);
         setOrder(data);
       } catch (error) {
-        console.error("Failed to fetch order:", error);
+        console.error(t("failed_to_fetch_order"), error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrder();
-  }, [slugg]);
+  }, [slugg, t]);
 
-  // Fetch cancel reasons
   const fetchCancelReasons = async () => {
     try {
       const res = await orderService.getCancelReasons();
       setReasons(res.data);
     } catch (error) {
-      console.error("Failed to fetch cancel reasons:", error);
+      console.error(t("failed_to_fetch_cancel_reasons"), error);
     }
   };
 
-  // Handle cancel confirm
   const handleCancelConfirm = async (reasonKey: string, reasonNote: string) => {
     const isOther = reasonKey === "other";
 
     if (isOther && !reasonNote.trim()) {
-      toast.error("Please provide a reason for cancellation.");
+      toast.error(t("please_provide_reason"));
       return;
     }
 
@@ -73,15 +71,15 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
 
     try {
       const res = await orderService.cancelOrder(order!.id, payload);
-      toast.success(res.message || "Order cancelled successfully");
+      toast.success(res.message || t("order_cancelled_success"));
       setIsCancelOpen(false);
 
       setTimeout(() => {
         window.location.reload();
       }, 2000);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Cancel failed", err);
-      toast.error(err?.message || "Something went wrong");
+      toast.error(err?.message || t("something_went_wrong"));
     }
   };
 
@@ -89,6 +87,7 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
     return (
       <div className="loading flex min-h-screen w-full items-center justify-center">
         <Loader color="blue" />
+        <p>{t("loading_message")}</p>
       </div>
     );
   }
@@ -96,7 +95,7 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
   if (!order) {
     return (
       <div className="loading flex min-h-screen w-full items-center justify-center">
-        <h2>Order not found</h2>
+        <h2>{t("order_not_found")}</h2>
       </div>
     );
   }
@@ -106,16 +105,14 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
 
   return (
     <div className="containerr my-12 grid min-h-[70vh] w-full grid-cols-1 gap-y-4 px-10 lg:grid-cols-2">
-      {/* Order Details */}
       <div className="order-2 lg:order-1">
         <OrderDetails order={order} />
       </div>
 
-      {/* Summary */}
       <div className="order-1 flex flex-col items-center rounded-2xl bg-white px-2 lg:order-2">
         <div className="orderid-status flex w-full justify-between px-6 pt-5">
           <h2 className="text-[28px] font-bold lg:text-[32px]">
-            Order ID - {order.order_num}
+            {t("order_id_prefix")} {order.order_num}
           </h2>
 
           <div className="flex items-center gap-2 text-lg font-semibold">
@@ -127,7 +124,7 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
                 }}
                 className="px-3 py-1 text-red-500 cursor-pointer"
               >
-                Cancel Order
+                {t("cancel_order_button")}
               </button>
             ) : (
               <>
@@ -138,7 +135,7 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
                   height={24}
                 />
                 <p className={isFinished ? "" : "text-red-500"}>
-                  {isFinished ? "Completed" : "Cancelled"}
+                  {isFinished ? t("completed_status") : t("cancelled_status")}
                 </p>
               </>
             )}
@@ -154,7 +151,6 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
         <TotalOrder priceDetail={order.price_detail} total={order.item_count} />
       </div>
 
-      {/* Cancel Order Dialog */}
       <CancelOrderDialog
         open={isCancelOpen}
         onClose={() => setIsCancelOpen(false)}

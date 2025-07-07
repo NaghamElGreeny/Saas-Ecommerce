@@ -5,11 +5,13 @@ import { useState } from "react";
 import GlobalAlertDialog from "../shared/GlobalAlertDialog";
 import { useAuthStore } from "@/stores/authStore";
 import { notificationService } from "@/services/ClientApiHandler";
+import { useTranslations } from "next-intl";
 
 export default function NotificationToggle() {
   const { userData, fetchUserData } = useAuthStore();
   const [openNotifDialog, setOpenNotifDialog] = useState(false);
   const [notifiable, setNotifiable] = useState(userData.notifiable);
+  const t = useTranslations("PROFILE_SHEET"); 
 
   const handleToggle = async () => {
     await notificationService.changeNotification();
@@ -30,7 +32,7 @@ export default function NotificationToggle() {
             width={65}
             height={65}
           />
-          Notifications
+          {t("notification")}
         </div>
         <div
           className="cursor-pointer"
@@ -47,7 +49,9 @@ export default function NotificationToggle() {
             <span
               className={cn(
                 "inline-block h-5 w-5 transform rounded-full bg-white transition",
-                notifiable ? "translate-x-6" : "translate-x-2/3",
+                  notifiable
+        ? "translate-x-6 rtl:-translate-x-6"
+        : "translate-x-1 rtl:translate-x-1"
               )}
             />
           </Switch>

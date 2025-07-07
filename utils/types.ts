@@ -357,3 +357,49 @@ export interface StaticPage {
   user_type: "both" | "guest" | "auth";
   created_at: string;
 }
+
+type Country = {
+  id: number;
+  name: string;
+  phone_code: string;
+  phone_limit: number;
+  flag: string;
+};
+
+type Address = {
+  id: number;
+  type: string | null;
+  title: string;
+  lat: string;
+  lng: string;
+  desc: string;
+  is_default: boolean;
+  building: string;
+  floor: string;
+  apartment: string;
+  created_at: string;
+};
+
+export type UserData = {
+  id: number;
+  full_name: string;
+  avatar: string;
+  email: string;
+  phone_code: string;
+  phone: string;
+  user_type: "customer" | string;
+  notifiable: boolean;
+  token: string;
+  points: number;
+  wallet: number;
+  country: Country;
+  default_address: Address;
+  tenant: string;
+};
+
+export type LoginResponse = {
+  token: any;
+  data: UserData;
+  status: "success" | "error" | string;
+  message: string;
+};

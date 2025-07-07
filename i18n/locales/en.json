@@ -1,49 +1,49 @@
-
-  {
+{
   "lang": "ltr",
   "locale": {
     "ar": "En",
     "en": "ع"
   },
 
-   "NAV": {
+  "NAV": {
     "lang": "ع",
     "home": "Home",
     "about": "About",
     "reservation": "Reservation",
     "menu": "Menu",
-    "fav":"Favourites",
+    "fav": "Favourites",
     "contact": "Contact",
     "logout": "Logout",
     "login": "Log In",
     "Services": "Services",
     "news": "News",
     "mainlinks": "Main Links",
-    "سياسة-الخصوصية":"Privacy Policy",
-    "الشروط-والاحكام":"Terms and Conditions",
-    "تواصل-معنا":"Contact us",
-    "من-نحن":"About us",
-  "offers": "Offers",
-  "sections": "Sections",
-  "links": "Links",
-  "call_center": "Call Center",
-  "email": "Email",
-  "all_rights_reserved": "All Rights Reserved"
-  },  
-  "cart":{
-    "add-to-cart":"Add to Cart"
+    "سياسة-الخصوصية": "Privacy Policy",
+    "الشروط-والاحكام": "Terms and Conditions",
+    "تواصل-معنا": "Contact us",
+    "من-نحن": "About us",
+    "offers": "Offers",
+    "sections": "Sections",
+    "links": "Links",
+    "call_center": "Call Center",
+    "email": "Email",
+    "all_rights_reserved": "All Rights Reserved"
   },
-   "HOME": {
+  "cart": {
+    "add-to-cart": "Add to Cart"
+  },
+  "HOME": {
     "view_our_menus": "View our menus",
     "offers": "Offers",
     "popular_items": "Popular Items",
     "welcome_message": "HEY! WELCOME TO mea telecom",
-    "view-all":"Veiw All",
-    "follow":"Follow us on Instagram"
-  },  "DBL_SECTION": {
+    "view-all": "Veiw All",
+    "follow": "Follow us on Instagram"
+  },
+  "DBL_SECTION": {
     "discover_more": "Discover more"
   },
- "RESERVATION_FORM": {
+  "RESERVATION_FORM": {
     "make_an_reserve": "Make an Reserve",
     "online_reservation": "Online Reservation",
     "reservations": "reservations",
@@ -82,8 +82,7 @@
     "reservation_failed": "Reservation failed",
     "please_select_a_branch_toast": "Please select a branch"
   },
-  "CART_SHEET": 
-  {
+  "CART_SHEET": {
     "checkout": "Checkout",
     "no_products_title": "No products",
     "no_products_message": "You don't have any products yet in your cart",
@@ -95,7 +94,196 @@
     "reservation_failed": "Reservation failed",
     "please_select_a_branch_toast": "Please select a branch"
   },
+  "AUTH_FORM": {
+    "welcome_back": "Welcome back",
+    "create_account": "Create your account",
+    "login_prompt": "Please enter your valid e-mail address and your password",
+    "no_account_yet": "Don't have an account?",
+    "sign_up": "Sign up",
+    "have_account": "Have an account?",
+    "login": "Login"
+  },
+  "LOGIN_FORM": {
+    "failed_load_country_codes": "Failed to load country codes",
+    "phone_required": "Phone is required",
+    "phone_digits_only": "Phone must be digits only",
+    "phone_max_digits": "Max {count} digits",
+    "password_required": "Password is required",
+    "phone_placeholder": "Phone",
+    "password_placeholder": "Password",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot password?",
+    "logging_in": "Logging in...",
+    "log_in": "Log in",
+    "login_successful": "Login successful!",
+    "login_failed": "Login failed"
+  },
+  "REGISTER_FORM": {
+    "failed_load_country_codes": "Failed to load country codes",
+    "full_name_required": "Full name is required",
+    "email_invalid": "Invalid email format",
+    "email_required": "Email is required",
+    "phone_code_required": "Phone code is required",
+    "phone_required": "Phone is required",
+    "phone_digits_only": "Phone must be digits only",
+    "phone_max_digits": "Max {count} digits",
+    "password_min_chars": "Password must be at least 6 characters",
+    "password_required": "Password is required",
+    "password_match": "Passwords must match",
+    "password_confirmation_required": "Password confirmation is required",
+    "full_name_placeholder": "Full Name",
+    "email_placeholder": "Email",
+    "phone_placeholder": "Phone",
+    "password_placeholder": "Password",
+    "confirm_password_placeholder": "Confirm Password",
+    "registering": "Registering...",
+    "register": "Register",
+    "registration_successful": "Registration successful!",
+    "registration_failed": "Registration failed"
+  },
+  "VERIFY_PAGE": {
+    "password_min_chars": "Password must be at least 6 characters",
+    "password_required": "Password is required",
+    "password_match": "Passwords must match",
+    "password_confirmation_required": "Password confirmation is required",
+    "reset_successful_toast": "Reset successful!",
+    "password_reset_failed_toast": "Password reset failed",
+    "change_password_title": "Change Password",
+    "enter_new_password_prompt": "Please enter your new password",
+    "password_placeholder": "Password",
+    "confirm_password_placeholder": "Confirm Password",
+    "resetting_password_button": "Resetting Password...",
+    "reset_password_button": "Reset Password"
+  },
+  "PHONE_INPUT": {
+    "failed_load_country_codes": "Failed to load country codes",
+    "phone_code_required": "Phone code is required",
+    "phone_required": "Phone is required",
+    "phone_digits_only": "Phone must be digits only",
+    "phone_max_digits": "Max {count} digits",
+    "verify_code_title": "Verify Code",
+    "enter_phone_for_recovery_prompt": "Please enter your phone number below to recover your password.",
+    "phone_placeholder": "Phone",
+    "sending_button": "Sending...",
+    "send_button": "Send",
+    "registration_failed_toast": "Registration failed"
+  },
+  "RESERVATION_PAGE": {
+    "loading_message": "Loading...",
+    "reservation_not_found": "Reservation not found",
+    "fetching_reservation": "Fetching reservation...",
+    "fetching_reservation_success": "Reservation fetched successfully!",
+    "fetching_reservation_failed": "Failed to fetch reservation",
+    "booking_id_prefix": "Booking ID -",
+    "booking_summary_title": "Booking Summary",
+    "booking_confirmation_amount": "Booking Confirmation Amount"
+  },
+  "ORDER_FORM": {
+    "order_type_required": "Order type is required",
+    "payment_method_required": "Payment method is required",
+    "address_required": "Address is required",
+    "store_required": "Store is required",
+    "failed_to_confirm_order": "Failed to confirm order",
+    "go_to_order_details": "Go to Order Details",
+    "continue_shopping": "Continue Shopping",
+    "your_shipping_address": "Your Shipping Address",
+    "select_branch": "Select Branch",
+    "payment_methods": "Payment Methods",
+    "credit_method": "Credit",
+    "cash_method": "Cash",
+    "points_method": "{points} Points",
+    "confirm_button": "Confirm",
+    "takeaway": "Take Away",
+    "delivery": "Delivery",
+    "order_now": "Order Now",
+    "schedule_order": "Schedule Order"
+  },
+  "GLOBAL_DIALOG": {
+    "confirm_button": "Confirm"
+  },
+  "PROMO_CODE_INPUT": {
+    "promo_code_title": "Promo Code",
+    "coupon_removed_success": "Coupon removed successfully",
+    "failed_to_remove_coupon": "Failed to remove coupon",
+    "enter_promo_code_placeholder": "Enter Promo Code",
+    "apply_button": "Apply",
+    "remove_button": "Remove",
+    "failed_to_apply_coupon": "Failed to apply coupon"
+  },
+  "TOTAL_ORDER": {
+    "order_summary_title": "Order Summary",
+    "subtotal_label": "Subtotal ({totalItems} items)",
+    "vat_label": "VAT ({vatPercent}%)",
+    "surcharge_label": "Surcharge",
+    "coupon_discount_label": "Coupon Discount",
+    "delivery_fee_label": "Delivery Fee",
+    "total_amount_label": "Total Amount"
+  },
 
+  "ORDER_PAGE": {
+    "loading_message": "Loading...",
+    "order_not_found": "Order not found",
+    "failed_to_fetch_order": "Failed to fetch order:",
+    "failed_to_fetch_cancel_reasons": "Failed to fetch cancel reasons:",
+    "order_id_prefix": "Order ID -",
+    "cancel_order_button": "Cancel Order",
+    "completed_status": "Completed",
+    "cancelled_status": "Cancelled",
+    "please_provide_reason": "Please provide a reason for cancellation.",
+    "order_cancelled_success": "Order cancelled successfully",
+    "something_went_wrong": "Something went wrong"
+  },
+  "ORDER_DETAILS": {
+    "branch_label": "Branch",
+    "address_label": "Address",
+    "call_center_title": "Call Center",
+    "order_type_title": "Order Type",
+    "payment_type_title": "Payment Type",
+    "date_of_order_title": "Date Of Order",
+    "time_of_order_title": "Time Of Order",
+    "takeaway_type": "Takeaway",
+    "delivery_type": "Delivery",
+    "cash_method": "Cash",
+    "card_method": "Card",
+    "reorder_button": "Reorder"
+  },"CANCEL_ORDER_DIALOG": {
+    "select_reason_title": "Select your reason",
+    "confirm_cancel_button": "Confirm Cancel",
+    "reason_placeholder": "Reason #{id}",
+    "other_reason_label": "Other reason",
+    "note_label": "Note",
+    "note_placeholder": "Write your reason..."
+  },"WISHLIST_SHEET": {
+    "total_items_label": "({totalItems} items)",
+    "no_products_title": "No products",
+    "no_products_message": "You don't have any products yet in your wishlist",
+    "wishlist_title": "WishList"
+  },"NOTIFICATION_SHEET": {
+    "title": "Notifications",
+    "no_notifications_title": "No Notifications",
+    "no_notifications_message": "You don't have any Notifications"
+  },  "PROFILE_SHEET": {
+    "profile_title": "Profile",
+    "my_address_label": "My Address",
+    "wish_list_label": "Wish List",
+    "my_account":"My Account",
+    "my_orders":"My Orders",
+    "notification":"Notification",
+    "logout_button": "Logout"
+  },
+   "LOYALTY_CARD": {
+    "loyalty_card_label": "Loyalty Card",
+    "points_label": "{points} points",
+    "loyalty_card_title": "Loyalty Card",
+    "transaction_id_prefix": "Transaction ID -",
+    "points_unit": "Points",
+    "no_transactions_found": "No transactions found."
+  }, "WALLET_COMPONENT": {
+    "wallet_label": "Wallet",
+    "wallet_title": "Wallet",
+    "cancelled_orders_title": "Cancelled Orders",
+    "no_data_cancelled_orders": "No data in cancelled orders"
+  },
   "TEXT": {},
   "LABELS": {
     "selectItem": "Select {value} {name}",
@@ -268,8 +456,6 @@
       "edit": "Edit",
       "show": "Show"
     },
-
- 
 
     "articles": {
       "title": "Articles",

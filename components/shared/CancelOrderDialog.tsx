@@ -3,6 +3,7 @@
 import { useState } from "react";
 import GlobalDialog from "@/components/shared/GlobalDialog";
 import { ScrollArea } from "../ui/scroll-area";
+import { useTranslations } from "next-intl"; 
 
 type Reason = {
   id: number;
@@ -26,8 +27,7 @@ const CancelOrderDialog: React.FC<Props> = ({
     "not_satisfied",
   );
   const [note, setNote] = useState<string>("");
-
-  //   const isOther = selectedReason === "other";
+  const t = useTranslations("CANCEL_ORDER_DIALOG"); 
 
   const handleConfirm = () => {
     onConfirm(String(selectedReason), note);
@@ -37,14 +37,14 @@ const CancelOrderDialog: React.FC<Props> = ({
     <GlobalDialog
       open={open}
       onOpenChange={onClose}
-      title="Select your reason"
+      title={t("select_reason_title")}
       height="!h-[420px]"
       footer={
         <button
           className="confirm-btn h-10 w-1/2 rounded-2xl px-4 py-2"
           onClick={handleConfirm}
         >
-          Confirm Cancel
+          {t("confirm_cancel_button")}
         </button>
       }
     >
@@ -62,12 +62,11 @@ const CancelOrderDialog: React.FC<Props> = ({
                     checked={selectedReason === reason.id}
                     onChange={() => setSelectedReason(reason.id)}
                   />
-                  {reason.desc || `Reason #${reason.id}`}
+                  {reason.desc || t("reason_placeholder", { id: reason.id })}
                 </div>
               </label>
             ))}
 
-            {/* Other reason manually */}
             <label htmlFor="reason_other">
               <div className="flex cursor-pointer items-center justify-start gap-3 rounded-2xl bg-white/60 p-4">
                 <input
@@ -78,14 +77,14 @@ const CancelOrderDialog: React.FC<Props> = ({
                   checked={selectedReason === "other"}
                   onChange={() => setSelectedReason("other")}
                 />
-                Other reason
+                {t("other_reason_label")}
               </div>
             </label>
           </div>
 
           <div className="flex w-full flex-col justify-center">
             <label htmlFor="note" className="mb-1 block font-medium">
-              Note{" "}
+              {t("note_label")}{" "}
               {selectedReason === "other" && (
                 <span className="text-red-500">*</span>
               )}
@@ -95,7 +94,7 @@ const CancelOrderDialog: React.FC<Props> = ({
               className="focus:ring-primary h-[100px] w-full justify-start rounded-md border px-3 py-2 text-start outline-none focus:ring-2"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Write your reason..."
+              placeholder={t("note_placeholder")}
             />
           </div>
         </div>

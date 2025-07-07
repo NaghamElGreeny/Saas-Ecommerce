@@ -3,9 +3,11 @@
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function AccountBtn({ onClose }: { onClose: () => void }) {
   const router = useRouter();
+  const t = useTranslations("PROFILE_SHEET"); 
 
   const handleClick = () => {
     onClose();
@@ -24,7 +26,7 @@ export default function AccountBtn({ onClose }: { onClose: () => void }) {
           width={65}
           height={65}
         />
-        My Account
+        {t("my_account")}
       </div>
       <ChevronRight />
     </div>

@@ -7,11 +7,12 @@ import NotificationCard from "../cards/NotificationCard";
 import GlobalSheet from "@/components/shared/GlobalSheet";
 import { Spinner } from "../atoms";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTranslations } from "next-intl"; 
 
 export default function NotificationSheet() {
   const { notifications, unreadCount, fetchNotifications, loading } =
     useNotificationStore();
-
+  const t = useTranslations("NOTIFICATION_SHEET"); 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -22,13 +23,13 @@ export default function NotificationSheet() {
     <GlobalSheet
       open={open}
       onOpenChange={setOpen}
-      title="Notifications"
+      title={t("title")}
       side="right"
       trigger={
         <div className="relative cursor-pointer">
           <Image
             src="/assets/icons/notifications.png"
-            alt="notifications"
+            alt={t("title")}
             width={60}
             height={60}
             className="size-[60px]"
@@ -48,8 +49,8 @@ export default function NotificationSheet() {
           </div>
         ) : notifications.length === 0 ? (
           <div className="flex h-full w-full flex-col items-center justify-center text-center">
-            <h2 className="mb-4 text-2xl font-bold">No Notifications</h2>
-            <p>You don&apos;t have any Notifications</p>
+            <h2 className="mb-4 text-2xl font-bold">{t("no_notifications_title")}</h2>
+            <p>{t("no_notifications_message")}</p>
           </div>
         ) : (
           <ScrollArea className="scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent h-[80vh] max-h-[85vh] w-[97%] overflow-y-auto rounded-md p-4 py-0">

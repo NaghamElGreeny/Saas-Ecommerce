@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useLikedStore } from "@/stores/likedStore";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import GlobalDialog from "@/components/shared/GlobalDialog";
 import { ShareButtons } from "./ShareButtons";
 import {
   Drawer,
@@ -14,10 +13,9 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-
-} from "@/components/ui/drawer"
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ProductHeaderClient({ product }: any) {
+} from "@/components/ui/drawer";
+import { Product } from "@/utils/menuTypes";
+export default function ProductHeaderClient({ product }: { product: Product }) {
   const { isLiked, toggleLike } = useLikedStore();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -27,11 +25,8 @@ export default function ProductHeaderClient({ product }: any) {
 
   return (
     <div className="flex items-center justify-end gap-4 px-2">
-      {/* Share Modal Trigger */}
- <button
-        className="cursor-pointer"
-        onClick={() => setOpen(true)}
-      >
+      {/* Share button */}
+      <button className="cursor-pointer" onClick={() => setOpen(true)}>
         <Image
           src="/assets/icons/share.svg"
           alt="Share"
@@ -40,20 +35,24 @@ export default function ProductHeaderClient({ product }: any) {
           className="rounded-full bg-[#F6F6FD] p-1"
         />
       </button>
-  {/* Global Dialog */}
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent className="bg-bg !rounded-3xl max-w-[480px] min-w-[400px] mx-auto !rounded-b-none h-[200px]" data-aos="fade-up">
+        <DrawerContent
+          className="bg-bg mx-auto h-[200px] max-w-[480px] min-w-[400px] !rounded-3xl !rounded-b-none"
+          data-aos="fade-up"
+        >
           <DrawerHeader>
-        <DrawerTitle>Share This Item</DrawerTitle>
-        <DrawerDescription />
+            <DrawerTitle>Share This Item</DrawerTitle>
+            <DrawerDescription />
           </DrawerHeader>
           <div className="px-4">
-        <ShareButtons />
+            <ShareButtons />
           </div>
           <DrawerFooter>
-        <DrawerClose asChild>
-          <button className="mt-2 w-full rounded bg-gray-200 py-2 font-semibold">Close</button>
-        </DrawerClose>
+            <DrawerClose asChild>
+              <button className="mt-2 w-full rounded bg-gray-200 py-2 font-semibold">
+                Close
+              </button>
+            </DrawerClose>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
