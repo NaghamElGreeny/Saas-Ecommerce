@@ -20,7 +20,7 @@ import { PhoneNumber } from "@/utils/webSettingsTypes";
 export default function Footer() {
   const { pages, fetchPages } = usePagesStore();
   const { data, fetchSettings, getContact, getSetting } = useWebsiteStore();
-  const t = useTranslations("NAV");
+  const t = useTranslations("NAV"); // استخدام الـ hook للترجمة
   const [logo, setLogo] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,11 +48,11 @@ export default function Footer() {
   const renderReservationDialog = () => (
     <Dialog>
       <DialogTrigger className="w-fit cursor-pointer text-start hover:text-primary">
-        {t("reservation")}
+        {t("reservation")} {/* ترجمة "Reservation" */}
       </DialogTrigger>
       <DialogContent className="mx-auto flex items-center justify-center rounded-[20px] p-0">
         <DialogHeader>
-          <DialogTitle>{/* يمكنك إضافة عنوان هنا */}</DialogTitle>
+          <DialogTitle></DialogTitle>
         </DialogHeader>
         <ReservationForm show={false} className="!w-full p-0" />
       </DialogContent>
@@ -68,7 +68,7 @@ export default function Footer() {
         <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-2">
-          
+            
               <Image
                 src={logo}
                 alt="mea telecom"
@@ -76,7 +76,7 @@ export default function Footer() {
                 height={96}
                 className="h-24"
               />
-           
+            
             {getSetting("footer_desc") && (
               <p className="pt-3 text-third">{getSetting("footer_desc")}</p>
             )}
@@ -84,16 +84,16 @@ export default function Footer() {
 
           {/* Static Sections */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Sections</h3>
+            <h3 className="mb-4 text-lg font-semibold">{t("sections")}</h3> {/* ترجمة "Sections" */}
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-third hover:text-primary">
-                  Menu
+                <Link href="/menu" className="text-third hover:text-primary">
+                   {t("menu")} {/* ترجمة "Menu" */}
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-third hover:text-primary">
-                  Offers
+                <Link href="/offers" className="text-third hover:text-primary">
+                  {t("offers")} {/* ترجمة "Offers" */}
                 </Link>
               </li>
               <li>{renderReservationDialog()}</li>
@@ -101,7 +101,7 @@ export default function Footer() {
                 <WishList
                   triggerr={
                     <p className="cursor-pointer text-third hover:text-primary">
-                      Favourites
+                      {t("fav")} {/* ترجمة "Wishlist" */}
                     </p>
                   }
                 />
@@ -111,7 +111,7 @@ export default function Footer() {
 
           {/* Dynamic Pages */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Links</h3>
+            <h3 className="mb-4 text-lg font-semibold">{t("links")}</h3> {/* ترجمة "Links" */}
             <ul className="space-y-2">
               {cmsPages.length > 0 ? (
                 cmsPages.map((page) => (
@@ -125,21 +125,21 @@ export default function Footer() {
                   </li>
                 ))
               ) : (
-                <li className="text-gray-400">No pages available</li>
+                <li className="text-gray-400">{t("no_pages_available")}</li> 
               )}
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Contact</h3>
+            <h3 className="mb-4 text-lg font-semibold">{t("contact")}</h3> {/* ترجمة "Contact" */}
             <ul className="space-y-4 text-third">
               {firstPhone &&
                 typeof firstPhone === "object" &&
                 "phone_code" in firstPhone &&
                 "phone" in firstPhone && (
                   <li>
-                    <strong>Call Center:</strong>
+                    <strong>{t("call_center")}</strong> {/* ترجمة "Call Center:" */}
                     <br />
                     <a
                       href={`tel:+${firstPhone.phone_code}${firstPhone.phone}`}
@@ -152,7 +152,7 @@ export default function Footer() {
 
               {email && (
                 <li>
-                  <strong>Email:</strong>
+                  <strong>{t("email")}</strong> {/* ترجمة "Email:" */}
                   <br />
                   <a
                     href={`mailto:${email}`}
@@ -169,7 +169,7 @@ export default function Footer() {
         <div className="my-6 border-t border-gray-700"></div>
 
         <div className="flex flex-col items-center justify-between gap-4 text-gray-400 md:flex-row">
-          <div>© {new Date().getFullYear()} All Rights Reserved</div>
+          <div>© {new Date().getFullYear()} {t("all_rights_reserved")}</div> {/* ترجمة "All Rights Reserved" */}
           <div className="flex gap-4">
             {socialLinks.map((social, idx) => (
               <Link

@@ -6,13 +6,16 @@ function ToggleLang() {
   const pathname = usePathname();
   const locale = pathname?.split("/")[1] === "ar" ? "ar" : "en";
 
-  const toggleLocale = () => {
-    const newLocale = locale === "en" ? "ar" : "en";
-    const segments = pathname.split("/").filter(Boolean);
-    segments[0] = newLocale; 
-    const newPath = `/${segments.join("/")}`;
-    router.push(newPath);
-  };
+const toggleLocale = () => {
+  const newLocale = locale === "en" ? "ar" : "en";
+
+  document.cookie = `NEXT_LOCALE=${newLocale}; path=/`;
+
+  const segments = pathname.split("/").filter(Boolean);
+  segments[0] = newLocale;
+  const newPath = `/${segments.join("/")}`;
+  router.push(newPath);
+};
   return (
     <button
       onClick={toggleLocale}

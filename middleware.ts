@@ -7,7 +7,6 @@ const defaultLocale = "en";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   const response = NextResponse.next();
 
   const token = request.cookies.get("token"); 
@@ -38,6 +37,7 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
+   // Prevent authenticated users from accessing /auth
   if (token && pathname.startsWith("/auth")) {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -45,11 +45,19 @@ export function middleware(request: NextRequest) {
   const pathnameParts = pathname.split("/").filter(Boolean);
   const hasLocale = locales.includes(pathnameParts[0]);
 
-  if (!hasLocale) {
-    const url = request.nextUrl.clone();
-    url.pathname = `/${defaultLocale}${pathname}`;
-    return NextResponse.redirect(url);
-  }
+  //  ONLY add locale if it's NOT already in the path
+if (!hasLocale) {
+  const localeFromCookie = request.cookies.get("NEXT_LOCALE")?.value;
+
+  const locale = locales.includes(localeFromCookie ?? "")
+    ? localeFromCookie
+    : defaultLocale;
+
+  const url = request.nextUrl.clone();
+  url.pathname = `/${locale}${pathname}`;
+  return NextResponse.redirect(url);
+}
+
 
   return response;
 }

@@ -16,8 +16,7 @@ export default async function Home() {
   const web_content_link = data?.web_content_link;
   const products = data?.products || [];
   const offers = data?.offers || [];
-  // console.log('data :',data)
-  // console.log('products :',products)
+
   return (
     <div className="space-y-12 overflow-hidden">
       <Hero sliders={sliders} />
@@ -42,10 +41,6 @@ export default async function Home() {
       />
       <FollowusSection />
        <Slider title="Popular Items" items={popularProducts} />
-      {/* <DblSection
-   sectionData={followSection}
-        sectionType='subscribe'
-      /> */}
 
     </div>
   );

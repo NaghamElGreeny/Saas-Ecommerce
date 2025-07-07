@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
 
 import GlobalSheet from "../shared/GlobalSheet";
 

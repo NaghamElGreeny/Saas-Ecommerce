@@ -12,6 +12,7 @@
     "about": "About",
     "reservation": "Reservation",
     "menu": "Menu",
+    "fav":"Favourites",
     "contact": "Contact",
     "logout": "Logout",
     "login": "Log In",
@@ -21,7 +22,13 @@
     "سياسة-الخصوصية":"Privacy Policy",
     "الشروط-والاحكام":"Terms and Conditions",
     "تواصل-معنا":"Contact us",
-    "من-نحن":"About us"
+    "من-نحن":"About us",
+  "offers": "Offers",
+  "sections": "Sections",
+  "links": "Links",
+  "call_center": "Call Center",
+  "email": "Email",
+  "all_rights_reserved": "All Rights Reserved"
   },  
   "cart":{
     "add-to-cart":"Add to Cart"
