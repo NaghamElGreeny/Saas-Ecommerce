@@ -33,6 +33,69 @@
   "cart":{
     "add-to-cart":"Add to Cart"
   },
+   "HOME": {
+    "view_our_menus": "View our menus",
+    "offers": "Offers",
+    "popular_items": "Popular Items",
+    "welcome_message": "HEY! WELCOME TO mea telecom",
+    "view-all":"Veiw All",
+    "follow":"Follow us on Instagram"
+  },  "DBL_SECTION": {
+    "discover_more": "Discover more"
+  },
+ "RESERVATION_FORM": {
+    "make_an_reserve": "Make an Reserve",
+    "online_reservation": "Online Reservation",
+    "reservations": "reservations",
+    "book_a_table": "Book a Table",
+    "name_required": "Name is required",
+    "name_min_chars": "Name must be at least 2 characters",
+    "phone_required": "Phone number is required",
+    "phone_digits_only": "Phone number must contain only digits",
+    "phone_too_short": "Phone number is too short",
+    "phone_too_long": "Phone number is too long",
+    "country_code_required": "Country code is required",
+    "select_branch_required": "Please select a branch",
+    "date_required": "Date is required",
+    "date_past_error": "Date cannot be in the past",
+    "time_from_required": "Start time is required",
+    "time_from_before_to": "Start time must be before end time",
+    "time_to_required": "End time is required",
+    "time_to_after_from": "End time must be after start time",
+    "guests_required": "Number of guests is required",
+    "guests_min": "Must be at least 1 guest",
+    "guests_max": "Maximum 20 guests allowed",
+    "guests_invalid_number": "Please enter a valid number",
+    "name_placeholder": "Name",
+    "phone_placeholder": "Phone",
+    "person": "Person",
+    "people": "People",
+    "branches_address": "Branches Address",
+    "select_your_location": "Please, Select your location",
+    "confirm": "Confirm",
+    "select_branch": "Select Branch",
+    "from_time_placeholder": "From Time",
+    "to_time_placeholder": "To Time",
+    "booking": "Booking...",
+    "book_now": "Book Now",
+    "reservation_successful": "Reservation successful!",
+    "reservation_failed": "Reservation failed",
+    "please_select_a_branch_toast": "Please select a branch"
+  },
+  "CART_SHEET": 
+  {
+    "checkout": "Checkout",
+    "no_products_title": "No products",
+    "no_products_message": "You don't have any products yet in your cart",
+    "my_cart": "My Cart",
+    "items": "items",
+    "booking": "Booking...",
+    "book_now": "Book Now",
+    "reservation_successful": "Reservation successful!",
+    "reservation_failed": "Reservation failed",
+    "please_select_a_branch_toast": "Please select a branch"
+  },
+
   "TEXT": {},
   "LABELS": {
     "selectItem": "Select {value} {name}",
@@ -206,13 +269,7 @@
       "show": "Show"
     },
 
-    "courses": {
-      "title": "Courses",
-      "all": "Show All",
-      "add": "Add ",
-      "edit": "Edit",
-      "show": "Show"
-    },
+ 
 
     "articles": {
       "title": "Articles",

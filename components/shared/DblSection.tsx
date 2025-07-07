@@ -6,6 +6,7 @@ import EmailSubscription from "../ui/SubscribeBtn";
 import DownloadButtons from "../ui/Download";
 import Btn from "../ui/Btn";
 import { WebContent } from "@/utils/types";
+import { useTranslations } from "next-intl"; 
 
 export function DblSection({
   topMsg,
@@ -20,6 +21,7 @@ export function DblSection({
 }) {
   const [isRTL, setIsRTL] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations("DBL_SECTION"); 
 
   useEffect(() => {
     setMounted(true);
@@ -38,7 +40,7 @@ export function DblSection({
       className="from-primary-50 to-secondary-50 bg-gradient-to-r py-16 md:py-24"
     >
       <div className="container mx-auto w-[90%] px-4">
-        <div className="grid grid-cols-1 items-center lg:grid-cols-2">
+        <div className="grid grid-cols-1 items-center lg:grid-cols-2 gap-5">
           {/* Image Section */}
           <Image
             data-aos={`${imageFirst ? "fade-right" : "fade-left"}`}
@@ -90,7 +92,7 @@ export function DblSection({
               />
             )}
             {sectionType === "discover" && (
-              <Btn text="Discover more" link="https://example.com" />
+              <Btn text={t("discover_more")} link="https://example.com" /> 
             )}
           </div>
         </div>

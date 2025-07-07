@@ -43,7 +43,7 @@ function MobileNav({ cms }: {  cms: CmsPage[] }) {
           href={`/pages/${page.slug}`}
           className="whitespace-nowrap hover:text-primary"
         >
-          {t(`${page.slug}`)}
+          {page.title}
         </Link>
       );
     });

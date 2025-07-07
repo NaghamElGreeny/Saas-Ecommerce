@@ -19,7 +19,7 @@ export default async function LocaleLayout({
 
   return (
     <>
-      <AosWrapper>
+      <AosWrapper >
         <Navbar cms={cmsPages?.data} />
 
         {children}

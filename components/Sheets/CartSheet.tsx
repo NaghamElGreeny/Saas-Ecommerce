@@ -9,11 +9,13 @@ import TotalOrder from "../shared/TotalOrder";
 import { Spinner } from "@/components/atoms";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import GlobalSheet from "@/components/shared/GlobalSheet";
+import { useTranslations } from "next-intl"; 
 
 export default function CartSheet() {
   const { cart, fetchCart, loading } = useCartStore();
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const t = useTranslations("CART_SHEET"); 
 
   useEffect(() => {
     fetchCart();
@@ -46,18 +48,18 @@ export default function CartSheet() {
   const footer = hasProducts && (
     <button
       onClick={() => {
-        setOpen(false);          // Close the sheet
-        router.push("/checkout"); // Navigate to checkout
+        setOpen(false); 
+        router.push("/checkout"); 
       }}
       className="confirm-btn  flex h-16 w-full items-center justify-center gap-2 rounded-full"
     >
-      <span className="text-2xl">Checkout</span>
+      <span className="text-2xl">{t("checkout")}</span>
       <Image
         src="/assets/icons/arrow.svg"
         alt="checkout"
         width={24}
         height={24}
-      className="confirm-btn rounded-full"
+        className="confirm-btn rounded-full"
       />
     </button>
   );
@@ -79,8 +81,8 @@ export default function CartSheet() {
     </>
   ) : (
     <div className="flex h-full w-full flex-col items-center justify-center text-center">
-      <h2 className="mb-4 text-2xl font-bold">No products</h2>
-      <p>You don&#39;t have any products yet in your cart</p>
+      <h2 className="mb-4 text-2xl font-bold">{t("no_products_title")}</h2>{" "}
+      <p>{t("no_products_message")}</p> 
     </div>
   );
 
@@ -90,10 +92,10 @@ export default function CartSheet() {
       onOpenChange={setOpen}
       title={
         <>
-          My Cart
+          {t("my_cart")} 
           {hasProducts && (
             <span className="text-text-website-font ms-2 text-sm font-medium">
-              ({totalItems} items)
+              ({totalItems} {t("items")}) 
             </span>
           )}
         </>

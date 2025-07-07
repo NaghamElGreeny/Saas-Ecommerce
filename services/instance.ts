@@ -17,10 +17,18 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(async (config: AxiosRequestConfig) => {
   const cookieStore = await cookies();
   const storeId = cookieStore.get("store_id")?.value;
+    const locale = cookieStore.get("NEXT_LOCALE")?.value;
+
   if (storeId) {
     config.params = {
       ...config.params,
       store_id: storeId,
+    };
+  }
+    if (locale) {
+    config.headers = {
+      ...config.headers,
+      "Accept-Language": locale,
     };
   }
   return config;

@@ -42,11 +42,13 @@ export const authService = {
     phone,
     verification_code,
     verificationType,
+    // reset_code,
   }: {
     phone_code?: string;
     phone?: string;
     verification_code: string;
-    verificationType: "register" | "forgot_password" | null;
+      verificationType: "register" | "forgot_password" | null;
+    // reset_code:
   }) => {
     let url = "";
     if (verificationType === "register") {

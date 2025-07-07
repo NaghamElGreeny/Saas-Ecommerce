@@ -29,7 +29,7 @@ params: { locale: string }
   return (
     <html className={`${themeMode ? themeMode : ''}`}
       lang={locale}
-      // dir={locale === "ar" ? "rtl" : "ltr"}
+      dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <head>
         <title>{locale === "ar" ? "نغم" : "MEA"}</title>

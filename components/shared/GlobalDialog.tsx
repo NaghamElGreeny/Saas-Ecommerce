@@ -45,7 +45,7 @@ export default function GlobalDialog({
           <DialogClose asChild>
             <button
               aria-label="Close"
-              className="absolute top-4 right-4 rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-700"
+              className="absolute top-4 end-4 rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-700"
             >
               <X className="h-5 w-5" />
             </button>

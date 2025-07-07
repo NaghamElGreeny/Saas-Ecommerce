@@ -30,7 +30,7 @@ export default function GlobalSheet({
   title,
   description,
   children,
-  side = "right",
+  side ,
   trigger,
   footer,
 }: GlobalSheetProps) {
@@ -41,12 +41,12 @@ export default function GlobalSheet({
         side={side}
         className={`bg-bg w-full  items-center rounded-l-2xl sm:min-w-[550px] min-h-[80vh]`}
       >
-        <SheetHeader className="relative w-full rounded-2xl  bg-white text-start bottom-0">
+        <SheetHeader className="relative w-full rounded-2xl  bg-white flex items-start bottom-0">
           {title ? (
             <SheetTitle className="text-2xl font-bold">{title}</SheetTitle>
           ) : (
             <VisuallyHidden>
-              <SheetTitle>Dialog</SheetTitle>
+              <SheetTitle></SheetTitle>
             </VisuallyHidden>
           )}
           {description && (

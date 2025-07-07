@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { BrandCountry, getCountryCodes} from '@/services/ClientApiHandler';
+import { locationService} from '@/services/ClientApiHandler';
 // import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useVerificationStore } from '@/stores/useVerificationStore';
 import { ChevronDown } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
+import { BrandCountry } from '@/utils/types';
 
 export default function PhoneInput({setStatus}: { setStatus: (status: 'phone' | 'verify') => void }) {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
@@ -23,7 +24,7 @@ export default function PhoneInput({setStatus}: { setStatus: (status: 'phone' | 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const codes = await getCountryCodes();
+        const codes = await locationService.getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);
         formik.setFieldValue('phone_code', codes[0].phone_code);

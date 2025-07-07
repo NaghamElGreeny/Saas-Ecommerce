@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import NavLinks from "./NavLinks";
 import CmsLinks from "./CmsLinks";
@@ -16,6 +15,7 @@ import WishList from "../Sheets/WishListSheet";
 import ToggleLang from "./ToggleLang";
 import { useWebsiteStore } from "@/stores/useWebsiteStore";
 import { useEffect, useState } from "react";
+import { Link } from "@/i18n/routing";
 export default function Navbar({ cms }) {
   const logged = !!useAuthStore((state) => state.token);
   const { getSetting } = useWebsiteStore();

@@ -88,12 +88,12 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="/menu" className="text-third hover:text-primary">
-                   {t("menu")} {/* ترجمة "Menu" */}
+                   {t("menu")}
                 </Link>
               </li>
               <li>
                 <Link href="/offers" className="text-third hover:text-primary">
-                  {t("offers")} {/* ترجمة "Offers" */}
+                  {t("offers")} 
                 </Link>
               </li>
               <li>{renderReservationDialog()}</li>
@@ -101,7 +101,7 @@ export default function Footer() {
                 <WishList
                   triggerr={
                     <p className="cursor-pointer text-third hover:text-primary">
-                      {t("fav")} {/* ترجمة "Wishlist" */}
+                      {t("fav")} 
                     </p>
                   }
                 />
@@ -111,7 +111,7 @@ export default function Footer() {
 
           {/* Dynamic Pages */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">{t("links")}</h3> {/* ترجمة "Links" */}
+            <h3 className="mb-4 text-lg font-semibold">{t("links")}</h3> 
             <ul className="space-y-2">
               {cmsPages.length > 0 ? (
                 cmsPages.map((page) => (
@@ -125,21 +125,21 @@ export default function Footer() {
                   </li>
                 ))
               ) : (
-                <li className="text-gray-400">{t("no_pages_available")}</li> 
+                <></>  
               )}
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">{t("contact")}</h3> {/* ترجمة "Contact" */}
+            <h3 className="mb-4 text-lg font-semibold">{t("contact")}</h3> 
             <ul className="space-y-4 text-third">
               {firstPhone &&
                 typeof firstPhone === "object" &&
                 "phone_code" in firstPhone &&
                 "phone" in firstPhone && (
                   <li>
-                    <strong>{t("call_center")}</strong> {/* ترجمة "Call Center:" */}
+                    <strong>{t("call_center")}</strong> 
                     <br />
                     <a
                       href={`tel:+${firstPhone.phone_code}${firstPhone.phone}`}
@@ -152,7 +152,7 @@ export default function Footer() {
 
               {email && (
                 <li>
-                  <strong>{t("email")}</strong> {/* ترجمة "Email:" */}
+                  <strong>{t("email")}</strong>
                   <br />
                   <a
                     href={`mailto:${email}`}
@@ -169,7 +169,7 @@ export default function Footer() {
         <div className="my-6 border-t border-gray-700"></div>
 
         <div className="flex flex-col items-center justify-between gap-4 text-gray-400 md:flex-row">
-          <div>© {new Date().getFullYear()} {t("all_rights_reserved")}</div> {/* ترجمة "All Rights Reserved" */}
+          <div>© {new Date().getFullYear()} {t("all_rights_reserved")}</div> 
           <div className="flex gap-4">
             {socialLinks.map((social, idx) => (
               <Link

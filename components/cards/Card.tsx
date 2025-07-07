@@ -11,10 +11,12 @@ function Card({
   item,
   width,
   offer,
+  className = "",
 }: {
   item: Product;
   width?: string;
   offer?: boolean;
+  className?: string;
 }) {
   const router = useRouter();
   const { isLiked, toggleLike } = useLikedStore();
@@ -33,17 +35,17 @@ function Card({
     <div
       onClick={handlePress}
       style={{ width }}
-      className="base-card-1  bg-website_white flex h-full w-full flex-col !rounded-3xl !p-3 mx-1"
+      className={`${className} relative  base-card-1 bg-website_white mx-1 flex h-full w-full flex-col !rounded-3xl !p-3`}
       // className="h-[509px] min-w-[402px] max-w-[450px] flex flex-col   cursor-pointer rounded-2xl bg-white px-4 pt-2.5 pb-6 shadow-sm transition-shadow hover:shadow-md"
     >
-      <div className="img relative mb-4">
+      <div className="img overflow-hidden relative mb-4 rounded-2xl">
         <Image
           // data-aos="zoom-out"
           src={item.image}
           alt={item.name}
-          width={384}
+          width={325}
           height={325}
-          className="h-[325px] w-96 rounded-2xl object-cover"
+          className="h-[325px] !w-full hover:scale-110  object-cover transition-transform"
         />
         <div className="absolute top-2 left-2 rounded-full bg-yellow-50 px-2 py-1 text-xs font-bold shadow">
           ⭐ {item.rating}

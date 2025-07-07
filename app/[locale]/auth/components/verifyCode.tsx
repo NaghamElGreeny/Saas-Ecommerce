@@ -1,5 +1,5 @@
 "use client";
-import { verifyCode } from "@/services/ClientApiHandler";
+import {  authService} from "@/services/ClientApiHandler";
 import { useVerificationStore } from "@/stores/useVerificationStore";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -70,11 +70,11 @@ export default function VerifyCode() {
       verificationType: verificationType,
     });
     try {
-      const data = await verifyCode({
+      const data = await authService.verifyCode({
         phone_code: phoneCode,
         phone: phone,
         verification_code: fullCode,
-        reset_code: fullCode,
+        // reset_code: fullCode,
         verificationType,
       });
 

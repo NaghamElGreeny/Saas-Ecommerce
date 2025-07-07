@@ -7,60 +7,58 @@ import "swiper/css";
 import Card from "../cards/Card";
 import Link from "next/link";
 import { Product } from "@/utils/menuTypes";
-
+import { useTranslations } from "next-intl";
 
 type SliderProps = {
   title?: string;
   items: Product[];
-  offer?: boolean|false;
+  offer?: boolean | false;
 };
 
-export default function Slider({ title, items,offer }: SliderProps) {
-
+export default function Slider({ title, items, offer }: SliderProps) {
+  const t = useTranslations("HOME");
 
   return (
     <div className="sliderr container my-6 min-h-screen px-10">
       {/* Header */}
-      <div className="mb-10 flex items-center justify-between px-28">
-        <h2 data-aos="fade-up" className="text-3xl font-bold md:text-4xl lg:text-5xl">{title}</h2>
-        <Link
-          href={offer?'/offers':'/menu'}
-          className="flex cursor-pointer text-sm text-indigo-600 hover:text-indigo-800 rtl:flex-row-reverse"
-        >
-          <p className="me-1">View All</p> <ArrowRight />
-        </Link>
-      </div>
 
       {/* Items Slider */}
-      <div className="relative w-full">
-        <div className="scrollbar-hide flex w-full overflow-x-visible lg:ps-20">
-          <Swiper
-            slidesPerView={3.5}
-            spaceBetween={20}
-            loop
-            breakpoints={{
-              320: { slidesPerView: 1, spaceBetween: 10 },
-              640: { slidesPerView: 2.2, spaceBetween: 15 },
-              768: { slidesPerView: 2.5, spaceBetween: 20 },
-              992: { slidesPerView: 3.2, spaceBetween: 25 },
-              1200: { slidesPerView: 3.5, spaceBetween: 30 },
-            }}
-            className="h-full w-full"
-          >
-            {items &&
-              items.map((item) => (
-                <SwiperSlide key={item.id} style={{ width: "420px" }} data-aos="fade-up">
-                  <Card
-                    item={item}
-                    // width="350px"
-                    offer={offer}
-                    width="100%"
-                  />
-                </SwiperSlide>
-              ))}
-          </Swiper>
-        </div>
+     <div className="relative w-full">
+  <div className="scrollbar-hide flex w-full overflow-x-visible lg:ps-20 flex-col">
+      <div className="mb-10 flex items-center justify-between w-full">
+        <h2
+          data-aos="fade-up"
+          className="text-lg font-bold md:text-4xl lg:text-5xl"
+        >
+          {title}
+        </h2>
+        <Link
+          href={offer ? "/offers" : "/menu"}
+          className="flex cursor-pointer text-sm text-indigo-600 hover:text-indigo-800"
+        >
+          <p className="me-1">{t("view-all")}</p> <ArrowRight className="rtl:rotate-180"/>
+        </Link>
       </div>
+   <Swiper
+  loop
+  className="w-full h-full"
+  spaceBetween={40}
+  slidesPerView="auto"
+>
+  {items?.map((item) => (
+    <SwiperSlide
+      key={item.id}
+      data-aos="fade-up"
+      className="!w-[430px]" 
+    >
+      <Card item={item} offer={offer} className="w-full" />
+    </SwiperSlide>
+  ))}
+</Swiper>
+
+  </div>
+</div>
+
     </div>
   );
 }
