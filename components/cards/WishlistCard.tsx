@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function WishlistCard({ cartProduct }: Props) {
-  const { removeFromWishlist } = useLikedStore();
+  const removeFromWishlist  = useLikedStore(s=>s.removeFromWishlist);
 
   const handleRemove = async () => {
 await removeFromWishlist(cartProduct.favourite_id);

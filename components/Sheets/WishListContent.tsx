@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   SheetClose,
   SheetContent,
@@ -12,10 +12,8 @@ import { Spinner } from "@heroui/spinner";
 import { useLikedStore } from "@/stores/likedStore";
 import WishlistCard from "../cards/WishlistCard";
 function WishListContent() {
-  const { likedItems, fetchLikedItems, loading } = useLikedStore();
-  useEffect(() => {
-    fetchLikedItems();
-  }, [fetchLikedItems]);
+  const { likedItems, loading } = useLikedStore();
+
   const totalItems = likedItems.length;
   const hasProducts = totalItems > 0;
   return (

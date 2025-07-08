@@ -35,12 +35,11 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
 
   const orderDate = order.order_date;
   const orderTime = order.order_time;
-  const { setCart, fetchCart } = useCartStore();
+  const { setCart } = useCartStore();
 
   const handleClick = async () => {
     const res = await orderService.reOrder(order.id);
     setCart(res);
-    fetchCart();
   };
 
   return (

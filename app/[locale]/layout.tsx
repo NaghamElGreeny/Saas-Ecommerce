@@ -8,6 +8,27 @@ import { getMessages } from "next-intl/server";
 // import { useEffect } from 'react';
 // import { useAuthStore } from '@/stores/authStore';
 import AuthProvider from "./auth/components/AuthProvider";
+import { getSettings } from "@/services/ApiHandler";
+import { Metadata } from "next";
+import SettingsHydration from "@/components/SettingsHydration";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const settings = await getSettings();
+
+  return {
+    title: settings.data?.website_setting.website_title,
+    icons: {
+      icon: settings.data?.website_setting.website_logo,
+    },
+  };
+}
+
+
 export default async function LocaleLayout({
   children,
   params,
@@ -21,7 +42,9 @@ params: { locale: string }
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-
+  const settings = await getSettings();
+  const webSettings = settings.data?.website_setting;
+  console.log(webSettings);
   const appCookies = await cookies()
 
   const themeMode = appCookies.get('modeLayout')
@@ -32,18 +55,18 @@ params: { locale: string }
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <head>
-        <title>{locale === "ar" ? "نغم" : "MEA"}</title>
-        <link rel="icon" href="/assets/logo/logo.svg" />
+        {/* <title>{webSettings.website_title}</title>
+        <link rel="icon" href={webSettings.website_logo }/> */}
       </head>
       <body className=" flex flex-col ">
         <Toaster position="top-center" />
         {/* <ChangeThem /> */}
         <NextIntlClientProvider messages={messages}>
-          <>
+          <SettingsHydration data={settings.data} />
             <AuthProvider />
             {children}
             
-          </>
+         
 
         </NextIntlClientProvider>
       </body>

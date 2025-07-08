@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import Image from "next/image";
 import { useLikedStore } from "@/stores/likedStore";
 import WishlistCard from "../cards/WishlistCard";
@@ -18,12 +18,9 @@ export default function WishList({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
-  const { likedItems, fetchLikedItems, loading } = useLikedStore();
+  const { likedItems, loading } = useLikedStore();
   const t = useTranslations("WISHLIST_SHEET");
 
-  useEffect(() => {
-    fetchLikedItems();
-  }, [fetchLikedItems]);
 
   const totalItems = likedItems.length;
   const hasProducts = totalItems > 0;

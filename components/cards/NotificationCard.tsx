@@ -11,8 +11,9 @@ import { useRouter } from "next/navigation";
 // };
 
 export default function NotificationCard({ notification }: any) {
-  const { deleteNotification, loading } = useNotificationStore();
-
+  // const { deleteNotification, loading } = useNotificationStore();
+  const deleteNotification = useNotificationStore(s => s.deleteNotification);
+  const loading = useNotificationStore(s => s.loading);
   const router = useRouter();
 
   // console.log(modifiers)

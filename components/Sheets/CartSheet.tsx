@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
@@ -12,14 +12,11 @@ import GlobalSheet from "@/components/shared/GlobalSheet";
 import { useTranslations } from "next-intl"; 
 
 export default function CartSheet() {
-  const { cart, fetchCart, loading } = useCartStore();
+  const { cart, loading } = useCartStore();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const t = useTranslations("CART_SHEET"); 
 
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
 
   const products = cart?.data?.products || [];
   const hasProducts = products.length > 0;
@@ -59,7 +56,7 @@ export default function CartSheet() {
         alt="checkout"
         width={24}
         height={24}
-        className="confirm-btn rounded-full"
+        className="confirm-btn rounded-full rtl:rotate-180"
       />
     </button>
   );

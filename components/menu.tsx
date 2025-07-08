@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useMenuFilterStore } from "@/stores/menuFilterStore";
+// import { useMenuFilterStore } from "@/stores/menuFilterStore";
 
 import Card from "./cards/Card";
 import { Product } from "@/utils/menuTypes";
@@ -17,13 +17,13 @@ const Menu = ({
   items: Product[];
   offer?: boolean | false;
 }) => {
-  const { mainCategory, subCategory, search } = useMenuFilterStore();
+  // const { mainCategory, subCategory, search } = useMenuFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredItems, setFilteredItems] = useState<Product[]>(items);
   const { fetchLikedItems } = useLikedStore();
 
   useEffect(() => {
-    let result = [...items];
+    // let result = [...items];
     // if (mainCategory) {
     //   result = result.filter(
     //     (item) => item.category?.toLowerCase() === mainCategory.toLowerCase(),
@@ -36,15 +36,15 @@ const Menu = ({
     //   );
     // }
 
-    if (search) {
-      result = result.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase()),
-      );
-    }
+    // if (search) {
+    //   result = result.filter((item) =>
+    //     item.name.toLowerCase().includes(search.toLowerCase()),
+    //   );
+    // }
     fetchLikedItems();
-    setFilteredItems(result);
+    // setFilteredItems(result);
     setCurrentPage(1); 
-  }, [items, mainCategory, subCategory, search, fetchLikedItems]);
+  }, [items, fetchLikedItems]);
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;

@@ -1,25 +1,30 @@
+"use client";
+
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
+import Cookies from "js-cookie";
+
 import Image from "next/image";
+import { useLocale } from "next-intl";
 function ToggleLang() {
+  const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const locale = pathname?.split("/")[1] === "ar" ? "ar" : "en";
 
-const toggleLocale = () => {
-  const newLocale = locale === "en" ? "ar" : "en";
+  const setLanguage = () => {
+    const lang = locale === "en" ? "ar" : "en";
 
-  document.cookie = `NEXT_LOCALE=${newLocale}; path=/`;
-
-  const segments = pathname.split("/").filter(Boolean);
-  segments[0] = newLocale;
-  const newPath = `/${segments.join("/")}`;
-  router.push(newPath);
-};
+    Cookies.set("NEXT_LOCALE", lang);
+    if (pathname.includes("/ar")) {
+      router.push(`/${lang}/${pathname.slice(3)}`);
+    } else {
+      router.push(`/${lang}/${pathname}`);
+    }
+  };
   return (
     <button
-      onClick={toggleLocale}
-      className="flex flex-row items-center gap-1 px-2 py-1 hover:text-primary cursor-pointer"
+      onClick={setLanguage}
+      className="hover:text-primary flex cursor-pointer flex-row items-center gap-1 px-2 py-1"
     >
       <Image
         src="/assets/globe.svg"

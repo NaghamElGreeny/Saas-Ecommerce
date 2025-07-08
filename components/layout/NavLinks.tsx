@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import LocalePath from "../localePath";
 
 const NAV_LINKS = [{ href: "/menu", labelKey: "menu" }];
 
@@ -8,9 +8,9 @@ export default function NavLinks() {
   return (
     <>
       {NAV_LINKS.map(({ href, labelKey }) => (
-        <Link key={href} href={href} className="hover:text-primary">
+        <LocalePath key={href} href={href} className="hover:text-primary">
           {t(labelKey)}
-        </Link>
+        </LocalePath>
       ))}
     </>
   );
