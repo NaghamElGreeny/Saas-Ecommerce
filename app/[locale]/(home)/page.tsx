@@ -6,12 +6,11 @@ import ReservationForm from "@/components/sections/Reservation";
 import { DblSection } from "@/components/shared/DblSection";
 import Slider from "@/components/shared/Slider";
 
-
 export default async function Home() {
   const data = await getHome();
   const t = await getTranslations("HOME");
 
-    const sliders = data?.sliders || [];
+  const sliders = data?.sliders || [];
   const webContent = data?.web_content;
   const popularProducts = data?.popular_products;
   const web_content_link = data?.web_content_link;
@@ -19,15 +18,15 @@ export default async function Home() {
   const offers = data?.offers || [];
 
   return (
-  <div className="space-y-12 overflow-hidden">
+    <div className="space-y-12 overflow-hidden">
       <Hero sliders={sliders} />
       <Slider title={t("view_our_menus")} items={products} />
       <DblSection
-        topMsg={t("welcome_message")} 
+        topMsg={t("welcome_message")}
         sectionData={webContent}
         sectionType="discover"
       />
-      <Slider title={t("offers")} items={offers} offer={true} /> 
+      <Slider title={t("offers")} items={offers} offer={true} />
       <ReservationForm
         show={true}
         className={
@@ -40,7 +39,7 @@ export default async function Home() {
         reverse={true}
       />
       <FollowusSection />
-      <Slider title={t("popular_items")} items={popularProducts} /> 
+      <Slider title={t("popular_items")} items={popularProducts} />
     </div>
   );
 }

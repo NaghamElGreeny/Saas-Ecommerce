@@ -11,7 +11,6 @@ export default function CmsLinks({ cms }: { cms: CmsPage[] }) {
             href={`/pages/${page.slug}`}
             className="hover:text-primary whitespace-nowrap"
           >
-            {/* {t(`${page.slug}`)} */}
             {page.title}
           </LocalePath>
         );

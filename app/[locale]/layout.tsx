@@ -12,23 +12,45 @@ import { getSettings } from "@/services/ApiHandler";
 import { Metadata } from "next";
 import SettingsHydration from "@/components/SettingsHydration";
 
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { locale: string };
+// }): Promise<Metadata> {
+//   const { locale } = await params;
+//   const settings = await getSettings();
+
+//   return {
+//     title: settings.data?.website_setting.website_title,
+//     icons: {
+//       icon: settings.data?.website_setting.website_logo,
+//     },
+//   };
+// }
+
 export async function generateMetadata({
   params,
 }: {
   params: { locale: string };
 }): Promise<Metadata> {
   const { locale } = await params;
+  const isArabic = locale === "ar";
+
   const settings = await getSettings();
 
   return {
-    title: settings.data?.website_setting.website_title,
+    title: 'test',
+    description:'test',
     icons: {
-      icon: settings.data?.website_setting.website_logo,
+      icon: "/logo.png",
     },
+    // openGraph: {
+    //   // images: "/logo.png",
+    //   title: locale === "ar" ? settings.meta_title_ar : settings.meta_title_en,
+    //   description: isArabic ? settings.meta_desc_ar : settings.meta_desc_en,
+    // },
   };
 }
-
-
 export default async function LocaleLayout({
   children,
   params,

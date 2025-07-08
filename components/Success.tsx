@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
 } from "@/components/ui/dialog";
-import Link from "next/link";
+import LocalePath from "next/link";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/Button";
@@ -48,15 +48,15 @@ const Success = ({ open, onOpenChange,firstTitle,firstLink,secondTitle,secondLin
        
 
         <div className="flex flex-col justify-between h-[80px]">
-          <Link href={firstLink}>
+          <LocalePath href={firstLink}>
             <Button className="w-full py-4 rounded-full">{firstTitle}</Button>
-          </Link>
+          </LocalePath>
       
-          <Link href={secondLink}>
+          <LocalePath href={secondLink}>
             <Button variant="outline" className="w-full py-4 rounded-full">
               {secondTitle}
             </Button>
-          </Link>
+          </LocalePath>
         </div>
       </DialogContent>
     </Dialog>

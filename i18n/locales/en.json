@@ -37,6 +37,7 @@
   "HOME": {
     "view_our_menus": "View our menus",
     "offers": "Offers",
+        "menu": "Menu",
     "popular_items": "Popular Items",
     "welcome_message": "HEY! WELCOME TO mea telecom",
     "view-all": "Veiw All",
@@ -190,6 +191,7 @@
     "continue_shopping": "Continue Shopping",
     "your_shipping_address": "Your Shipping Address",
     "select_branch": "Select Branch",
+    "select_address": "Select Address",
     "payment_methods": "Payment Methods",
     "credit_method": "Credit",
     "cash_method": "Cash",

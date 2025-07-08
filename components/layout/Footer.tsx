@@ -1,6 +1,5 @@
 "use client";
 
-import { usePagesStore } from "@/stores/usePagesStore";
 import { useWebsiteStore } from "@/stores/useWebsiteStore";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,11 +15,11 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { PhoneNumber } from "@/utils/webSettingsTypes";
+import LocalePath from "../localePath";
 
-export default function Footer() {
-  const { pages, fetchPages } = usePagesStore();
-  const { data, fetchSettings, getContact, getSetting } = useWebsiteStore();
-  const t = useTranslations("NAV"); // استخدام الـ hook للترجمة
+export default function Footer({ cms }) {
+  const { getContact, getSetting } = useWebsiteStore();
+  const t = useTranslations("NAV"); 
   const [logo, setLogo] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,12 +27,7 @@ export default function Footer() {
     if (src) setLogo(src);
   }, [getSetting]);
 
-  useEffect(() => {
-    if (!data) {
-      fetchSettings();
-      fetchPages();
-    }
-  }, [data, fetchSettings, fetchPages]);
+
   if (!logo) return null;
 
   const phoneNumbers = getContact("phone_number") as PhoneNumber[];
@@ -48,7 +42,7 @@ export default function Footer() {
   const renderReservationDialog = () => (
     <Dialog>
       <DialogTrigger className="w-fit cursor-pointer text-start hover:text-primary">
-        {t("reservation")} {/* ترجمة "Reservation" */}
+        {t("reservation")} 
       </DialogTrigger>
       <DialogContent className="mx-auto flex items-center justify-center rounded-[20px] p-0">
         <DialogHeader>
@@ -60,7 +54,7 @@ export default function Footer() {
   );
 
   const socialLinks = ["facebook", "twitter", "messenger", "instagram"];
-  const cmsPages = pages.filter((page) => page.in_menu);
+  // const cmsPages = pages.filter((page) => page.in_menu);
 
   return (
     <footer className="bg-gray-900 px-4 py-12 text-white sm:px-6 lg:px-8 text-third">
@@ -87,14 +81,14 @@ export default function Footer() {
             <h3 className="mb-4 text-lg font-semibold">{t("sections")}</h3> {/* ترجمة "Sections" */}
             <ul className="space-y-2">
               <li>
-                <Link href="/menu" className="text-third hover:text-primary">
+                <LocalePath href="/menu" className="text-third hover:text-primary">
                    {t("menu")}
-                </Link>
+                </LocalePath>
               </li>
               <li>
-                <Link href="/offers" className="text-third hover:text-primary">
+                <LocalePath href="/offers" className="text-third hover:text-primary">
                   {t("offers")} 
-                </Link>
+                </LocalePath>
               </li>
               <li>{renderReservationDialog()}</li>
               <li>
@@ -113,15 +107,15 @@ export default function Footer() {
           <div>
             <h3 className="mb-4 text-lg font-semibold">{t("links")}</h3> 
             <ul className="space-y-2">
-              {cmsPages.length > 0 ? (
-                cmsPages.map((page) => (
+              {cms.length > 0 ? (
+                cms.map((page) => (
                   <li key={page.id}>
-                    <Link
+                    <LocalePath
                       href={`/pages/${page.slug}`}
                       className="flex items-center gap-2 text-third hover:text-primary"
                     >
                       {page.title}
-                    </Link>
+                    </LocalePath>
                   </li>
                 ))
               ) : (

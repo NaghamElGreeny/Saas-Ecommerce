@@ -8,6 +8,7 @@ import Card from "../cards/Card";
 import Link from "next/link";
 import { Product } from "@/utils/menuTypes";
 import { useTranslations } from "next-intl";
+import LocalePath from "../localePath";
 
 type SliderProps = {
   title?: string;
@@ -32,12 +33,12 @@ export default function Slider({ title, items, offer }: SliderProps) {
         >
           {title}
         </h2>
-        <Link
+        <LocalePath
           href={offer ? "/offers" : "/menu"}
           className="flex cursor-pointer text-sm text-indigo-600 hover:text-indigo-800"
         >
           <p className="me-1">{t("view-all")}</p> <ArrowRight className="rtl:rotate-180"/>
-        </Link>
+        </LocalePath>
       </div>
    <Swiper
   loop

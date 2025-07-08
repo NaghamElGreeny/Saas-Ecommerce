@@ -9,6 +9,9 @@ import ToggleLang from "./ToggleLang";
 import GlobalSheet from "@/components/shared/GlobalSheet";
 import { Menu, X } from "lucide-react";
 import LocationSelector from "../ui/LocationSelector";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import LocalePath from "../localePath";
 
 const NAV_LINKS = [{ href: "/menu", labelKey: "menu" }];
 
@@ -18,9 +21,9 @@ function MobileNav({ cms }: {  cms: CmsPage[] }) {
 
   const renderNavLinks = () =>
     NAV_LINKS.map(({ href, labelKey }) => (
-      <Link key={href} href={href} className="hover:text-primary">
+      <LocalePath key={href} href={href} className="hover:text-primary">
         {t(labelKey)} 
-      </Link>
+      </LocalePath>
     ));
 
   const renderReservationDialog = () => (
@@ -29,6 +32,9 @@ function MobileNav({ cms }: {  cms: CmsPage[] }) {
         {t("reservation")}
       </DialogTrigger>
       <DialogContent className="mx-auto flex items-center justify-center rounded-[20px] p-0">
+            <VisuallyHidden>
+    <DialogTitle>Hidden title for screen readers</DialogTitle>
+  </VisuallyHidden>
         <ReservationForm show={false} className="!w-full p-0" />
       </DialogContent>
     </Dialog>

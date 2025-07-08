@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState, useEffect, useRef } from "react";
+import LocalePath from "../localePath";
 
 export default function Hero({ sliders }: { sliders: Slider[] }) {
   const socials = ["facebook", "twitter", "messenger", "instagram"];
@@ -61,13 +62,13 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
             dolor sit amet, consectetur adipiscing elit aenean.
           </p>
 
-          <Link
+          <LocalePath
             href="/" data-aos="fade-up" data-aos-delay="900"
             className="flex font-medium text-white md:text-xl rtl:flex-row-reverse"
           >
             <p className="underline" > Discover More </p>
             <ArrowUpRight />
-          </Link>
+          </LocalePath>
         </div>
 
         <div className="flex justify-between">

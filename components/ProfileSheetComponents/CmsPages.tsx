@@ -4,15 +4,12 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { usePagesStore } from "@/stores/usePagesStore";
-import { useEffect } from "react";
 
 export default function CmsPages({ onClose }: { onClose: () => void }) {
   const router = useRouter();
-  const { pages, fetchPages } = usePagesStore();
+  const { pages } = usePagesStore();
 
-  useEffect(() => {
-    if (!pages.length) fetchPages();
-  }, [fetchPages, pages.length]);
+
   const handleClick = (slug) => {
     onClose();
     router.push(`/pages/${slug}`);

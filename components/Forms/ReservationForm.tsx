@@ -21,18 +21,13 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
   const router = useRouter();
 
   const countryCodes = useCountryCodesStore((state) => state.countryCodes);
-  const fetchCountryCodes = useCountryCodesStore((state) => state.fetchCountryCodes);
   const stores = useStore((state) => state.stores);
-  const fetchStores = useStore((state) => state.fetchStores);
 
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
   const [branchDialogOpen, setBranchDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchCountryCodes();
-    fetchStores();
-  }, []);
+ 
 
   useEffect(() => {
     if (countryCodes.length > 0) {

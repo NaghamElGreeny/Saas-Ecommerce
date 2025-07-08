@@ -16,7 +16,7 @@ export default async function DynamicCmsPage({ params }: Props) {
   // console.log("CMS page data:", pageData);
   return (
     <>
-      <HeroSection title={pageData.slug} />
+      <HeroSection title={pageData.title} />
       <div className="container mx-auto py-10">
         <h1 className="mb-4 text-3xl font-bold">{pageData.title}</h1>
         <div dangerouslySetInnerHTML={{ __html: pageData.desc }} />

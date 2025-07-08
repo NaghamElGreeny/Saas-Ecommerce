@@ -24,7 +24,7 @@ export default async function LocaleLayout({
 
         {children}
 
-        <Footer />
+        <Footer cms={cmsPages?.data}/>
       </AosWrapper>
     </>
   );

@@ -37,6 +37,7 @@
   "HOME": {
     "view_our_menus": "شاهد قوائم طعامنا",
     "offers": "العروض",
+       "menu": "المنيو",
     "popular_items": "العناصر الأكثر شعبية",
     "welcome_message": "مرحباً! أهلاً بك في mea telecom",
     "view-all": "عرض الكل",
@@ -191,6 +192,7 @@
     "continue_shopping": "متابعة التسوق",
     "your_shipping_address": "عنوان الشحن الخاص بك",
     "select_branch": "اختر الفرع",
+    "select_address": "اختر العنوان",
     "payment_methods": "طرق الدفع",
     "credit_method": "ائتمان",
     "cash_method": "نقداً",
