@@ -44,10 +44,14 @@ export default function ProfileSheet() {
       className="flex w-full cursor-pointer items-center justify-between"
     >
       <div className="flex items-center gap-3">
-        <Image src={icon} alt={label} width={65} height={65} />
-        {label}
+      <Image src={icon} alt={label} width={65} height={65}/>
+      {label}
       </div>
+      {typeof document !== "undefined" && document.dir === "rtl" ? (
+      <ChevronRight style={{ transform: "scaleX(-1)" }} />
+      ) : (
       <ChevronRight />
+      )}
     </div>
   );
 
@@ -64,7 +68,7 @@ export default function ProfileSheet() {
             alt={t("profile_title")}
             width={60}
             height={60}
-            className="cursor-pointer"
+            className="cursor-pointer  sm:size-15 size-12"
           />
         }
       >

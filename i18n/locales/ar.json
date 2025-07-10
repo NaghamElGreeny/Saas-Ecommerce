@@ -320,5 +320,88 @@
     "item_details_title": "تفاصيل المنتج",
     "spicy_alt_text": "حار",
     "customer_review_title": "مراجعات العملاء"
+  },
+  "ADDRESS_SHEET": {
+    "no_addresses_found": "لم يتم العثور على أي عناوين.",
+    "add_new_address_button": "إضافة عنوان جديد"
+  },
+   "ADDRESS_ITEM": {
+    "delete_address_title": "حذف العنوان",
+    "delete_address_description": "هل أنت متأكد أنك تريد حذف هذا العنوان؟ لا يمكن التراجع عن هذا الإجراء.",
+    "confirm_delete_button": "نعم، احذف",
+    "cancel_button": "إلغاء"
+  }, "DELETE_ACCOUNT_BUTTON": {
+    "delete_account_label": "حذف الحساب",
+    "account_deleted_success": "تم حذف الحساب بنجاح",
+    "alert_title": "هل أنت متأكد؟",
+    "alert_description": "سيؤدي هذا إلى حذف حسابك بشكل دائم.",
+    "confirm_text": "نعم، احذف",
+    "cancel_text": "لا، احتفظ به"
+  },  "LOGOUT_BUTTON": {
+    "logout_label": "تسجيل الخروج",
+    "logout_success_toast": "تم تسجيل الخروج",
+    "alert_title": "هل أنت متأكد؟",
+    "alert_description": "سيتم تسجيل خروجك.",
+    "confirm_text": "متابعة",
+    "cancel_text": "إلغاء"
+  }, "CREDIT_CARD": {
+    "balance_label": "الرصيد",
+    "loyalty_card_label": "بطاقة الولاء",
+    "points_unit": "نقطة"
+  }, "ADDRESS_FORM": {
+    "edit_address_title": "تعديل العنوان",
+    "add_new_address_title": "إضافة عنوان جديد",
+    "min_characters_error": "الحد الأدنى 3 أحرف",
+    "required_field_error": "مطلوب",
+    "select_location_error": "الرجاء تحديد موقع على الخريطة",
+    "address_updated_success": "تم تحديث العنوان بنجاح!",
+    "address_saved_success": "تم حفظ العنوان بنجاح!",
+    "failed_to_save_address": "فشل في حفظ العنوان",
+    "default_address_label": "عنوان افتراضي",
+    "address_label": "العنوان",
+    "address_placeholder": "ابحث أو انقر على الخريطة",
+    "title_label": "العنوان",
+    "title_placeholder": "مثال: منزلي",
+    "building_label": "المبنى",
+    "floor_label": "الطابق",
+    "apartment_label": "الشقة",
+    "saving_button": "جاري الحفظ...",
+    "save_button": "حفظ"
+  },"PROFILE_PAGE": {
+    "title": "الملف الشخصي"
+  },
+   "ACCOUNT_FORM": {
+    "name_required": "الاسم مطلوب",
+    "invalid_email": "بريد إلكتروني غير صالح",
+    "email_required": "البريد الإلكتروني مطلوب",
+    "current_password_required": "كلمة المرور الحالية مطلوبة",
+    "password_too_short": "كلمة المرور قصيرة جداً",
+    "new_password_required": "كلمة المرور الجديدة مطلوبة",
+    "passwords_must_match": "كلمتا المرور غير متطابقتين",
+    "confirm_new_password_required": "تأكيد كلمة المرور الجديدة",
+    "failed_to_load_country_codes": "فشل في تحميل رموز الدول",
+    "image_uploaded_success": "تم تحميل الصورة بنجاح",
+    "image_upload_failed": "فشل تحميل الصورة",
+    "account_updated_success": "تم تحديث الحساب بنجاح",
+    "failed_to_update_account": "فشل في تحديث الحساب",
+    "change_password_button": "تغيير كلمة المرور",
+    "name_label": "الاسم",
+    "phone_label": "رقم الهاتف",
+    "change_phone_button": "تغيير رقم الهاتف",
+    "email_label": "البريد الإلكتروني",
+    "save_button": "حفظ",
+    "change_phone_dialog_title": "تغيير رقم الهاتف",
+    "phone_required": "رقم الهاتف مطلوب",
+    "phone_digits_only": "يجب أن يحتوي رقم الهاتف على أرقام فقط",
+    "phone_max_digits": "الحد الأقصى {limit} أرقام",
+    "phone_placeholder": "رقم الهاتف",
+    "send_verification_code_button": "إرسال رمز التحقق",
+    "change_password_dialog_title": "تغيير كلمة المرور",
+    "current_password_placeholder": "كلمة المرور الحالية",
+    "new_password_placeholder": "كلمة المرور الجديدة",
+    "confirm_new_password_placeholder": "تأكيد كلمة المرور الجديدة",
+    "password_changed_success": "تم تغيير كلمة المرور بنجاح",
+    "something_went_wrong": "حدث خطأ ما",
+    "profile_picture_alt": "صورة الملف الشخصي"
   }
 }

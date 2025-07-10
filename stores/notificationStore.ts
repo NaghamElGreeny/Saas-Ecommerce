@@ -1,7 +1,6 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import toast from "react-hot-toast";
 import { notificationService } from "@/services/ClientApiHandler";
 
@@ -27,7 +26,7 @@ type NotificationStore = {
 };
 
 export const useNotificationStore = create<NotificationStore>()(
-  persist(
+
     (set, get) => ({
       notifications: [],
       unreadCount: 0,
@@ -70,13 +69,6 @@ export const useNotificationStore = create<NotificationStore>()(
           toast.error("حدث خطأ أثناء حذف الإشعار");
         }
       },
-    }),
-    {
-      name: "notification-storage",
-      partialize: (state) => ({
-        notifications: state.notifications,
-        unreadCount: state.unreadCount,
-      }),
-    },
+    }
   ),
 );

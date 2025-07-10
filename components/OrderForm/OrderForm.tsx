@@ -10,7 +10,7 @@ import { useStore } from "@/stores/useStore";
 import { useCartStore } from "@/stores/cartStore";
 import AddressItem from "../shared/AddressItem";
 import toast from "react-hot-toast";
-import { useAuthStore } from "@/stores/authStore";
+// import { useAuthStore } from "@/stores/authStore";
 import { orderService } from "@/services/ClientApiHandler";
 import Success from "../Success";
 import { useLoyalityStore } from "@/stores/loyalityStore";
@@ -70,7 +70,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
       window.location.href = session.url;
     }
   };
-  const userData = useAuthStore((s) => s.userData) as UserData;
+  // const userData = useAuthStore((s) => s.userData) as UserData;
 
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const [openStoreDialog, setOpenStoreDialog] = useState(false);

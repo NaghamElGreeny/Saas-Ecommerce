@@ -86,7 +86,7 @@ export const locationService = {
   },
   
   getStores: async (): Promise<Store[]> => {
-    const res = await axiosClient.get<{
+    const res = await axiosClient.get<{ 
       status: boolean;
       message: string;
       data: Store[];

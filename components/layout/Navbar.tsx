@@ -5,17 +5,23 @@ import NavLinks from "./NavLinks";
 import CmsLinks from "./CmsLinks";
 import ReservationDialog from "./ReservationDialog";
 import CartSheet from "../Sheets/CartSheet";
-import NotificationSheet from "../Sheets/NotificationSheet";
+//import NotificationSheet from "../Sheets/NotificationSheet";
 import ProfileSheet from "../Sheets/ProfileSheet";
 import LocationSelector from "../ui/LocationSelector";
 import MobileNav from "./MobileNav";
 
 import { useAuthStore } from "@/stores/authStore";
 import WishList from "../Sheets/WishListSheet";
-import ToggleLang from "./ToggleLang";
 import { useWebsiteStore } from "@/stores/useWebsiteStore";
 import { useEffect, useState } from "react";
-import { Link } from "@/i18n/routing";
+import LocalePath from "../localePath";
+import dynamic from "next/dynamic";
+// import { Skeleton } from "../ui/skeleton";
+const NotificationSheet = dynamic(() => import("../Sheets/NotificationSheet"), {
+  loading: () => (
+    <div className="size-12 animate-pulse rounded-full bg-gray-300 sm:size-15" />
+  ),
+});
 export default function Navbar({ cms }) {
   const logged = !!useAuthStore((state) => state.token);
   const { getSetting } = useWebsiteStore();
@@ -28,7 +34,7 @@ export default function Navbar({ cms }) {
 
   if (!logo) return null;
   return (
-    <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-end 2xl:justify-between px-4 md:px-10 lg:px-14">
+    <nav className="navBar bg-bgPrimary relative z-50 flex h-28 w-full items-center justify-end px-4 md:px-10 lg:px-14 2xl:justify-between">
       {/* Desktop Navigation Links */}
       <div className="linksdiv hidden min-w-0 flex-1 items-center gap-6 ps-8 2xl:flex">
         <NavLinks />
@@ -37,43 +43,39 @@ export default function Navbar({ cms }) {
       </div>
 
       {/* Desktop Icons */}
-      <div className="iconsdiv flex items-center gap-4">
+      <div className="iconsdiv flex shrink-0 items-center gap-2 sm:gap-4">
         <WishList />
         <CartSheet />
         {logged ? (
           <>
-          <NotificationSheet />
+            <NotificationSheet />
             <ProfileSheet />
-            <div className="hidden 2xl:flex">
-              <LocationSelector />
-            </div>
+            <LocationSelector />
           </>
         ) : (
           <>
-            <Link
+            <LocalePath
               href={"/auth"}
               className={`bg-primary hover:text-primary hover:border-primary w-26 cursor-pointer rounded-full border py-3 text-center text-white transition hover:bg-white`}
             >
               Log in
-            </Link>
+            </LocalePath>
           </>
         )}
 
-        <ToggleLang />
+        {/* <ToggleLang /> */}
         <MobileNav cms={cms} />
         {/* Logo */}
-        <Link href="/" className="flex shrink-0 items-center">
-         
-            <Image
-              src={logo}
-              width={56}
-              height={56}
-              className="h-14"
-              alt="logo"
-              priority
-            />
-  
-        </Link>
+        <LocalePath href="/" className="flex shrink-0 items-center">
+          <Image
+            src={logo}
+            width={56}
+            height={56}
+            className="h-14"
+            alt="logo"
+            priority
+          />
+        </LocalePath>
       </div>
     </nav>
   );

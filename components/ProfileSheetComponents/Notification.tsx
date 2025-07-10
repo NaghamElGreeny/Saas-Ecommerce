@@ -40,7 +40,7 @@ export default function NotificationToggle() {
         >
           <Switch
             checked={notifiable}
-            // onCheckedChange={setNotifiable}
+            onCheckedChange={setNotifiable}
             className={cn(
               "relative inline-flex h-7 w-12 bg-primary items-center rounded-full transition-colors ps-1",
               // notifiable ? "bg-primary" : "bg-gray-300",

@@ -8,6 +8,7 @@ import {
   SheetDescription,
   SheetClose,
   SheetTrigger,
+  SheetFooter,
 } from "@/components/ui/sheet";
 import { ReactNode } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -59,9 +60,12 @@ export default function GlobalSheet({
 
         {children}
 
-        {footer && (
+    
+      <SheetFooter className="w-full">
+            {footer && (
           <div className="mt-4 flex w-full justify-center p-3">{footer}</div>
         )}
+      </SheetFooter>
       </SheetContent>
     </Sheet>
   );

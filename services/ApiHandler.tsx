@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
-import { ApiCategories, CmsPage } from "../utils/types";
+import { ApiCategories, CmsPage, Store } from "../utils/types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fetchData = async (endpoint: string, errorMsg: string, config = {}) => {
@@ -76,6 +76,16 @@ export const getCategories = async () => {
 //settings 
 export const getSettings = async () => {
   const res = await axiosInstance.get("/web_settings");
-  console.log(res.data)
+  // console.log(res.data)
   return res.data;
 };
+
+//stores
+  export const getStores = async (): Promise<Store[]> => {
+    const res = await axiosInstance.get<{
+      status: boolean;
+      message: string;
+      data: Store[];
+    }>("/stores");
+    return res.data.data;
+  };

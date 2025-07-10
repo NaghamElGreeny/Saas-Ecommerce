@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ReservationForm from "../sections/Reservation";
@@ -44,13 +43,13 @@ function MobileNav({ cms }: {  cms: CmsPage[] }) {
     cms.map((page) => {
 
       return (
-        <Link
+        <LocalePath
           key={page.id}
           href={`/pages/${page.slug}`}
           className="whitespace-nowrap hover:text-primary"
         >
           {page.title}
-        </Link>
+        </LocalePath>
       );
     });
 

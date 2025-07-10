@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useTranslations } from "next-intl"; 
 
 const CreditCard = ({
   full_name,
@@ -9,10 +12,11 @@ const CreditCard = ({
   wallet?: { balance: number; currency: string };
   loyality?: number;
 }) => {
+  const t = useTranslations("CREDIT_CARD"); 
+
   return (
     <div className="relative h-[317px] overflow-hidden rounded-[30px] bg-[#5E6BF2] text-white">
       {/* Top-left circle */}
-
       <div className="absolute  -start-[25%] aspect-square h-full rounded-full bg-white/20 flex items-center justify-center">
         <div className="aspect-square w-[75%] rounded-full bg-white/10" />
       </div>
@@ -38,7 +42,7 @@ const CreditCard = ({
       {/* Balance section */}
       {wallet && (
         <div className="bsolute absolute bottom-0 p-8">
-          <p className="mb-3">Balance</p>
+          <p className="mb-3">{t("balance_label")}</p>
           <p className="flex items-baseline gap-1 text-[40px] leading-none font-bold">
             {wallet.balance}
             <span className="text-[16px] font-normal">{wallet.currency}</span>
@@ -48,10 +52,10 @@ const CreditCard = ({
       {/* loyality */}
       {loyality && (
         <div className="bsolute absolute bottom-0 p-8">
-          <p className="mb-3">Loyalty Card</p>
+          <p className="mb-3">{t("loyalty_card_label")}</p>
           <p className="flex items-baseline gap-1 text-[40px] leading-none font-bold">
             {loyality}
-            <span className="text-[16px] font-normal">Points</span>
+            <span className="text-[16px] font-normal">{t("points_unit")}</span>
           </p>
         </div>
       )}

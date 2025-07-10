@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { Edit, Trash2 } from "lucide-react";
-
 import { Address, useAddressStore } from "@/stores/addressStore";
 import AddressForm from "../Forms/AddAdressForm";
 import GlobalDialog from "../shared/GlobalDialog";
 import GlobalAlertDialog from "../shared/GlobalAlertDialog";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 type Props = {
   addr: Address;
@@ -19,6 +19,7 @@ export default function AddressItem({ addr }: Props) {
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const t = useTranslations("ADDRESS_ITEM");
 
   const handleEditSuccess = () => {
     setIsEditDialogOpen(false);
@@ -36,7 +37,6 @@ export default function AddressItem({ addr }: Props) {
     <>
       <div className="rounded-lg border-border p-4 shadow hover:bg-gray-50">
         <div className="flex items-center justify-between">
-          {/* Address info */}
           <div className="flex items-center gap-2">
             <Image
               src="/assets/images/map.png"
@@ -51,14 +51,11 @@ export default function AddressItem({ addr }: Props) {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex gap-2 text-gray-500">
-            {/* Edit */}
             <button onClick={() => setIsEditDialogOpen(true)}>
               <Edit className="text-text-website-font h-5 w-5 cursor-pointer" />
             </button>
 
-            {/* Delete */}
             <button onClick={() => setIsAlertOpen(true)}>
               <Trash2 className="h-5 w-5 cursor-pointer text-red-500" />
             </button>
@@ -66,7 +63,6 @@ export default function AddressItem({ addr }: Props) {
         </div>
       </div>
 
-      {/* Edit Dialog */}
       <GlobalDialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <AddressForm
           isUpdate
@@ -79,14 +75,13 @@ export default function AddressItem({ addr }: Props) {
         />
       </GlobalDialog>
 
-      {/* Confirm Delete */}
       <GlobalAlertDialog
         open={isAlertOpen}
         onOpenChange={setIsAlertOpen}
-        title="Delete Address"
-        description="Are you sure you want to delete this address? This action cannot be undone."
-        confirmText="Yes, Delete"
-        cancelText="Cancel"
+        title={t("delete_address_title")}
+        description={t("delete_address_description")}
+        confirmText={t("confirm_delete_button")}
+        cancelText={t("cancel_button")}
         onConfirm={handleDeleteConfirm}
       />
     </>

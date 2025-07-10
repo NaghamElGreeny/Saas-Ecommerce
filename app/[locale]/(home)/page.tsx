@@ -30,7 +30,7 @@ export default async function Home() {
       <ReservationForm
         show={true}
         className={
-          "container-custom relative my-5 flex min-h-screen w-[80%] flex-col justify-center"
+          "container-custom relative md:my-5 flex min-h-screen flex-col justify-center"
         }
       />
       <DblSection

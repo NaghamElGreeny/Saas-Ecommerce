@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form } from "formik"; 
 import * as Yup from "yup";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ChevronDown, Eye, EyeOff, KeyIcon, Upload } from "lucide-react";
@@ -17,6 +17,7 @@ import {
 import toast from "react-hot-toast";
 import { BrandCountry } from "@/utils/types";
 import VerificationCodeDialog from "../Dialogs/VerificationCodeDialog";
+import { useTranslations } from "next-intl"; 
 
 const AccountForm = () => {
   const { userData, setUserData } = useAuthStore();
@@ -37,6 +38,8 @@ const AccountForm = () => {
   } | null>(null);
 
   const [showVerification, setShowVerification] = useState(false);
+  const t = useTranslations("ACCOUNT_FORM"); 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,30 +48,27 @@ const AccountForm = () => {
         const codes = await locationService.getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);
-        // formik.setFieldValue("phone_code", codes[0].phone_code);
       } catch (err) {
-        toast.error("Failed to load country codes");
+        toast.error(t("failed_to_load_country_codes"));
         console.error(err);
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setUserData, t]);
 
-  console.log(userData);
   const validationSchema = Yup.object({
-    full_name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
+    full_name: Yup.string().required(t("name_required")),
+    email: Yup.string().email(t("invalid_email")).required(t("email_required")),
   });
 
   const passwordSchema = Yup.object().shape({
-    old_password: Yup.string().required("Current password is required"),
+    old_password: Yup.string().required(t("current_password_required")),
     password: Yup.string()
-      .min(6, "Password too short")
-      .required("New password is required"),
+      .min(6, t("password_too_short"))
+      .required(t("new_password_required")),
     password_confirmation: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match")
-      .required("Confirm your new password"),
+      .oneOf([Yup.ref("password")], t("passwords_must_match"))
+      .required(t("confirm_new_password_required")),
   });
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,10 +78,10 @@ const AccountForm = () => {
         const uploaded = await userService.uploadImage(file);
         const uploadedUrl = uploaded.data.avatar_url || uploaded.data;
         setUploadedAvatar(uploadedUrl);
-        setAvatarUrl(URL.createObjectURL(file)); // معاينة
-        toast.success("Image uploaded successfully");
+        setAvatarUrl(URL.createObjectURL(file));
+        toast.success(t("image_uploaded_success"));
       } catch (err) {
-        toast.error("Image upload failed");
+        toast.error(t("image_upload_failed"));
         console.error(err);
       }
     }
@@ -99,12 +99,12 @@ const AccountForm = () => {
           try {
             const updated = await userService.updateUserInfo({
               ...values,
-              avatar: uploadedAvatar || userData.avatar, // ← استخدمي الجديد لو موجود
+              avatar: uploadedAvatar || userData?.avatar,
             });
             setUserData({ ...userData, ...updated.data });
-            toast.success("Account updated successfully");
+            toast.success(t("account_updated_success"));
           } catch (err) {
-            toast.error("Failed to update account");
+            toast.error(t("failed_to_update_account"));
             console.error(err);
           }
         }}
@@ -116,7 +116,7 @@ const AccountForm = () => {
               <div className="relative h-[200px] w-[200px]">
                 <Image
                   src={avatarUrl}
-                  alt="Profile picture"
+                  alt={t("profile_picture_alt")}
                   width={200}
                   height={200}
                   className="h-full w-full rounded-full border border-black object-cover"
@@ -146,7 +146,7 @@ const AccountForm = () => {
                 className="flex items-center gap-1 text-sm text-blue-600"
               >
                 <KeyIcon size={16} />
-                Change Password
+                {t("change_password_button")}
               </button>
             </div>
 
@@ -155,7 +155,7 @@ const AccountForm = () => {
               {/* Name */}
               <div>
                 <label className="text-text-website-font text-sm font-semibold">
-                  Name
+                  {t("name_label")}
                 </label>
                 <input
                   name="full_name"
@@ -174,7 +174,7 @@ const AccountForm = () => {
               {/* Phone (Disabled) */}
               <div className="!mb-0">
                 <label className="text-text-website-font w-full items-end text-sm font-semibold">
-                  Phone
+                  {t("phone_label")}
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -194,7 +194,7 @@ const AccountForm = () => {
                     onClick={() => setShowPhoneDialog(true)}
                     className="mt-1 text-sm text-blue-600"
                   >
-                    Change phone
+                    {t("change_phone_button")}
                   </button>
                 </div>
               </div>
@@ -202,7 +202,7 @@ const AccountForm = () => {
               {/* Email */}
               <div>
                 <label className="text-text-website-font text-sm font-semibold">
-                  Email
+                  {t("email_label")}
                 </label>
                 <input
                   name="email"
@@ -221,19 +221,17 @@ const AccountForm = () => {
               {/* Save Button */}
               <div className="flex justify-end">
                 <Button type="submit" className="px-6">
-                  Save
+                  {t("save_button")}
                 </Button>
               </div>
             </div>
           </Form>
         )}
       </Formik>
-
-      {/* Phone Dialog */}
       {/* Phone Dialog */}
       <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
         <DialogContent>
-          <h3 className="text-lg font-semibold">Change Phone</h3>
+          <h3 className="text-lg font-semibold">{t("change_phone_dialog_title")}</h3>
 
           {!showVerification ? (
             <Formik
@@ -243,22 +241,22 @@ const AccountForm = () => {
               }}
               validationSchema={Yup.object({
                 phone: Yup.string()
-                  .required("Phone is required")
-                  .matches(/^\d+$/, "Phone must be digits only")
+                  .required(t("phone_required"))
+                  .matches(/^\d+$/, t("phone_digits_only"))
                   .max(
                     selectedCountry?.phone_limit || 10,
-                    `Max ${selectedCountry?.phone_limit || 10} digits`,
+                    t("phone_max_digits", { limit: selectedCountry?.phone_limit || 10 }),
                   ),
               })}
               onSubmit={async (values, { setSubmitting, setErrors }) => {
                 try {
                   setSubmitting(true);
-                  const res = await authService.verifyCode(values);
+                  await authService.verifyCode(values);
                   setNewPhone(values);
-                  setShowVerification(true); // عرض فورم الكود
-                } catch (error: any) {
+                  setShowVerification(true);
+                } catch (error) {
                   const errorMsg =
-                    error?.response?.data?.message || "Something went wrong";
+                    error?.response?.data?.message || t("something_went_wrong");
                   toast.error(errorMsg);
                   if (error?.response?.data?.errors) {
                     setErrors(error.response.data.errors);
@@ -295,7 +293,7 @@ const AccountForm = () => {
                       <input
                         name="phone"
                         type="tel"
-                        placeholder="Phone"
+                        placeholder={t("phone_placeholder")}
                         value={values.phone}
                         onChange={handleChange}
                         className="w-full rounded-md border p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
@@ -313,7 +311,7 @@ const AccountForm = () => {
                     className="w-full"
                     loading={isSubmitting}
                   >
-                    Send Verification Code
+                    {t("send_verification_code_button")}
                   </Button>
                 </Form>
               )}
@@ -335,7 +333,7 @@ const AccountForm = () => {
       {/* Password Dialog */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
         <DialogContent>
-          <h3 className="text-lg font-semibold">Change Password</h3>
+          <h3 className="text-lg font-semibold">{t("change_password_dialog_title")}</h3>
           <Formik
             initialValues={{
               old_password: "",
@@ -345,14 +343,14 @@ const AccountForm = () => {
             validationSchema={passwordSchema}
             onSubmit={async (values, { resetForm }) => {
               try {
-                const res = await authService.resetPassword(values); // الريكويست
-                toast.success("Password changed successfully");
+                const res = await authService.resetPassword(values);
+                toast.success(t("password_changed_success"));
                 setUserData(res.data);
                 resetForm();
                 setShowPasswordDialog(false);
-              } catch (error: any) {
+              } catch (error) {
                 const errorMsg =
-                  error?.response?.data?.message || "Something went wrong";
+                  error?.response?.data?.message || t("something_went_wrong");
                 toast.error(errorMsg);
               }
             }}
@@ -364,7 +362,7 @@ const AccountForm = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       name="old_password"
-                      placeholder="Current Password"
+                      placeholder={t("current_password_placeholder")}
                       value={values.old_password}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -391,7 +389,7 @@ const AccountForm = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       name="password"
-                      placeholder="New Password"
+                      placeholder={t("new_password_placeholder")}
                       value={values.password}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -418,7 +416,7 @@ const AccountForm = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       name="password_confirmation"
-                      placeholder="Confirm New Password"
+                      placeholder={t("confirm_new_password_placeholder")}
                       value={values.password_confirmation}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -443,7 +441,7 @@ const AccountForm = () => {
 
                 <div className="save flex w-full justify-end">
                   <Button type="submit" className="w-[30%] rounded-full">
-                    Save
+                    {t("save_button")}
                   </Button>
                 </div>
               </Form>

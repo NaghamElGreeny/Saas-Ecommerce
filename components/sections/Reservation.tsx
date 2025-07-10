@@ -90,7 +90,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
       await locationService.makeReservation(payload);
       toast.success(t("reservation_successful"));
       router.push("/");
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err?.response?.data?.message || t("reservation_failed"));
     } finally {
       setLoading(false);
@@ -288,7 +288,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
               <button
                 type="submit"
                 disabled={isSubmitting || loading}
-                className="reserve rounded-full bg-blue-600 px-6 py-3 text-white hover:bg-blue-700 disabled:opacity-50"
+                className="reserve md:w-1/4 rounded-full bg-blue-600 px-6 py-3 text-white hover:bg-blue-700 disabled:opacity-50"
               >
                 {loading ? t("booking") : t("book_now")}
               </button>

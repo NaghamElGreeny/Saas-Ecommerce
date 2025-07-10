@@ -1,17 +1,12 @@
+"use client";
+
 import { useRef, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { addressService } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
 import GoogleMapSelector from "../shared/GoogleMap";
-
-const validationSchema = Yup.object({
-  address: Yup.string().min(3, "Minimum 3 characters").required("Required"),
-  title: Yup.string().min(3, "Minimum 3 characters").required("Required"),
-  building: Yup.number().required("Required"),
-  floorNo: Yup.number().required("Required"),
-  apartment: Yup.number().required("Required"),
-});
+import { useTranslations } from "next-intl"; 
 
 const AddressForm = ({
   isUpdate = false,
@@ -36,11 +31,20 @@ const AddressForm = ({
     initialData ? { lat: initialData.lat, lng: initialData.lng } : null,
   );
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("ADDRESS_FORM"); 
+
+  const validationSchema = Yup.object({
+    address: Yup.string().min(3, t("min_characters_error")).required(t("required_field_error")),
+    title: Yup.string().min(3, t("min_characters_error")).required(t("required_field_error")),
+    building: Yup.number().required(t("required_field_error")),
+    floorNo: Yup.number().required(t("required_field_error")),
+    apartment: Yup.number().required(t("required_field_error")),
+  });
 
   return (
     <div className="h-full w-full space-y-6 overflow-y-auto rounded-3xl bg-white p-6">
       <h2 className="mb-4 text-xl font-semibold">
-        {isUpdate ? "Edit Address" : "Add New Address"}
+        {isUpdate ? t("edit_address_title") : t("add_new_address_title")}
       </h2>
 
       <Formik
@@ -55,7 +59,7 @@ const AddressForm = ({
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           if (!location) {
-            toast.error("Please select a location on the map");
+            toast.error(t("select_location_error"));
             return;
           }
 
@@ -75,16 +79,16 @@ const AddressForm = ({
           try {
             if (isUpdate && initialData?.id) {
               await addressService.updateAddress(initialData.id, payload);
-              toast.success("Address updated successfully!");
+              toast.success(t("address_updated_success"));
             } else {
               await addressService.addAddress(payload);
-              toast.success("Address saved successfully!");
+              toast.success(t("address_saved_success"));
               resetForm();
               setLocation(null);
             }
-            onSuccess();
+            onSuccess?.(); 
           } catch (error) {
-            toast.error("Failed to save address");
+            toast.error(t("failed_to_save_address"));
             console.error(error);
           } finally {
             setSubmitting(false);
@@ -92,18 +96,18 @@ const AddressForm = ({
         }}
       >
         {({ isSubmitting }) => (
-          <Form className="space-y-4 h-full">
+          <Form className="h-full space-y-4">
             <div className="flex items-center gap-2">
               <Field type="checkbox" name="isDefault" className="!size-5" />
-              <label htmlFor="isDefault">Default Address</label>
+              <label htmlFor="isDefault">{t("default_address_label")}</label>
             </div>
 
             <div>
-              <label className="mb-1 block font-medium">Address</label>
+              <label className="mb-1 block font-medium">{t("address_label")}</label>
               <Field
                 innerRef={searchInputRef}
                 name="address"
-                placeholder="Search or click on map"
+                placeholder={t("address_placeholder")}
                 className="w-full rounded border p-2"
               />
               <ErrorMessage
@@ -122,10 +126,10 @@ const AddressForm = ({
             </div>
 
             <div>
-              <label className="mb-1 block font-medium">Title</label>
+              <label className="mb-1 block font-medium">{t("title_label")}</label>
               <Field
                 name="title"
-                placeholder="E.g. My Place"
+                placeholder={t("title_placeholder")}
                 className="w-full rounded border p-2"
               />
               <ErrorMessage
@@ -136,7 +140,7 @@ const AddressForm = ({
             </div>
 
             <div>
-              <label className="mb-1 block font-medium">Building</label>
+              <label className="mb-1 block font-medium">{t("building_label")}</label>
               <Field
                 name="building"
                 type="number"
@@ -151,7 +155,7 @@ const AddressForm = ({
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1 block font-medium">Floor</label>
+                <label className="mb-1 block font-medium">{t("floor_label")}</label>
                 <Field
                   name="floorNo"
                   type="number"
@@ -164,7 +168,7 @@ const AddressForm = ({
                 />
               </div>
               <div>
-                <label className="mb-1 block font-medium">Apartment</label>
+                <label className="mb-1 block font-medium">{t("apartment_label")}</label>
                 <Field
                   name="apartment"
                   type="number"
@@ -183,7 +187,7 @@ const AddressForm = ({
               disabled={isSubmitting}
               className="bg-primary hover:text-primary hover:border-primary w-full rounded-full py-3 text-white hover:border-2 hover:bg-white"
             >
-              {isSubmitting ? "Saving..." : "Save"}
+              {isSubmitting ? t("saving_button") : t("save_button")}
             </button>
           </Form>
         )}

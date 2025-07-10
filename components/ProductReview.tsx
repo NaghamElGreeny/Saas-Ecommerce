@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { productService } from "@/services/ClientApiHandler";
 
 type Review = {
@@ -100,13 +101,15 @@ function ProductReview({ productId }: Props) {
         {reviews.map((review) => (
           <div
             key={review.id}
-            className="flex items-center space-x-3 border-t border-gray-300 pt-4"
-          >
-            <img
+            className="flex items-start space-x-3 border-t border-gray-300 pt-4">
+            <Image
               src={review.user.avatar}
               alt={review.user.full_name}
+              width={40}
+              height={40}
               className="h-10 w-10 rounded-full object-cover"
             />
+           
             <div className="flex-1">
               <div className="mb-1 flex items-center justify-between">
                 <h4 className="font-medium text-gray-900">
@@ -117,7 +120,7 @@ function ProductReview({ productId }: Props) {
                 </span>
               </div>
               {renderStars(review.rate, "mb-2")}
-              <p className="text-sm text-gray-600">{review.review}</p>
+              <p className="text-sm line-clamp-3 text-gray-600">{review.review}</p>
             </div>
           </div>
         ))}

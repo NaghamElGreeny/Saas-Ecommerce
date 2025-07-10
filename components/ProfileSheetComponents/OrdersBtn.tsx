@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 
 export default function OrdersBtn({ onClose }: { onClose: () => void }) {
   const router = useRouter();
-  const t = useTranslations("PROFILE_SHEET"); 
+  const t = useTranslations("PROFILE_SHEET");
 
   const handleClick = () => {
     onClose();
@@ -28,7 +28,11 @@ export default function OrdersBtn({ onClose }: { onClose: () => void }) {
         />
         {t("my_orders")}
       </div>
-      <ChevronRight />
+      {typeof document !== "undefined" && document.dir === "rtl" ? (
+        <ChevronRight style={{ transform: "scaleX(-1)" }} />
+      ) : (
+        <ChevronRight />
+      )}
     </div>
   );
 }

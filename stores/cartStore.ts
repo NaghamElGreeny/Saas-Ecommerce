@@ -75,8 +75,13 @@ export const useCartStore = create<CartStore>()(
           _method: "put" as const,
         };
         try {
-          await cartService.updateCount(payload);
-          await get().fetchCart();
+          const res = await cartService.updateCount(payload) as CartResponse;
+          set({
+            cart: res,
+            loading: false,
+            couponCode: res.coupon_code,
+            couponValue: res.price?.coupon_price ?? null,
+          });
         } catch (err) {
           set({ error: err.message || "Failed to update quantity" });
         } finally {
@@ -87,8 +92,13 @@ export const useCartStore = create<CartStore>()(
       removeProduct: async (productId) => {
         set({ actionLoading: true, error: null });
         try {
-          await cartService.deleteItem(productId);
-          await get().fetchCart();
+          const res = await cartService.deleteItem(productId) as CartResponse;
+          set({
+            cart: res,
+            loading: false,
+            couponCode: res.coupon_code,
+            couponValue: res.price?.coupon_price ?? null,
+          });
         } catch (err) {
           set({ error: err.message || "Failed to remove product" });
         } finally {

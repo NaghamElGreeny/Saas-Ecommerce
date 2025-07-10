@@ -165,8 +165,8 @@ const ProductForm = ({
                   ) : (
                     <>
                       <ShoppingBag size={20} />
-                      <p>{t("add-to-cart")}</p>
-                      <p className="text-[22px] font-bold">
+                      <p className="md:text-lg text-sm  md:font-medium font-thin">{t("add-to-cart")}</p>
+                      <p className="md:text-[22px] md:font-bold">
                         {cart?.price.total}{" "}
                         <span className="ms-1 text-[14px] font-thin">
                           {cart?.currency}

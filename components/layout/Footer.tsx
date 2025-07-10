@@ -57,7 +57,7 @@ export default function Footer({ cms }) {
   // const cmsPages = pages.filter((page) => page.in_menu);
 
   return (
-    <footer className="bg-gray-900 px-4 py-12 text-white sm:px-6 lg:px-8 text-third">
+    <footer className="bg-[var(--website_footer_color)]  px-4 py-12 text-white sm:px-6 lg:px-8 text-third">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}

@@ -32,9 +32,9 @@ export default function WishList({
       <Image
         src="/assets/icons/navheart.png"
         alt={t("wishlist_title")}
-        width={60}
+           width={60}
         height={60}
-        className="size-[60px] shrink-0"
+       className="cursor-pointer sm:size-15 size-12"
       />
       {!loading && totalItems > 0 && (
         <span className="bg-primary absolute top-4 right-3 flex size-4 items-center justify-center rounded-full text-[8px] font-semibold text-white">

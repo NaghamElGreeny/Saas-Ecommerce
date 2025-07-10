@@ -14,7 +14,8 @@ type LocationSelectorProps = {
 };
 
 export default function LocationSelector({ active = false }: LocationSelectorProps) {
-  const { stores, selectedStore, setSelectedStore, fetchStores } = useStore();
+  const { stores, selectedStore, setSelectedStore } = useStore();
+
 
   const [open, setOpen] = useState(false);
   const [tempSelectedId, setTempSelectedId] = useState<number | null>(null);
@@ -25,8 +26,9 @@ export default function LocationSelector({ active = false }: LocationSelectorPro
       const storeIdFromCookie = Cookies.get('store_id');
       const hasSelectedBefore = Cookies.get('store_selected_once');
 
-      const data = stores.length > 0 ? stores : await fetchStores();
-
+      // const data =  await fetchStores();
+      const data =  stores;
+      
       // Auto-select first store if no selection
       if (!storeIdFromCookie && !hasSelectedBefore && data.length > 0) {
         const first = data[0];
@@ -35,7 +37,6 @@ export default function LocationSelector({ active = false }: LocationSelectorPro
         Cookies.set('store_id', String(first.id));
         Cookies.set('store_selected_once', 'true');
       }
-
       // Restore selection from cookie
       if (storeIdFromCookie && !selectedStore) {
         const matched = data.find((s) => String(s.id) === storeIdFromCookie);
@@ -66,7 +67,7 @@ export default function LocationSelector({ active = false }: LocationSelectorPro
     <>
       {/* Trigger */}
       <div
-        className="flex items-center space-x-3 cursor-pointer"
+        className=" items-center space-x-3 cursor-pointer hidden 2xl:flex"
         onClick={() => setOpen(true)}
       >
         <div className="w-12 h-12 rounded-full overflow-hidden">

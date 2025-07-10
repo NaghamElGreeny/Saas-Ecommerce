@@ -1,95 +1,72 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import "@/styles/globals.css"
+import "@/styles/globals.css";
 import { cookies } from "next/headers";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import { getMessages } from "next-intl/server";
-// import { useEffect } from 'react';
-// import { useAuthStore } from '@/stores/authStore';
 import AuthProvider from "./auth/components/AuthProvider";
 import { getSettings } from "@/services/ApiHandler";
 import { Metadata } from "next";
 import SettingsHydration from "@/components/SettingsHydration";
-
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: { locale: string };
-// }): Promise<Metadata> {
-//   const { locale } = await params;
-//   const settings = await getSettings();
-
-//   return {
-//     title: settings.data?.website_setting.website_title,
-//     icons: {
-//       icon: settings.data?.website_setting.website_logo,
-//     },
-//   };
-// }
-
+import { convertSettingsArrayToObject } from "@/utils/settings";
+import 'leaflet/dist/leaflet.css';
 export async function generateMetadata({
   params,
 }: {
   params: { locale: string };
 }): Promise<Metadata> {
-  const { locale } = await params;
-  const isArabic = locale === "ar";
 
-  const settings = await getSettings();
+const settings = await getSettings();
+const rawSettingsArray = settings.data?.website_setting || [];
+
+const webSettings = convertSettingsArrayToObject(rawSettingsArray);
+  console.log('raw',settings);
 
   return {
-    title: 'test',
-    description:'test',
+    title: webSettings.website_title || "MEA - Telecome",
+    description: "test",
     icons: {
-      icon: "/logo.png",
+      icon: webSettings.website_fav_icon || "/assets/logo/logo.svg",
     },
-    // openGraph: {
-    //   // images: "/logo.png",
-    //   title: locale === "ar" ? settings.meta_title_ar : settings.meta_title_en,
-    //   description: isArabic ? settings.meta_desc_ar : settings.meta_desc_en,
-    // },
   };
 }
+
 export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-params: { locale: string }
-
+  params: { locale: string };
 }) {
   const { locale } = params;
-  const messages = await getMessages({ locale })
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-  const settings = await getSettings();
-  const webSettings = settings.data?.website_setting;
-  console.log(webSettings);
-  const appCookies = await cookies()
 
-  const themeMode = appCookies.get('modeLayout')
+  const messages = await getMessages({ locale });
+  const settings = await getSettings() ;
+  const webSettings = convertSettingsArrayToObject(settings.data);
+
+  const appCookies = await cookies();
+  const themeMode = appCookies.get("modeLayout")?.value ?? "";
 
   return (
-    <html className={`${themeMode ? themeMode : ''}`}
+    <html
+      className={themeMode}
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <head>
-        {/* <title>{webSettings.website_title}</title>
-        <link rel="icon" href={webSettings.website_logo }/> */}
+        {/* <link rel="icon" href={webSettings.website_fav_icon || "/logo.png"} /> */}
       </head>
-      <body className=" flex flex-col ">
+      <body className="flex flex-col">
         <Toaster position="top-center" />
-        {/* <ChangeThem /> */}
         <NextIntlClientProvider messages={messages}>
           <SettingsHydration data={settings.data} />
-            <AuthProvider />
-            {children}
-            
-         
-
+          <AuthProvider />
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

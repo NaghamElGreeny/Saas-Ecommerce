@@ -55,7 +55,7 @@ const ProductDetails: React.FC<Props> = async ({ params }: Props) => {
 
           {/* Product Info */}
           <div className="mb-2 flex items-center justify-between px-3">
-            <h2 className="flex items-center gap-1 text-3xl font-bold text-gray-900">
+            <h2 className="flex items-center gap-1 text-xl md:text-3xl font-bold text-gray-900">
               {product.name}
               <span>
                 {spicy && (

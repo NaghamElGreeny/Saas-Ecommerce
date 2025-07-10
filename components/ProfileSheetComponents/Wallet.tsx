@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import CreditCard from "../cards/CreditCard";
 import { loyaltyService } from "@/services/ClientApiHandler";
 import GlobalDialog from "@/components/shared/GlobalDialog";
-import { useTranslations } from "next-intl"; // Import useTranslations
+import { useTranslations } from "next-intl"; 
+import { useAuthStore } from "@/stores/authStore";
 
 export default function Wallet() {
   const [wallet, setWallet] = useState({ balance: 0, currency: "" });
   const [open, setOpen] = useState(false);
-  const t = useTranslations("WALLET_COMPONENT"); // Initialize useTranslations
+    const { userData } = useAuthStore();
+  const t = useTranslations("WALLET_COMPONENT"); 
 
   useEffect(() => {
     const fetchWallet = async () => {
@@ -43,8 +45,7 @@ export default function Wallet() {
 
       {/* Global Dialog */}
       <GlobalDialog open={open} onOpenChange={setOpen} title={t("wallet_title")}>
-        {/* Assuming CreditCard component itself handles its own translations or receives necessary props */}
-        <CreditCard full_name="User N" wallet={wallet} />
+        <CreditCard full_name={userData.full_name} wallet={wallet} />
         <div className="w-full m-4">
           <h2 className="font-bold text-lg">{t("cancelled_orders_title")}</h2>
           <div className="canceled w-full h-[200px] flex items-center justify-center">

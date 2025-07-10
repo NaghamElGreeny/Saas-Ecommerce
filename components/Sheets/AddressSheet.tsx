@@ -8,14 +8,16 @@ import { useAddressStore } from "@/stores/addressStore";
 import AddressItem from "../shared/AddressItem";
 import AddressForm from "../Forms/AddAdressForm";
 import GlobalDialog from "../shared/GlobalDialog";
+import { useTranslations } from "next-intl"; 
 
 export default function AddressSheet() {
   const { addresses, fetchAddresses } = useAddressStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const t = useTranslations("ADDRESS_SHEET"); 
 
   useEffect(() => {
     fetchAddresses();
-  }, []);
+  }, [fetchAddresses]);
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -25,9 +27,8 @@ export default function AddressSheet() {
     <>
       <SheetHeader className="flex items-center justify-between">
         <SheetTitle className="start-0 text-2xl font-bold">
-          {/* My Address */}
+          {/* Title is handled by the parent component (ProfileSheet) */}
         </SheetTitle>
-        {/* <div style={{ width: 24 }} /> */}
       </SheetHeader>
 
       <div className="flex-grow overflow-hidden w-full h-full px-2">
@@ -39,7 +40,7 @@ export default function AddressSheet() {
               ))
             ) : (
               <p className="mt-8 text-center text-gray-500">
-                No addresses found.
+                {t("no_addresses_found")}
               </p>
             )}
           </div>
@@ -53,7 +54,7 @@ export default function AddressSheet() {
           }}
           className="bg-primary border-primary hover:text-primary mt-4 flex h-10 w-[80%] cursor-pointer items-center justify-center gap-2 rounded-full border text-white hover:bg-white"
         >
-          Add new address
+          {t("add_new_address_button")}
         </button>
       </SheetFooter>
 

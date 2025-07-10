@@ -1,6 +1,6 @@
 "use client";
 
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Image from "next/image";
 import { useNotificationStore } from "@/stores/notificationStore";
 import NotificationCard from "../cards/NotificationCard";
@@ -10,11 +10,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslations } from "next-intl"; 
 
 export default function NotificationSheet() {
-  const { notifications, unreadCount, loading } =
+  const { notifications, unreadCount, loading,fetchNotifications } =
     useNotificationStore();
   const t = useTranslations("NOTIFICATION_SHEET"); 
   const [open, setOpen] = useState(false);
-
+useEffect(() => {
+  fetchNotifications();
+}, []);
 
   return (
     <GlobalSheet
@@ -29,7 +31,7 @@ export default function NotificationSheet() {
             alt={t("title")}
             width={60}
             height={60}
-            className="size-[60px]"
+            className="cursor-pointer  sm:size-15 size-12"
           />
           {unreadCount > 0 && (
             <span className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">

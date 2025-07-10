@@ -5,14 +5,14 @@ import Image from "next/image";
 import CreditCard from "../cards/CreditCard";
 import { useLoyalityStore } from "@/stores/loyalityStore";
 import GlobalDialog from "@/components/shared/GlobalDialog";
-import { useTranslations } from "next-intl"; // Import useTranslations
+import { useTranslations } from "next-intl"; 
 import { useAuthStore } from "@/stores/authStore";
 
 export default function Loyality() {
   const { points, transactions } = useLoyalityStore();
-  const{userData}=useAuthStore()
+  const { userData } = useAuthStore();
   const [open, setOpen] = useState(false);
-  const t = useTranslations("LOYALTY_CARD"); // Initialize useTranslations
+  const t = useTranslations("LOYALTY_CARD"); 
 
   return (
     <>

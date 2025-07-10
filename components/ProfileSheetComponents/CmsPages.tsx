@@ -4,15 +4,17 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { usePagesStore } from "@/stores/usePagesStore";
+import { useLocale } from "next-intl";
 
 export default function CmsPages({ onClose }: { onClose: () => void }) {
   const router = useRouter();
+  const locale = useLocale();
   const { pages } = usePagesStore();
 
 
   const handleClick = (slug) => {
     onClose();
-    router.push(`/pages/${slug}`);
+    router.push(`/${locale}/pages/${slug}`);
   };
 
   return (
@@ -31,7 +33,11 @@ export default function CmsPages({ onClose }: { onClose: () => void }) {
                       
                       {page.title}
                   </div>
-                  <ChevronRight />
+                 {typeof document !== "undefined" && document.dir === "rtl" ? (
+                     <ChevronRight style={{ transform: "scaleX(-1)" }} />
+                     ) : (
+                     <ChevronRight />
+                     )}
               </div>
               );
       })}

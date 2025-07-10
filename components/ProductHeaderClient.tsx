@@ -15,18 +15,50 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Product } from "@/utils/menuTypes";
+import toast from "react-hot-toast";
+
 export default function ProductHeaderClient({ product }: { product: Product }) {
   const { isLiked, toggleLike } = useLikedStore();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Detect if it's a mobile device
+    if (typeof window !== "undefined") {
+      const isSmallScreen = window.innerWidth < 500;
+      setIsMobile(isSmallScreen);
+    }
+  }, []);
 
   const liked = mounted ? isLiked(product.id) : false;
+
+const handleShare = async () => {
+  if (isMobile) {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product.name,
+          text: product.desc || "",
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.error("Error sharing:", err);
+        toast.error(err);
+      }
+    } else {
+      toast("المشاركة غير مدعومة على هذا المتصفح.");
+    }
+  } else {
+    setOpen(true);
+  }
+};
 
   return (
     <div className="flex items-center justify-end gap-4 px-2">
       {/* Share button */}
-      <button className="cursor-pointer" onClick={() => setOpen(true)}>
+      <button className="cursor-pointer" onClick={handleShare}>
         <Image
           src="/assets/icons/share.svg"
           alt="Share"
@@ -35,6 +67,8 @@ export default function ProductHeaderClient({ product }: { product: Product }) {
           className="rounded-full bg-[#F6F6FD] p-1"
         />
       </button>
+
+      {/* Drawer (only opens if !isMobile) */}
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerContent
           className="bg-bg mx-auto h-[200px] max-w-[480px] min-w-[400px] !rounded-3xl !rounded-b-none"
