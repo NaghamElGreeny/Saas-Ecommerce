@@ -380,3 +380,9 @@ export const getWebSettings = async () => {
   console.log(res.data)
   return res.data;
 };
+//settings 
+export const contactUs = async (payload) => {
+  const res = await axiosClient.post("/contact_us",payload);
+  console.log('contact',res.data)
+  return res.data;
+};
