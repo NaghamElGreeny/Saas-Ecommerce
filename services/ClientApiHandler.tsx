@@ -377,12 +377,10 @@ export const cmsService = {
 //settings 
 export const getWebSettings = async () => {
   const res = await axiosClient.get("/web_settings");
-  console.log(res.data)
   return res.data;
 };
 //settings 
 export const contactUs = async (payload) => {
   const res = await axiosClient.post("/contact_us",payload);
-  console.log('contact',res.data)
   return res.data;
 };

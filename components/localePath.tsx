@@ -3,6 +3,8 @@ import React, { PropsWithChildren } from "react";
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 type props = {
   href: string;
@@ -15,11 +17,15 @@ export default function LocalePath({
   children,
 }: PropsWithChildren<props>) {
   const locale = useLocale();
-
+  const pathname = usePathname();
+    const localizedHref = locale === "ar" ? `/${locale}${href}` : href;
+    const isActive = pathname === localizedHref;
   return (
     <Link
-      className={className}
-      href={`${locale === "ar" ? `/${locale}${href}` : `${href}`}`}
+          href={localizedHref}
+      className={clsx(className, {
+        "active-link": isActive, 
+      })}
     >
       {children}
     </Link>

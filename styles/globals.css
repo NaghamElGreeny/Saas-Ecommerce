@@ -257,7 +257,9 @@ form select {
   padding: 0.75rem;
   outline: none;
 }
-
+.active-link{
+  color: var(--website-primary-color);
+}
 form input:focus,
 form select:focus {
   outline: none;

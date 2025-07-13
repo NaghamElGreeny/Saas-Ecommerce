@@ -1,37 +1,51 @@
 "use client";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import L from "leaflet";
+// import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import { FaArrowRight, FaPhone } from "react-icons/fa";
 import Image from "next/image";
 import clsx from "clsx";
 
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+// import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+// import markerIcon from "leaflet/dist/images/marker-icon.png";
+// import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 import MessageTypeSelect from "../MessageTypeSelect";
 import PhoneCodeSelect from "../PhoneCodeSelect";
-import { useCountryCodesStore } from "@/stores/countryCodesStore";
 import { contactUs, locationService } from "@/services/ClientApiHandler";
 import { BrandCountry } from "@/utils/types";
 import toast from "react-hot-toast";
+import { useWebsiteStore } from "@/stores/useWebsiteStore";
+import { PhoneNumber } from "@/utils/webSettingsTypes";
+import dynamic from "next/dynamic";
 
 // Fix leaflet marker icon
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x.src,
-  iconUrl: markerIcon.src,
-  shadowUrl: markerShadow.src,
-});
+// delete (L.Icon.Default.prototype as any)._getIconUrl;
+// L.Icon.Default.mergeOptions({
+//   iconRetinaUrl: markerIcon2x.src,
+//   iconUrl: markerIcon.src,
+//   shadowUrl: markerShadow.src,
+// });
 
 const ContactForm = () => {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(
     null,
   );
+  const { getContact } = useWebsiteStore();
+  const phoneNumbers = getContact("phone_number") as PhoneNumber[];
+  const firstPhone =
+    Array.isArray(phoneNumbers) && phoneNumbers.length > 0
+      ? phoneNumbers[0]
+      : null;
+  const address = getContact("store_address");
+  console.log(address);
+
+  const LeafletMap = dynamic(() => import("../LeafletMap"), {
+    ssr: false, // مهم عشان Leaflet مش شغال على السيرفر
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,37 +81,42 @@ const ContactForm = () => {
   });
 
   const formik = useFormik({
-  initialValues: {
-    full_name: "",
-    phone_code: "",
-    phone: "",
-    message_type: "",
-    message: "",
-  },
-  validationSchema,
- onSubmit: async (values, { resetForm }) => {
-  try {
-    const res = await contactUs(values);
+    initialValues: {
+      full_name: "",
+      phone_code: "",
+      phone: "",
+      message_type: "",
+      message: "",
+    },
+    validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        type ContactUsResponse = {
+          status?: string;
+          message?: string;
+          messages?: Record<string, string[]>;
+        };
+        const res = (await contactUs(values)) as ContactUsResponse;
 
-    if (res?.status === "success") {
-      toast.success("Message sent successfully!");
-      resetForm();
-    } else {
-      const mainMessage = res?.message || "Something went wrong.";
-      const fieldMessages = res?.messages
-        ? Object.values(res.messages).flat().join("\n")
-        : "";
+        if (res?.status === "success") {
+          toast.success(res.message);
+          resetForm();
+        } else {
+          const mainMessage = res?.message || "Something went wrong.";
+          const fieldMessages = res?.messages
+            ? Object.values(res.messages).flat().join("\n")
+            : "";
 
-      toast.error(`${mainMessage}\n${fieldMessages}`);
-    }
-  } catch (err) {
-    toast.error("Unexpected error occurred. Please try again.");
-  }
-}
-});
+          toast.error(`${mainMessage}\n${fieldMessages}`);
+        }
+      } catch {
+        toast.error("Unexpected error occurred. Please try again.");
+      }
+    },
+  });
   return (
     <div className="container mt-10 rounded-lg bg-white">
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 relative">
         <div className="space-y-6 p-8">
           <h2 className="text-4xl font-bold">Contact Us</h2>
           <p className="text-gray-500">
@@ -190,20 +209,33 @@ const ContactForm = () => {
         </div>
 
         {/* Right Side: Map Placeholder */}
-        <div className="relative">
-          <div className="absolute -top-9 right-1 z-20">
+        <div className="ps-8">
+       <div className="h-[350px] rounded-md bg-green-400 lg:h-[725px] z-0">
+            {address?.lat && address?.lng ? (
+              <LeafletMap lat={+address.lat} lng={+address.lng} loc={address.location} />
+            ) : (
+              <div className="flex h-full items-center justify-center text-white">
+                Location not available
+              </div>
+            )}
+          </div>
+        </div>
+            <div className="absolute -top-9 right-1 z-40">
             <div className="phoneContainer bg-primary group flex max-h-[70px] rounded-full p-3 hover:ps-8 hover:pr-4">
               <div className="hidden w-[200px] ps-2 text-white group-hover:block">
                 <p className="font-bold">Call Center</p>
-                <a href="tel:201000020000" className="flex items-center gap-2">
+                <a
+                  href={`tel:${firstPhone?.phone_code}${firstPhone?.phone}`}
+                  className="flex items-center gap-2"
+                >
                   <Image
-                    src="https://flagcdn.com/w20/eg.png"
+                    src={firstPhone?.flag}
                     alt="flag"
                     width={24}
                     height={20}
                     className="h-5 w-6"
                   />
-                  (20) 1000020000
+                  ({firstPhone?.phone_code}) {firstPhone?.phone}
                 </a>
               </div>
               <div className="flex h-[47px] w-[47px] items-center justify-center rounded-full bg-white">
@@ -211,11 +243,6 @@ const ContactForm = () => {
               </div>
             </div>
           </div>
-
-          <div className="h-[350px] rounded-md bg-green-400 lg:h-[725px]">
-            {/* Map Placeholder */}
-          </div>
-        </div>
       </div>
     </div>
   );

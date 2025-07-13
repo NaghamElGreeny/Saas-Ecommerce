@@ -107,20 +107,28 @@ export default function Footer({ cms }) {
           <div>
             <h3 className="mb-4 text-lg font-semibold">{t("links")}</h3> 
             <ul className="space-y-2">
-              {cms.length > 0 ? (
-                cms.map((page) => (
-                  <li key={page.id}>
-                    <LocalePath
-                      href={`/pages/${page.slug}`}
-                      className="flex items-center gap-2 text-third hover:text-primary"
-                    >
-                      {page.title}
-                    </LocalePath>
-                  </li>
-                ))
-              ) : (
-                <></>  
-              )}
+    {cms.length > 0 ? (
+  cms.map((page) => (
+    <li key={page.id}>
+      {page.slug === "contact-us" ? (
+        <LocalePath
+          href="/contact"
+          className="hover:text-primary whitespace-nowrap"
+        >
+          {page.title}
+        </LocalePath>
+      ) : (
+        <LocalePath
+          href={`/pages/${page.slug}`}
+          className="flex items-center gap-2 text-third hover:text-primary"
+        >
+          {page.title}
+        </LocalePath>
+      )}
+    </li>
+  ))
+) : null}
+
             </ul>
           </div>
 
