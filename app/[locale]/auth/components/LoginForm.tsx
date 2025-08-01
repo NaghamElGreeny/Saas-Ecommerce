@@ -42,7 +42,7 @@ export default function LoginForm() {
     };
 
     fetchCountryCodes();
-  }, [t]);
+  }, []);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const code = e.target.value;

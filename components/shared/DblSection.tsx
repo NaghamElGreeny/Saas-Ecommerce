@@ -7,7 +7,6 @@ import DownloadButtons from "../ui/Download";
 import Btn from "../ui/Btn";
 import { WebContent } from "@/utils/types";
 import { useTranslations } from "next-intl";
-import { useWebsiteStore } from "@/stores/useWebsiteStore";
 
 export function DblSection({
   topMsg,

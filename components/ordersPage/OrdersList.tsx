@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { orderService } from "@/services/ClientApiHandler";
-import { Spinner } from "../atoms";
 import Order from "./Order";
 import Pagination from "../Pagination";
+import { Spinner } from "../atoms/UI/Spinner";
 
 
 interface Props {

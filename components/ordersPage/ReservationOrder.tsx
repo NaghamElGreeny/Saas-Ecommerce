@@ -6,13 +6,14 @@ import { orderService } from "@/services/ClientApiHandler";
 import ReservationDetails from "./ReservationDetails";
 import { useTranslations } from "next-intl";
 import toast from "react-hot-toast";
+import { OrderItem } from "@/utils/orderTypes";
 
 type ReservationProps = {
   slugg: number;
 };
 
 const Reservation: React.FC<ReservationProps> = ({ slugg }) => {
-  const [reservation, setReservation] = useState<any>(null);
+  const [reservation, setReservation] = useState<OrderItem>(null);
   const [loading, setLoading] = useState(true);
   const t = useTranslations("RESERVATION_PAGE");
 
@@ -20,7 +21,8 @@ const Reservation: React.FC<ReservationProps> = ({ slugg }) => {
     const fetchReservation = async () => {
       try {
         const data = await orderService.getReservation(slugg);
-        setReservation(data);
+        console.log("🚀 ~ fetchReservation ~ data:", data)
+        setReservation(data.data);
       } catch (error) {
 toast.error(error)
       } finally {

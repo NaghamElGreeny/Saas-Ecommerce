@@ -2,6 +2,7 @@
 import axiosInstance from "./instance";
 import AppError from "../utils/appError";
 import { ApiCategories, CmsPage, Store } from "../utils/types";
+import { WebsiteData } from "@/utils/settingsTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fetchData = async (endpoint: string, errorMsg: string, config = {}) => {
@@ -75,8 +76,12 @@ export const getCategories = async () => {
 };
 //settings 
 export const getSettings = async () => {
-  const res = await axiosInstance.get("/web_settings");
-  // console.log(res.data)
+  const res = await axiosInstance.get<{
+    status: string;
+      message: string;
+      data: WebsiteData;
+    }>("/web_settings");
+  console.log(res.data)
   return res.data;
 };
 

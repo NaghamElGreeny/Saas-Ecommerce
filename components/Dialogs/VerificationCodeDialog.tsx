@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Button } from "../atoms";
-
+// import Button from "@/components/ui/Button";
 import toast from "react-hot-toast";
 import { userService } from "@/services/ClientApiHandler";
+import { Button } from "../atoms/buttons/Button";
 
 
 interface Props {

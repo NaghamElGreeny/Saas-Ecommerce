@@ -1,18 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Image from "next/image";
-// import { Spinner } from "@heroui/spinner";
 import { CartProduct, ItemModifier } from "@/utils/cartTypes";
-// import toast from "react-hot-toast";
-// import { useCartStore } from "@/stores/cartStore";
 
 type Props = {
   cartProduct: CartProduct;
 };
 
 export default function CheckoutCartItem({ cartProduct }: Props) {
-  //   const { updateProductQuantity, removeProduct, actionLoading } = useCartStore();
-
   const product = cartProduct.product;
 
   const modifiers: ItemModifier[] =

@@ -1,5 +1,6 @@
-// components/AppButtons.tsx
 'use client';
+
+import Image from "next/image";
 
 // import { useEffect, useState } from 'react';
 
@@ -35,7 +36,7 @@ export default function DownloadButtons({ googlePlay, appStore }: {
                     rel="noopener noreferrer"
                     className="flex items-center"
                 >
-                    <img src={btn.image} alt={btn.label} />
+                    <Image src={btn.image} alt={btn.label} width={24} height={24}/>
 
                 </a>
             ))}

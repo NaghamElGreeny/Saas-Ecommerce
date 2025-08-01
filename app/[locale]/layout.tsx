@@ -10,18 +10,14 @@ import { getSettings } from "@/services/ApiHandler";
 import { Metadata } from "next";
 import SettingsHydration from "@/components/SettingsHydration";
 import { convertSettingsArrayToObject } from "@/utils/settings";
-import 'leaflet/dist/leaflet.css';
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+import "leaflet/dist/leaflet.css";
+import { SettingsResponse } from "@/utils/settingsTypes";
+export async function generateMetadata(): Promise<Metadata> {
+  const settings:SettingsResponse = await getSettings();
+  const rawSettingsArray = settings.data?.website_setting || [];
 
-const settings = await getSettings();
-const rawSettingsArray = settings.data?.website_setting || [];
-
-const webSettings = convertSettingsArrayToObject(rawSettingsArray);
-  console.log('raw',settings);
+  const webSettings = convertSettingsArrayToObject(rawSettingsArray);
+  console.log("raw", settings);
 
   return {
     title: webSettings.website_title || "MEA - Telecome",
@@ -46,8 +42,8 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages({ locale });
-  const settings = await getSettings() ;
-  const webSettings = convertSettingsArrayToObject(settings.data);
+  const settings = await getSettings();
+  // const webSettings = convertSettingsArrayToObject(settings.data);
 
   const appCookies = await cookies();
   const themeMode = appCookies.get("modeLayout")?.value ?? "";

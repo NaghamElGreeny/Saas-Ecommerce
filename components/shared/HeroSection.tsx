@@ -2,8 +2,7 @@
 
 import { useTranslations } from "next-intl"
 
-export default function HeroSection({ img, title }: {
-    img?: string,
+export default function HeroSection({  title }: {
     title: string
 }) {
     const t = useTranslations("NAV");

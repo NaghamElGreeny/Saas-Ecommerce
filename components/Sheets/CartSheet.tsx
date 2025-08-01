@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import CartItemCard from "../cards/CartItem";
 import TotalOrder from "../shared/TotalOrder";
-import { Spinner } from "@/components/atoms";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import GlobalSheet from "@/components/shared/GlobalSheet";
 import { useTranslations } from "next-intl"; 
+import { Spinner } from "../atoms/UI/Spinner";
 
 export default function CartSheet() {
   const { cart, loading } = useCartStore();

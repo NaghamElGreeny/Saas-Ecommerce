@@ -1,4 +1,3 @@
-import {  AiFillEdit } from "react-icons/ai"
 import EditIconC from "./EditIcon"
 type EditProps_TP = {
   className?: string
@@ -8,7 +7,6 @@ type EditProps_TP = {
 export const Edit = ({
   className,
   action,
-  size,
   ...props
 }: EditProps_TP) => {
 

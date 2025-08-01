@@ -12,7 +12,7 @@ import { useCartStore } from "@/stores/cartStore";
 import Success from "../Success";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
-import { Spinner } from "../atoms";
+import { Spinner } from "../atoms/UI/Spinner";
 
 const ProductForm = ({
   productId,

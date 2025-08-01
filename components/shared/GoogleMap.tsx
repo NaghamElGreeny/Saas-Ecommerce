@@ -1,5 +1,5 @@
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import { useEffect, useState, useCallback } from "react";
+import {  useState, useCallback } from "react";
 import { useGoogleMapsLoader } from "@/utils/useGoogleMapsLoader";
 
 const containerStyle = {
@@ -19,7 +19,6 @@ type Props = {
 
 const GoogleMapSelector = ({ onLocationSelect }: Props) => {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const { isLoaded } = useGoogleMapsLoader(); // <-- استخدام الـ hook المشترك
 

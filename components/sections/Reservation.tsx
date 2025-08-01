@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -25,13 +25,6 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
   const [branchDialogOpen, setBranchDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
-
-  useEffect(() => {
-    if (countryCodes.length > 0) {
-      setSelectedCountry(countryCodes[0]);
-    }
-  }, [countryCodes]);
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t("name_required")).min(2, t("name_min_chars")),
@@ -71,7 +64,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
     return parsedTime.isValid() ? parsedTime.format("hh:mm A") : time;
   };
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleSubmit = async (values) => {
     setLoading(true);
     toast.dismiss();
 
@@ -94,7 +87,6 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
       toast.error(err?.response?.data?.message || t("reservation_failed"));
     } finally {
       setLoading(false);
-      setSubmitting(false);
     }
   };
 
@@ -160,7 +152,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
                     onChange={(e) => {
                       const code = e.target.value;
                       setFieldValue("phone_code", code);
-                      setSelectedCountry(countryCodes.find((c) => c.phone_code === code) || null);
+                      setSelectedCountry(countryCodes.find((c) => c.phone_code === code) as BrandCountry || null);
                     }}
                     onBlur={handleBlur}
                     className="w-full appearance-none rounded-xl border p-3"
@@ -271,7 +263,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
                     setFieldValue("timeTo", time ? time.format("h:mm A") : "")
                   }
                   placeholder={t("to_time_placeholder")}
-                  value={values.timeTo ? dayjs(values.timeTo, "h:mm A") : null}
+                  value={values.timeTo ? dayjs(values.timeTo, "h:mm A").toDate() : null}
                 />
               </div>
               <ErrorMessage name="timeFrom" component="div" className="text-sm text-red-500" />

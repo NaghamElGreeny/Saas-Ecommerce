@@ -12,7 +12,7 @@ type Option = {
 
 type Props = {
   field: FieldInputProps<string>;
-  formik: FormikProps<any>;
+  formik: FormikProps<string>;
   label?: string;
 };
 

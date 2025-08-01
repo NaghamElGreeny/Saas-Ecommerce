@@ -5,9 +5,9 @@ import Image from "next/image";
 import { useNotificationStore } from "@/stores/notificationStore";
 import NotificationCard from "../cards/NotificationCard";
 import GlobalSheet from "@/components/shared/GlobalSheet";
-import { Spinner } from "../atoms";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslations } from "next-intl"; 
+import { Spinner } from "../atoms/UI/Spinner";
 
 export default function NotificationSheet() {
   const { notifications, unreadCount, loading,fetchNotifications } =

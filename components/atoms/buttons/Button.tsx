@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { tv, type VariantProps } from "tailwind-variants"
-import { Spinner } from "../"
 import { FormikValues } from "formik"
+import { Spinner } from "../UI/Spinner"
 
 const buttonVars = tv({
   base: "relative active:top-px py-2 px-8 font-bold rounded-md text-white",

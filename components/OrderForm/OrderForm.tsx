@@ -14,11 +14,11 @@ import toast from "react-hot-toast";
 import { orderService } from "@/services/ClientApiHandler";
 import Success from "../Success";
 import { useLoyalityStore } from "@/stores/loyalityStore";
-import { Spinner } from "../atoms";
 import GlobalDialog from "../shared/GlobalDialog";
 import ScheduleSelector from "./ScheduleSelector";
 import OrderTypeSelector from "./OrderTypeSelector";
 import { useTranslations } from "next-intl";
+import { Spinner } from "../atoms/UI/Spinner";
 
 type OrderFormProps = {
   params: Record<string, string | string[]>;

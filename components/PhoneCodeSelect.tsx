@@ -6,9 +6,12 @@ import Image from "next/image";
 import clsx from "clsx";
 import { BrandCountry } from "@/utils/types";
 import { FormikProps } from "formik";
-
+type PhoneFormValues = {
+  phone: string;
+  phone_code: string;
+};
 type Props = {
-  formik: FormikProps<any>;
+  formik: FormikProps<PhoneFormValues>;
   countries: BrandCountry[];
   selected: BrandCountry | null;
   onSelect: (country: BrandCountry) => void;

@@ -5,9 +5,8 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ChevronDown, Eye, EyeOff, KeyIcon, Upload } from "lucide-react";
-
-import { Button } from "../atoms";
-import { useAuthStore } from "@/stores/authStore";
+import { Button } from "../atoms/buttons/Button";
+import { useAuthStore, UserData } from "@/stores/authStore";
 import Image from "next/image";
 import {
   locationService,
@@ -18,7 +17,11 @@ import toast from "react-hot-toast";
 import { BrandCountry } from "@/utils/types";
 import VerificationCodeDialog from "../Dialogs/VerificationCodeDialog";
 import { useTranslations } from "next-intl"; 
-
+// interface userResponse{
+//   data: UserData;
+//   status: string;
+//   message: string;
+// }
 const AccountForm = () => {
   const { userData, setUserData } = useAuthStore();
   const [showPhoneDialog, setShowPhoneDialog] = useState(false);
@@ -45,6 +48,7 @@ const AccountForm = () => {
       try {
         const user = await userService.getUser();
         if (user) setUserData(user.data);
+        console.log("🚀 ~ fetchData ~ user:", user)
         const codes = await locationService.getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);

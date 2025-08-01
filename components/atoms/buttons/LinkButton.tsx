@@ -20,7 +20,6 @@ type LinkButtonVariants_TP = VariantProps<typeof linkButton>
 
 export const LinkButton = ({
   children,
-  className,
   disabled,
   color = "primary",
   to,
@@ -33,7 +32,7 @@ export const LinkButton = ({
 }) => {
   return (
     <Link
-      to={to}
+      href={to}
       className={linkButton({
         color,
         disabled,

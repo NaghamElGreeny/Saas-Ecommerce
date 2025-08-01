@@ -3,7 +3,6 @@
 import Image from "next/image";
 import {
   Phone,
-  MapPin,
   Calendar,
   Clock,
 } from "lucide-react";

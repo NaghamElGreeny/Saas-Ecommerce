@@ -1,7 +1,7 @@
 // import Filter from '@/components/Filter';
 import Menu from '@/components/menu';
 import HeroSection from '@/components/shared/HeroSection';
-import { getCategories, getHome, getMenuItem } from '@/services/ApiHandler';
+import {  getHome, getMenuItem } from '@/services/ApiHandler';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
 
@@ -10,7 +10,7 @@ async function MenuPage() {
     const data = await getHome();
   const menu = data?.products || [];
   const items = menu||[MenuItem];
-  const categories = getCategories();
+  // const categories = getCategories();
      const t =await getTranslations("HOME");
   // const categoriesArr=[categories]
   return (
