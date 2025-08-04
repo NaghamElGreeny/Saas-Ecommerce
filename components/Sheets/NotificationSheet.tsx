@@ -16,7 +16,7 @@ export default function NotificationSheet() {
   const [open, setOpen] = useState(false);
 useEffect(() => {
   fetchNotifications();
-}, []);
+}, [fetchNotifications]);
 
   return (
     <GlobalSheet

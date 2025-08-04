@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { ChevronDown, Eye, EyeOff } from "lucide-react";
-import { useTranslations } from "next-intl"; 
+import { useTranslations } from "next-intl";
 
 import { locationService } from "@/services/ClientApiHandler";
 import { authService } from "@/services/ClientApiHandler";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore, UserData } from "@/stores/authStore";
 import { useVerificationStore } from "@/stores/useVerificationStore";
 import { BrandCountry } from "@/utils/types";
 
@@ -19,30 +19,18 @@ export default function LoginForm() {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(
+    null,
+  );
 
   const router = useRouter();
   const setToken = useAuthStore((state) => state.setToken);
   const setUserData = useAuthStore((state) => state.setUserData);
   const setFormData = useAuthStore((state) => state.setFormData);
-  const setVerificationData = useVerificationStore((state) => state.setVerificationData);
-  const t = useTranslations('LOGIN_FORM'); 
-
-  useEffect(() => {
-    const fetchCountryCodes = async () => {
-      try {
-        const codes = await locationService.getCountryCodes();
-        setCountryCodes(codes);
-        setSelectedCountry(codes[0]);
-        formik.setFieldValue("phone_code", codes[0].phone_code);
-      } catch (error) {
-        toast.error(t("failed_load_country_codes"));
-        console.error(error);
-      }
-    };
-
-    fetchCountryCodes();
-  }, []);
+  const setVerificationData = useVerificationStore(
+    (state) => state.setVerificationData,
+  );
+  const t = useTranslations("LOGIN_FORM");
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const code = e.target.value;
@@ -68,7 +56,10 @@ export default function LoginForm() {
       phone: Yup.string()
         .required(t("phone_required"))
         .matches(/^\d+$/, t("phone_digits_only"))
-        .max(selectedCountry?.phone_limit || 10, t("phone_max_digits", { count: selectedCountry?.phone_limit || 10 })),
+        .max(
+          selectedCountry?.phone_limit || 10,
+          t("phone_max_digits", { count: selectedCountry?.phone_limit || 10 }),
+        ),
       password: Yup.string().required(t("password_required")),
     }),
     onSubmit: async (values) => {
@@ -76,9 +67,11 @@ export default function LoginForm() {
       toast.dismiss();
 
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const response = await authService.login({ ...values, device_type: "web" }) as { data:any };
-        console.log('login res :',response)
+        const response = (await authService.login({
+          ...values,
+          device_type: "web",
+        })) as { data: UserData & { token: string } };
+        console.log("login res :", response);
         const { token } = response.data;
 
         setToken(token);
@@ -98,8 +91,26 @@ export default function LoginForm() {
     },
   });
 
+  useEffect(() => {
+    const fetchCountryCodes = async () => {
+      try {
+        const codes = await locationService.getCountryCodes();
+        setCountryCodes(codes);
+        setSelectedCountry(codes[0]);
+        formik.setFieldValue("phone_code", codes[0].phone_code);
+      } catch (error) {
+        toast.error(t("failed_load_country_codes"));
+        console.error(error);
+      }
+    };
+
+    fetchCountryCodes();
+  }, [t, formik]);
   return (
-    <form onSubmit={formik.handleSubmit} className="mx-auto flex w-full flex-col gap-4 p-4">
+    <form
+      onSubmit={formik.handleSubmit}
+      className="mx-auto flex w-full flex-col gap-4 p-4"
+    >
       {/* Phone Section */}
       <div className="items-center gap-2">
         <div className="flex gap-1">
@@ -125,7 +136,7 @@ export default function LoginForm() {
           <input
             type="tel"
             placeholder={t("phone_placeholder")}
-            className="w-full rounded-md border p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full rounded-md border p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
             {...formik.getFieldProps("phone")}
           />
         </div>
@@ -146,7 +157,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transform rtl:left-2 ltr:right-2"
+            className="absolute top-1/2 -translate-y-1/2 transform text-gray-500 hover:text-gray-700 ltr:right-2 rtl:left-2"
             aria-label="Toggle password visibility"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -163,7 +174,9 @@ export default function LoginForm() {
           <input
             type="checkbox"
             checked={formik.values.rememberMe}
-            onChange={() => formik.setFieldValue("rememberMe", !formik.values.rememberMe)}
+            onChange={() =>
+              formik.setFieldValue("rememberMe", !formik.values.rememberMe)
+            }
             className="h-4 w-4 accent-blue-600"
           />
           <span className="select-none">{t("remember_me")}</span>

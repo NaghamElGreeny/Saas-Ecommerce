@@ -16,7 +16,7 @@ export const TextAreaInput = ({
     autocomplete,
     ...props
 }: TextAreaInputProp_TP) => {
-    var newClassName = `${BASE_CLASS_NAME} ${className || ''}`;
+    let newClassName = `${BASE_CLASS_NAME} ${className || ''}`;
     if (override) {
         newClassName = className || '';
     }

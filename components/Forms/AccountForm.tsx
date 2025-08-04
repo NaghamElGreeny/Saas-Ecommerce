@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
-import { Formik, Form } from "formik"; 
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ChevronDown, Eye, EyeOff, KeyIcon, Upload } from "lucide-react";
@@ -14,16 +15,20 @@ import {
   authService,
 } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
-import { BrandCountry } from "@/utils/types";
+import {
+  BrandCountry,
+  LoginResponse,
+  ProfileResponse,
+  UploadImageResponse,
+  UserData,
+} from "@/utils/types";
 import VerificationCodeDialog from "../Dialogs/VerificationCodeDialog";
-import { useTranslations } from "next-intl"; 
-// interface userResponse{
-//   data: UserData;
-//   status: string;
-//   message: string;
-// }
+import { useTranslations } from "next-intl";
+import ChangePasswordDialog from "../Dialogs/ChangePasswordDialog";
+import ChangePhoneDialog from "../Dialogs/ChangePhoneDialog";
 const AccountForm = () => {
   const { userData, setUserData } = useAuthStore();
+  const avatarr=useAuthStore(s=>s.userData.avatar)
   const [showPhoneDialog, setShowPhoneDialog] = useState(false);
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +37,7 @@ const AccountForm = () => {
     null,
   );
 
-  const [avatarUrl, setAvatarUrl] = useState(userData.avatar);
+  const [avatarUrl, setAvatarUrl] = useState(avatarr);
   const [uploadedAvatar, setUploadedAvatar] = useState("");
 
   const [newPhone, setNewPhone] = useState<{
@@ -41,14 +46,14 @@ const AccountForm = () => {
   } | null>(null);
 
   const [showVerification, setShowVerification] = useState(false);
-  const t = useTranslations("ACCOUNT_FORM"); 
+  const t = useTranslations("ACCOUNT_FORM");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = await userService.getUser();
+        const user = (await userService.getUser()) as ProfileResponse;
         if (user) setUserData(user.data);
-        console.log("🚀 ~ fetchData ~ user:", user)
+        console.log("🚀 ~ fetchData ~ user:", user);
         const codes = await locationService.getCountryCodes();
         setCountryCodes(codes);
         setSelectedCountry(codes[0]);
@@ -79,8 +84,10 @@ const AccountForm = () => {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const uploaded = await userService.uploadImage(file);
-        const uploadedUrl = uploaded.data.avatar_url || uploaded.data;
+        const uploaded = (await userService.uploadImage(
+          file,
+        )) as UploadImageResponse;
+        const uploadedUrl = uploaded.data;
         setUploadedAvatar(uploadedUrl);
         setAvatarUrl(URL.createObjectURL(file));
         toast.success(t("image_uploaded_success"));
@@ -101,11 +108,13 @@ const AccountForm = () => {
         validationSchema={validationSchema}
         onSubmit={async (values) => {
           try {
-            const updated = await userService.updateUserInfo({
-              ...values,
-              avatar: uploadedAvatar || userData?.avatar,
-            });
-            setUserData({ ...userData, ...updated.data });
+             const updated = await userService.updateUserInfo({
+      full_name: values.full_name,
+      email: values.email,
+      avatar: uploadedAvatar || userData?.avatar,
+    });
+
+    setUserData({ ...userData, ...updated.data });
             toast.success(t("account_updated_success"));
           } catch (err) {
             toast.error(t("failed_to_update_account"));
@@ -232,227 +241,23 @@ const AccountForm = () => {
           </Form>
         )}
       </Formik>
-      {/* Phone Dialog */}
-      <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
-        <DialogContent>
-          <h3 className="text-lg font-semibold">{t("change_phone_dialog_title")}</h3>
 
-          {!showVerification ? (
-            <Formik
-              initialValues={{
-                phone_code: selectedCountry?.phone_code || "20",
-                phone: "",
-              }}
-              validationSchema={Yup.object({
-                phone: Yup.string()
-                  .required(t("phone_required"))
-                  .matches(/^\d+$/, t("phone_digits_only"))
-                  .max(
-                    selectedCountry?.phone_limit || 10,
-                    t("phone_max_digits", { limit: selectedCountry?.phone_limit || 10 }),
-                  ),
-              })}
-              onSubmit={async (values, { setSubmitting, setErrors }) => {
-                try {
-                  setSubmitting(true);
-                  await authService.verifyCode(values);
-                  setNewPhone(values);
-                  setShowVerification(true);
-                } catch (error) {
-                  const errorMsg =
-                    error?.response?.data?.message || t("something_went_wrong");
-                  toast.error(errorMsg);
-                  if (error?.response?.data?.errors) {
-                    setErrors(error.response.data.errors);
-                  }
-                } finally {
-                  setSubmitting(false);
-                }
-              }}
-            >
-              {({ isSubmitting, values, handleChange, errors, touched }) => (
-                <Form className="mt-4 space-y-4">
-                  <div className="flex items-center gap-2">
-                    {/* Country Code */}
-                    <div className="relative w-28">
-                      <select
-                        name="phone_code"
-                        className="w-full appearance-none rounded-xl border p-3"
-                        value={values.phone_code}
-                        onChange={handleChange}
-                      >
-                        {countryCodes.map((country) => (
-                          <option key={country.id} value={country.phone_code}>
-                            +{country.phone_code}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
-                        <ChevronDown size={18} />
-                      </div>
-                    </div>
+      <ChangePhoneDialog
+        open={showPhoneDialog}
+        onOpenChange={setShowPhoneDialog}
+        t={t}
+        countryCodes={countryCodes}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+        setUserData={setUserData}
+      />
 
-                    {/* Phone Input */}
-                    <div className="flex-1">
-                      <input
-                        name="phone"
-                        type="tel"
-                        placeholder={t("phone_placeholder")}
-                        value={values.phone}
-                        onChange={handleChange}
-                        className="w-full rounded-md border p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  {touched.phone && errors.phone && (
-                    <div className="mt-0 text-sm text-red-500">
-                      {errors.phone}
-                    </div>
-                  )}
-
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    loading={isSubmitting}
-                  >
-                    {t("send_verification_code_button")}
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-          ) : (
-            <>
-              <VerificationCodeDialog
-                newPhone={newPhone}
-                onClose={() => {
-                  setShowPhoneDialog(false);
-                  setShowVerification(false);
-                }}
-              />
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Password Dialog */}
-      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent>
-          <h3 className="text-lg font-semibold">{t("change_password_dialog_title")}</h3>
-          <Formik
-            initialValues={{
-              old_password: "",
-              password: "",
-              password_confirmation: "",
-            }}
-            validationSchema={passwordSchema}
-            onSubmit={async (values, { resetForm }) => {
-              try {
-                const res = await authService.resetPassword(values);
-                toast.success(t("password_changed_success"));
-                setUserData(res.data);
-                resetForm();
-                setShowPasswordDialog(false);
-              } catch (error) {
-                const errorMsg =
-                  error?.response?.data?.message || t("something_went_wrong");
-                toast.error(errorMsg);
-              }
-            }}
-          >
-            {({ values, handleChange, handleBlur, touched, errors }) => (
-              <Form className="mt-3 space-y-3">
-                <div>
-                  <div className="oldpass relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      name="old_password"
-                      placeholder={t("current_password_placeholder")}
-                      value={values.old_password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="w-full rounded border px-3 py-2"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute top-1/2 right-2 -translate-y-1/2 transform text-gray-500 hover:text-gray-700"
-                      aria-label="Toggle password visibility"
-                    >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  {touched.old_password && errors.old_password && (
-                    <div className="mt-1 text-xs text-red-500">
-                      {errors.old_password}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <div className="newpass relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      placeholder={t("new_password_placeholder")}
-                      value={values.password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="w-full rounded border px-3 py-2"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute top-1/2 right-2 -translate-y-1/2 transform text-gray-500 hover:text-gray-700"
-                      aria-label="Toggle password visibility"
-                    >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  {touched.password && errors.password && (
-                    <div className="mt-1 text-xs text-red-500">
-                      {errors.password}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <div className="confirmnewpass relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      name="password_confirmation"
-                      placeholder={t("confirm_new_password_placeholder")}
-                      value={values.password_confirmation}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className="w-full rounded border px-3 py-2"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute top-1/2 right-2 -translate-y-1/2 transform text-gray-500 hover:text-gray-700"
-                      aria-label="Toggle password visibility"
-                    >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  {touched.password_confirmation &&
-                    errors.password_confirmation && (
-                      <div className="mt-1 text-xs text-red-500">
-                        {errors.password_confirmation}
-                      </div>
-                    )}
-                </div>
-
-                <div className="save flex w-full justify-end">
-                  <Button type="submit" className="w-[30%] rounded-full">
-                    {t("save_button")}
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </DialogContent>
-      </Dialog>
+      <ChangePasswordDialog
+        open={showPasswordDialog}
+        onOpenChange={setShowPasswordDialog}
+        t={t}
+        setUserData={setUserData}
+      />
     </>
   );
 };

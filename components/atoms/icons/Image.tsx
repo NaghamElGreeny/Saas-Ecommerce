@@ -1,4 +1,3 @@
-import { GrView } from "react-icons/gr"
 import { MdInsertPhoto } from "react-icons/md"
 type ImageProps_TP = {
   className?: string

@@ -395,12 +395,21 @@ export type UserData = {
   country: Country;
   default_address: Address;
   tenant: string;
+   is_active: boolean;
 };
 
-export type LoginResponse = {
+
+export interface LoginResponse extends ProfileResponse {
   token: any;
+};
+
+export type ProfileResponse = {
   data: UserData;
   status: "success" | "error" | string;
   message: string;
+}
+export type UploadImageResponse = {
+  data: string; // دي هي الصورة نفسها URL
+  message: string;
+  status: string;
 };
-

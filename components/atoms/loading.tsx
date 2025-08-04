@@ -1,7 +1,5 @@
 'use client';
 
-import { Loader } from '@mantine/core';
-
 function Loading() {
     return (
         <>

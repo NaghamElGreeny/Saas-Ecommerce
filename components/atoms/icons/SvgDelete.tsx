@@ -13,7 +13,7 @@ type SvgDelete_TP = {
 ///
 
 ///
-export const SvgDelete = ({ action, stroke }: SvgDelete_TP) => {
+export const SvgDelete = ({ action }: SvgDelete_TP) => {
   /////////// VARIABLES
   ///
 

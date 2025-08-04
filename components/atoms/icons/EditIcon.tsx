@@ -1,10 +1,11 @@
 import React from 'react'
 
 type EditIcon_TP = {
-  onClick?:any
-  className?:any
+className?: string;
+  onClick?: () => void;
+  size?: number;
 };
-const EditIconC = ({onClick,className}:EditIcon_TP) => {
+const EditIconC = ({ onClick}: EditIcon_TP) => {
   return (
     <button  onClick={onClick}>
     <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-700">

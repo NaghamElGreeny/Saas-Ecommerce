@@ -34,10 +34,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
   const { stores, selectedStore, setSelectedStore } = useStore();
   const { cart, fetchCart } = useCartStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  type UserData = {
-    points?: number;
-    wallet?: number;
-  };
+  
   const [open, setOpen] = useState(false);
   const [orderId, setOrderId] = useState("");
   const cridetPaymet = async (data) => {
@@ -80,7 +77,7 @@ const OrderForm = ({ params }: OrderFormProps) => {
 
   useEffect(() => {
     fetchAddresses();
-  }, []);
+  }, [fetchAddresses]);
   useEffect(() => {
     (async () => {
       if (params.status === "success") {

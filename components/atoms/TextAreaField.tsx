@@ -5,7 +5,7 @@ import { FormikError } from './FormikError';
 
 export const TextAreaField = ({
     label,
-    name,
+    name = '',
     placeholder,
     id,
     required,
@@ -13,30 +13,46 @@ export const TextAreaField = ({
 }: {
     label?: string;
     id?: string;
-    name?: any;
+    name?: string;
     placeholder?: string;
 } & TextAreaInputProp_TP) => {
-    const { setFieldValue, setFieldTouched, errors, touched, values } = useFormikContext<{
-        [key: string]: any;
-    }>();
+    const {
+        setFieldValue,
+        setFieldTouched,
+        errors,
+        touched,
+        values,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = useFormikContext<{ [key: string]:any }>();
+
+    const fieldError = errors[name];
+    const isTouched = touched[name];
+
     return (
-        <TextAreaInput
-            placeholder={placeholder}
-            id={id}
-            value={props.value || values[name]}
-            className={`${
-                touched[name as string] && !!errors[name as string] && '!border-mainRed border-2'
-            }  border border-gray-200 text-area`}
-            onChange={(e) => {
-                if (props.value === undefined) {
-                    // setFieldValueState(e.target.value)
-                    setFieldValue(name, e.target.value);
-                }
-            }}
-            onBlur={() => {
-                setFieldTouched(name as string, true);
-            }}
-            {...props}
-        />
+        <div className="flex flex-col gap-1">
+            {label && (
+                <Label htmlFor={id || name} required={required}>
+                    {label}
+                </Label>
+            )}
+
+            <TextAreaInput
+                id={id || name}
+                placeholder={placeholder}
+                value={props.value ?? values[name]}
+                className={`text-area border ${
+                    isTouched && fieldError ? '!border-mainRed border-2' : 'border-gray-200'
+                }`}
+                onChange={(e) => {
+                    if (props.value === undefined) {
+                        setFieldValue(name, e.target.value);
+                    }
+                }}
+                onBlur={() => setFieldTouched(name, true)}
+                {...props}
+            />
+
+            <FormikError name={name} />
+        </div>
     );
 };

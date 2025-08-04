@@ -27,7 +27,7 @@
 //     : null
 // }
 
-import { Field, useField } from 'formik';
+import {  useField } from 'formik';
 import { createElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -42,7 +42,7 @@ export const FormikError = ({
     className?: string;
     withTouched?: boolean;
 }) => {
-    const [field, meta] = useField(name);
+    const [ ,meta] = useField(name);
 
     const error = meta.error;
     const isTouched = meta.touched;

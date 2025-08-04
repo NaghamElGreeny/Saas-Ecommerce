@@ -12,6 +12,7 @@ import {
   ResetPasswordPayload,
   ReviewResponse,
   Store,
+  UserData,
 } from "../utils/types";
 import { CartResponse } from "@/utils/cartTypes";
 
@@ -291,14 +292,15 @@ export const userService = {
     return response.data;
   },
   
-  updateUserInfo: async (data: { name: string; email: string }) => {
-    try {
-      const response = await axiosClient.patch("/profile", data);
-      return response.data;
-    } catch (error: any) {
-      throw new Error(error?.response?.data?.message || "Failed to update user info");
-    }
-  },
+updateUserInfo: async (data: { full_name: string; email: string; avatar?: string }) => {
+  try {
+    const response = await axiosClient.patch<{ data: UserData }>("/profile", data);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to update user info");
+  }
+},
+
 };
 
 // Favorites Services

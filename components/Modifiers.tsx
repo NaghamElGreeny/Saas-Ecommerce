@@ -107,7 +107,7 @@ console.log(modifiers)
 
   useEffect(() => {
     onGetCurrentResult(modifiersResults);
-  }, [modifiersResults]); 
+  }, [modifiersResults,onGetCurrentResult]); 
 
   const t = useTranslations();
 

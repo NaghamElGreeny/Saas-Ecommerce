@@ -40,10 +40,10 @@ function Button({
     action,
     loading,
     type = 'button',
-    bordered = false,
+    // bordered = false,
     ...props
 }: ButtonProps_TP) {
-    var newClass = className;
+    const newClass = className;
     return (
         <button
             type={type}
