@@ -49,7 +49,7 @@ const Order: React.FC<{ order: OrderItem }> = ({ order }) => {
           </p>
           {order.type === "order" ? (
             <div className="flex flex-col gap-1">
-              {order.item.map((productItem: any) => (
+              {order.item.map((productItem) => (
                 <p
                   key={productItem.id}
                   className="text-text-website-font text-sm"

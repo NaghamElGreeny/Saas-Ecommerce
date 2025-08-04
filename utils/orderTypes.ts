@@ -1,5 +1,6 @@
 export interface OrderItem {
   id: number;
+  name: string;
   order_num: string;
   status: string;
   status_trans: string;
@@ -12,8 +13,9 @@ export interface OrderItem {
   order_time: string;
   order_date: string;
   can_cancel: boolean;
+  guests_number: string | number;
   store: Store;
-  driver: any | null;
+  driver: unknown | null;
   item: OrderProduct[];
   item_count: number;
   cancel_reason: string | null;
@@ -71,10 +73,10 @@ interface OrderProduct {
   quantity: number;
   total_price: number;
   note: string | null;
-  combo: any[];
+  combo: unknown[];
   sub_modifiers: SubModifier[];
   is_rate: boolean;
-  review: any | null;
+  review: unknown | null;
 }
 
 interface Product {

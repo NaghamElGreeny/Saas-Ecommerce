@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ChevronDown, Eye, EyeOff, KeyIcon, Upload } from "lucide-react";
 import { Button } from "../atoms/buttons/Button";
-import { useAuthStore, UserData } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 import Image from "next/image";
 import {
   locationService,

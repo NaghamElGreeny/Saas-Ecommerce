@@ -14,7 +14,7 @@ import { locationService } from "@/services/ClientApiHandler";
 import { useCountryCodesStore } from "@/stores/countryCodesStore";
 import { useStore } from "@/stores/useStore";
 import GlobalDialog from "@/components/shared/GlobalDialog";
-import { BrandCountry, ReservationPayload } from "@/utils/types";
+import { ReservationPayload } from "@/utils/types";
 
 export default function ReservationForm({ show, className }: { show: boolean; className?: string }) {
   const t = useTranslations("RESERVATION_FORM");
@@ -22,7 +22,6 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
 
   const countryCodes = useCountryCodesStore((state) => state.countryCodes);
   const stores = useStore((state) => state.stores);
-  const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
   const [branchDialogOpen, setBranchDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -152,7 +151,6 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
                     onChange={(e) => {
                       const code = e.target.value;
                       setFieldValue("phone_code", code);
-                      setSelectedCountry(countryCodes.find((c) => c.phone_code === code) as BrandCountry || null);
                     }}
                     onBlur={handleBlur}
                     className="w-full appearance-none rounded-xl border p-3"

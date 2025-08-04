@@ -29,6 +29,11 @@
     "email": "Email",
     "all_rights_reserved": "All Rights Reserved"
   },
+   "HERO": {
+    "title": "Exotic and Delicious",
+    "description": "Food is the foundation of true happiness, lorem ipsum dolor sit amet, consectetur adipiscing elit aenean.",
+    "discover_more_button": "Discover More"
+  },
   "cart": {
     "add-to-cart": "Add to Cart",
     "note_label": "Note",

@@ -43,12 +43,12 @@ export default function NotificationToggle() {
             onCheckedChange={setNotifiable}
             className={cn(
               "relative inline-flex h-7 w-12 bg-primary items-center rounded-full transition-colors ps-1",
-              // notifiable ? "bg-primary" : "bg-gray-300",
+              // notifiable ? "!bg-primary" : "!bg-gray-300",
             )}
           >
             <span
               className={cn(
-                "inline-block h-5 w-5 transform rounded-full bg-white transition",
+                "inline-block z-50 h-5 w-5 transform rounded-full !bg-red-500 transition",
                   notifiable
         ? "translate-x-6 rtl:-translate-x-6"
         : "translate-x-1 rtl:translate-x-1"
