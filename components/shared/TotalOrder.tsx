@@ -6,9 +6,11 @@ import React from "react";
 import LoyaltyCheckbox from "../LoyalityCheckBox";
 import { useLoyalityStore } from "@/stores/loyalityStore";
 import { useTranslations } from "next-intl"; // Import useTranslations
+import { OrderPriceDetail } from "@/utils/types";
 
 type Props = {
-  priceDetail?: PriceSummary & { total?: number };
+  // priceDetail?: PriceSummary & { total?: number };
+  priceDetail?:OrderPriceDetail;
   total?: number;
   sheet?: boolean;
 };

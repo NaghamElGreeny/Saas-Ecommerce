@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { orderService } from "@/services/ClientApiHandler";
-import { OrderItem } from "@/utils/orderTypes";
+// import { OrderItem } from "@/utils/orderTypes";
 
 import TotalOrder from "./shared/TotalOrder";
 import CheckoutCartItem from "./shared/CheckoutCartItem";
@@ -13,6 +13,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { Loader } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useTranslations } from "next-intl";
+import { OrderData } from "@/utils/types";
 
 type OrderProps = {
   slugg: number;
@@ -23,7 +24,7 @@ export type CancelReason = {
   created_at: string;
 };
 const Order: React.FC<OrderProps> = ({ slugg }) => {
-  const [order, setOrder] = useState<OrderItem | null>(null);
+  const [order, setOrder] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const [isCancelOpen, setIsCancelOpen] = useState<boolean>(false);
@@ -34,6 +35,8 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
     const fetchOrder = async () => {
       try {
         const data = await orderService.getOrder(slugg);
+        // console.log("🚀 ~ fetchOrder ~ data:", data)
+      
         setOrder(data);
       } catch (error) {
         console.error(t("failed_to_fetch_order"), error);
@@ -70,8 +73,8 @@ const Order: React.FC<OrderProps> = ({ slugg }) => {
     };
 
     try {
-      const res = await orderService.cancelOrder(order!.id, payload);
-      toast.success(res.message || t("order_cancelled_success"));
+       await orderService.cancelOrder(order!.id, payload);
+      toast.success( t("order_cancelled_success"));
       setIsCancelOpen(false);
 
       setTimeout(() => {
