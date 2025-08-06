@@ -10,12 +10,10 @@ type Option = {
   label: string;
 };
 
-type Props = {
+interface Props<T> {
   field: FieldInputProps<string>;
-  formik: FormikProps<string>;
-  label?: string;
-};
-
+  formik: FormikProps<T>;
+}
 const options: Option[] = [
   { value: "complaint", label: "Complaint" },
   { value: "suggestion", label: "Suggestion" },
@@ -23,11 +21,11 @@ const options: Option[] = [
   { value: "other", label: "Other" },
 ];
 
-const MessageTypeSelect: React.FC<Props> = ({
+const MessageTypeSelect = <T,>({
   field,
   formik,
   label = "Choose Type Of Message",
-}) => {
+}: Props<T> & { label?: string }) => {
   const selected = options.find((o) => o.value === field.value);
   const error = formik.touched[field.name] && formik.errors[field.name];
 

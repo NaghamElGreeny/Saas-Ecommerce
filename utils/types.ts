@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// Auth Related Interfaces
+// AUTH
+
+/**
+ * @interface LoginPayload
+ * @description The payload for the login request.
+ */
 export interface LoginPayload {
   phone_code: string;
   phone: string;
@@ -9,11 +14,19 @@ export interface LoginPayload {
   device_token?: string;
 }
 
+/**
+ * @interface LogoutPayload
+ * @description The payload for the logout request.
+ */
 export interface LogoutPayload {
   device_type: DeviceType;
   device_token?: string;
 }
 
+/**
+ * @interface RegisterPayload
+ * @description The payload for the registration request.
+ */
 export interface RegisterPayload {
   phone_code: string;
   phone: string;
@@ -25,6 +38,10 @@ export interface RegisterPayload {
   device_token?: string;
 }
 
+/**
+ * @interface ResetPasswordPayload
+ * @description The payload for the password reset request.
+ */
 export interface ResetPasswordPayload {
   phone: string;
   phone_code: string;
@@ -34,21 +51,110 @@ export interface ResetPasswordPayload {
   device_type?: DeviceType;
 }
 
+/**
+ * @type ChangePasswordPayload
+ * @description The payload for the password change request.
+ */
+export type ChangePasswordPayload = {
+  old_password: string;
+  password: string;
+  password_confirmation: string;
+};
+
+/**
+ * @type DeviceType
+ * @description The type of device used for the request.
+ */
 type DeviceType = "web" | "ios" | "android";
 
-// Reservation Interface
-export interface ReservationPayload {
-  name: string;
-  phone: string;
-  phone_code: string;
-  store_id: number;
-  date: string;
-  from_time: string;
-  to_time: string;
-  guests_number: number;
+/**
+ * @interface LoginResponse
+ * @description The response after a successful login.
+ */
+export interface LoginResponse extends ProfileResponse {
+  token: any;
 }
 
-// Location Interfaces
+// USER & PROFILE
+
+/**
+ * @interface ProfileResponse
+ * @description The response containing user profile data.
+ */
+export type ProfileResponse = {
+  data: UserData;
+  status: "success" | "error" | string;
+  message: string;
+};
+
+/**
+ * @type UserData
+ * @description The user's data.
+ */
+export type UserData = {
+  id: number;
+  full_name: string;
+  avatar: string;
+  email: string;
+  phone_code: string;
+  phone: string;
+  user_type: "customer" | string;
+  notifiable: boolean;
+  token: string;
+  points: number;
+  wallet: number;
+  country: Country;
+  default_address: Address;
+  tenant: string;
+  is_active: boolean;
+};
+
+/**
+ * @type Country
+ * @description A country's data.
+ */
+type Country = {
+  id: number;
+  name: string;
+  phone_code: string;
+  phone_limit: number;
+  flag: string;
+};
+
+/**
+ * @type Address
+ * @description A user's address.
+ */
+type Address = {
+  id: number;
+  type: string | null;
+  title: string;
+  lat: string;
+  lng: string;
+  desc: string;
+  is_default: boolean;
+  building: string;
+  floor: string;
+  apartment: string;
+  created_at: string;
+};
+
+/**
+ * @interface UploadImageResponse
+ * @description The response after uploading an image.
+ */
+export type UploadImageResponse = {
+  data: string; // The URL of the uploaded image
+  message: string;
+  status: string;
+};
+
+// LOCATIONS & STORES
+
+/**
+ * @interface BrandCountry
+ * @description Data for a country related to a brand.
+ */
 export interface BrandCountry {
   id: number;
   name: string;
@@ -57,6 +163,10 @@ export interface BrandCountry {
   flag: string;
 }
 
+/**
+ * @interface Store
+ * @description Data for a store.
+ */
 export interface Store {
   id: number;
   image: string;
@@ -68,7 +178,29 @@ export interface Store {
   location_description: string;
 }
 
-// CMS Interfaces
+// RESERVATIONS
+
+/**
+ * @interface ReservationPayload
+ * @description The payload for creating a reservation.
+ */
+export interface ReservationPayload {
+  name: string;
+  phone: string;
+  phone_code: string;
+  store_id: number;
+  date: string;
+  from_time: string;
+  to_time: string;
+  guests_number: number;
+}
+
+// CMS & STATIC PAGES
+
+/**
+ * @interface CmsPageBase
+ * @description The base interface for a CMS page.
+ */
 export interface CmsPageBase {
   created_at: string;
   icon: string;
@@ -79,6 +211,10 @@ export interface CmsPageBase {
   user_type: "both" | "guest" | "registered";
 }
 
+/**
+ * @interface CmsPage
+ * @description The full interface for a CMS page, including additional data.
+ */
 export interface CmsPage extends CmsPageBase {
   desc: string;
   image: string;
@@ -86,6 +222,10 @@ export interface CmsPage extends CmsPageBase {
   addition_data: CmsAdditionalData[];
 }
 
+/**
+ * @interface CmsAdditionalData
+ * @description Additional data for a CMS page.
+ */
 export interface CmsAdditionalData {
   id: number;
   image: string;
@@ -94,7 +234,26 @@ export interface CmsAdditionalData {
   created_at: string;
 }
 
-// Product Interfaces
+/**
+ * @interface StaticPage
+ * @description Data for a static page.
+ */
+export interface StaticPage {
+  id: number;
+  title: string;
+  slug: string;
+  in_menu: boolean;
+  icon: string;
+  user_type: "both" | "guest" | "auth";
+  created_at: string;
+}
+
+// PRODUCTS & HOME PAGE
+
+/**
+ * @interface CardItem
+ * @description Data for a product card item.
+ */
 export interface CardItem {
   id: number;
   name: string;
@@ -104,6 +263,10 @@ export interface CardItem {
   rating: number;
 }
 
+/**
+ * @interface Slider
+ * @description Data for a homepage slider.
+ */
 export interface Slider {
   id: number;
   title: string;
@@ -112,6 +275,10 @@ export interface Slider {
   image: string;
 }
 
+/**
+ * @interface WebContent
+ * @description Data for web content on the homepage.
+ */
 export interface WebContent {
   id: number;
   title: string;
@@ -121,29 +288,46 @@ export interface WebContent {
   app_store?: string;
 }
 
+/**
+ * @interface HomePageData
+ * @description Data for the homepage.
+ */
 export interface HomePageData {
   address: string | null;
   sliders: Slider[];
   web_content: WebContent;
-  popular_products: any[]; 
+  popular_products: any[];
   web_content_link: WebContent;
   products: any[];
   subscription_content: any | null;
   offers: any[];
 }
 
-// Category Interfaces
+// CATEGORIES
+
+/**
+ * @interface Category
+ * @description A product category.
+ */
 export interface Category {
   id: number;
   name: string;
   subCategories?: SubCategory[];
 }
 
+/**
+ * @interface SubCategory
+ * @description A sub-category of a product category.
+ */
 export interface SubCategory {
   id: number;
   name: string;
 }
 
+/**
+ * @interface ApiCategories
+ * @description A category from the API.
+ */
 export interface ApiCategories {
   subCategories: any;
   id: number;
@@ -153,7 +337,12 @@ export interface ApiCategories {
   icon: string;
 }
 
-// Review Interfaces
+// REVIEWS
+
+/**
+ * @interface Review
+ * @description A user's review of a product.
+ */
 export interface Review {
   id: number;
   rate: number;
@@ -167,6 +356,10 @@ export interface Review {
   };
 }
 
+/**
+ * @interface ReviewResponse
+ * @description The response containing product reviews.
+ */
 export interface ReviewResponse {
   status: string;
   message: string;
@@ -179,7 +372,12 @@ export interface ReviewResponse {
   }[];
 }
 
-// Modifier Interfaces
+// MODIFIERS
+
+/**
+ * @interface Modifier
+ * @description A product modifier.
+ */
 export interface Modifier {
   id: number;
   name: string;
@@ -189,6 +387,10 @@ export interface Modifier {
   item_modifiers: ItemModifier[];
 }
 
+/**
+ * @interface ItemModifier
+ * @description An item within a modifier.
+ */
 export interface ItemModifier {
   id: number;
   name: string;
@@ -196,7 +398,12 @@ export interface ItemModifier {
   price: { price: number; currency: string } | null;
 }
 
-// Order Interfaces
+// ORDERS
+
+/**
+ * @interface OrderItemProduct
+ * @description Product details within an order item.
+ */
 export interface OrderItemProduct {
   id: number;
   name: string;
@@ -213,12 +420,20 @@ export interface OrderItemProduct {
   price: ProductPrice;
 }
 
+/**
+ * @interface FoodIcon
+ * @description An icon representing a food item's properties.
+ */
 export interface FoodIcon {
   id: number;
   name: string;
   image: string;
 }
 
+/**
+ * @interface ProductPrice
+ * @description Price details for a product.
+ */
 export interface ProductPrice {
   price: number;
   currency: string;
@@ -228,6 +443,10 @@ export interface ProductPrice {
   offer: ProductOffer;
 }
 
+/**
+ * @interface ProductOffer
+ * @description An offer applied to a product.
+ */
 export interface ProductOffer {
   id: number;
   from_day: string | null;
@@ -236,6 +455,10 @@ export interface ProductOffer {
   to_time: string | null;
 }
 
+/**
+ * @interface OrderItemModifier
+ * @description Modifier details for an order item.
+ */
 export interface OrderItemModifier {
   id: number;
   name: string;
@@ -245,6 +468,10 @@ export interface OrderItemModifier {
   item_modifiers: OrderItemModifierDetail[];
 }
 
+/**
+ * @interface OrderItemModifierDetail
+ * @description Details of an item within an order item modifier.
+ */
 export interface OrderItemModifierDetail {
   id: number;
   order_item_id: number;
@@ -257,6 +484,10 @@ export interface OrderItemModifierDetail {
   quantity: number;
 }
 
+/**
+ * @interface OrderItem
+ * @description An item within an order.
+ */
 export interface OrderItem {
   id: number;
   product: OrderItemProduct;
@@ -272,8 +503,13 @@ export interface OrderItem {
     review: string;
     note: string;
   };
+  in_store: boolean;
 }
 
+/**
+ * @interface OrderPriceDetail
+ * @description The price breakdown of an order.
+ */
 export interface OrderPriceDetail {
   total_price: number;
   discount_value: number;
@@ -287,6 +523,10 @@ export interface OrderPriceDetail {
   currency: string;
 }
 
+/**
+ * @interface OrderStatus
+ * @description An object representing an order status.
+ */
 export interface OrderStatus {
   key: string;
   value: string;
@@ -294,6 +534,10 @@ export interface OrderStatus {
   icon: string;
 }
 
+/**
+ * @interface OrderStore
+ * @description Details of the store associated with an order.
+ */
 export interface OrderStore {
   id: number;
   image: string;
@@ -319,6 +563,10 @@ export interface OrderStore {
   }[];
 }
 
+/**
+ * @interface OrderData
+ * @description The full data for a single order.
+ */
 export interface OrderData {
   id: number;
   order_num: string;
@@ -346,70 +594,3 @@ export interface OrderData {
   call_center_message: string;
   order_status: OrderStatus[];
 }
-
-// Static Page Interface
-export interface StaticPage {
-  id: number;
-  title: string;
-  slug: string;
-  in_menu: boolean;
-  icon: string;
-  user_type: "both" | "guest" | "auth";
-  created_at: string;
-}
-
-type Country = {
-  id: number;
-  name: string;
-  phone_code: string;
-  phone_limit: number;
-  flag: string;
-};
-
-type Address = {
-  id: number;
-  type: string | null;
-  title: string;
-  lat: string;
-  lng: string;
-  desc: string;
-  is_default: boolean;
-  building: string;
-  floor: string;
-  apartment: string;
-  created_at: string;
-};
-
-export type UserData = {
-  id: number;
-  full_name: string;
-  avatar: string;
-  email: string;
-  phone_code: string;
-  phone: string;
-  user_type: "customer" | string;
-  notifiable: boolean;
-  token: string;
-  points: number;
-  wallet: number;
-  country: Country;
-  default_address: Address;
-  tenant: string;
-   is_active: boolean;
-};
-
-
-export interface LoginResponse extends ProfileResponse {
-  token: any;
-};
-
-export type ProfileResponse = {
-  data: UserData;
-  status: "success" | "error" | string;
-  message: string;
-}
-export type UploadImageResponse = {
-  data: string; // دي هي الصورة نفسها URL
-  message: string;
-  status: string;
-};

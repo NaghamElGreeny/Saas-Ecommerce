@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -27,14 +27,6 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
   const [branchDialogOpen, setBranchDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
- 
-
-  useEffect(() => {
-    if (countryCodes.length > 0) {
-      // setSelectedCountry(countryCodes[0]);
-    }
-  }, [countryCodes]);
-
   const validationSchema = Yup.object({
     name: Yup.string().required(t("name_required")).min(2, t("name_min_chars")),
     phone_code: Yup.string().required(t("country_code_required")),
@@ -51,17 +43,17 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
       }),
     store_id: Yup.string().required(t("select_branch_required")),
     date: Yup.date().required(t("date_required")).min(new Date(), t("date_past_error")),
-    timeFrom: Yup.string()
+    from_time: Yup.string()
       .required(t("time_from_required"))
-      .test("is-before-timeTo", t("time_from_before_to"), function (value) {
-        return !value || !this.parent.timeTo || value < this.parent.timeTo;
+      .test("is-before-to_time", t("time_from_before_to"), function (value) {
+        return !value || !this.parent.to_time || value < this.parent.to_time;
       }),
-    timeTo: Yup.string()
+    to_time: Yup.string()
       .required(t("time_to_required"))
-      .test("is-after-timeFrom", t("time_to_after_from"), function (value) {
-        return !value || !this.parent.timeFrom || value > this.parent.timeFrom;
+      .test("is-after-from_time", t("time_to_after_from"), function (value) {
+        return !value || !this.parent.from_time || value > this.parent.from_time;
       }),
-    guest_number: Yup.number()
+    guests_number: Yup.number()
       .required(t("guests_required"))
       .min(1, t("guests_min"))
       .max(20, t("guests_max"))
@@ -80,12 +72,12 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
     const payload: ReservationPayload = {
       name: values.name,
       date: values.date,
-      store_id: parseInt(values.store_id, 10),
+      store_id: values.store_id,
       phone_code: values.phone_code,
       phone: values.phone,
-      from_time: formatTime(values.timeFrom),
-      to_time: formatTime(values.timeTo),
-      guests_number: Number(values.guest_number),
+      from_time: formatTime(values.from_time),
+      to_time: formatTime(values.to_time),
+      guests_number: Number(values.guests_number),
     };
 
     try {
@@ -142,11 +134,11 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
             name: "",
             phone: "",
             phone_code: countryCodes[0]?.phone_code || "",
-            store_id: stores[0]?.id?.toString() || "",
+            store_id: stores[0]?.id || "",
             date: "",
-            timeFrom: "",
-            timeTo: "",
-            guest_number: 1,
+            from_time: "",
+            to_time: "",
+            guests_number: 1,
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -194,7 +186,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
               <ErrorMessage name="phone" component="div" className="text-sm text-red-500" />
 
               <div className="flex flex-col gap-4 md:flex-row">
-                <Field as="select" name="guest_number" className="reserve w-1/2 p-3">
+                <Field as="select" name="guests_number" className="reserve w-1/2 p-3">
                   {[1, 2, 3, 4].map((n) => (
                     <option key={n} value={n}>
                       {n} {n === 1 ? t("person") : t("people")}
@@ -212,7 +204,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
                     : t("select_branch")}
                 </button>
               </div>
-              <ErrorMessage name="guest_number" component="div" className="text-sm text-red-500" />
+              <ErrorMessage name="guests_number" component="div" className="text-sm text-red-500" />
 
               <GlobalDialog
                 open={branchDialogOpen}
@@ -261,29 +253,35 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
               </GlobalDialog>
 
               <div className="flex w-full flex-col gap-4 md:flex-row">
-                <TimePicker
-                  className="time-picker md:w-1/2"
-                  use12Hours
-                  format="h:mm A"
-                  onChange={(time) =>
-                    setFieldValue("timeFrom", time ? time.format("h:mm A") : "")
-                  }
-                  placeholder={t("from_time_placeholder")}
-                  value={values.timeFrom ? dayjs(values.timeFrom, "h:mm A") : null}
-                />
-                <TimePicker
-                  className="time-picker md:w-1/2"
-                  use12Hours
-                  format="h:mm A"
-                  onChange={(time) =>
-                    setFieldValue("timeTo", time ? time.format("h:mm A") : "")
-                  }
-                  placeholder={t("to_time_placeholder")}
-                  value={values.timeTo ? dayjs(values.timeTo, "h:mm A") : null}
-                />
+                <div className="time-picker md:w-1/2">
+                  <TimePicker
+                    // use12Hours
+                    format="h:mm A"
+                    // onChange={(time) =>
+                    //   setFieldValue("from_time", time ? time.format("h:mm A") : "")
+                    // }
+                    // placeholder={t("from_time_placeholder")}
+                    // value={values.from_time ? dayjs(values.from_time, "h:mm A") : null}
+                    onChange={(time) =>
+                      setFieldValue("from_time", time )
+                    }
+                    placeholder={t("from_time_placeholder")}
+                    value={values.from_time}
+                  />
+                </div>
+                <div className="time-picker md:w-1/2">
+                  <TimePicker
+                    format="h:mm A"
+                    onChange={(time) =>
+                      setFieldValue("to_time", time )
+                    }
+                    placeholder={t("to_time_placeholder")}
+                    value={values.to_time}
+                  />
+                </div>
               </div>
-              <ErrorMessage name="timeFrom" component="div" className="text-sm text-red-500" />
-              <ErrorMessage name="timeTo" component="div" className="text-sm text-red-500" />
+              <ErrorMessage name="from_time" component="div" className="text-sm text-red-500" />
+              <ErrorMessage name="to_time" component="div" className="text-sm text-red-500" />
 
               <Field
                 name="date"

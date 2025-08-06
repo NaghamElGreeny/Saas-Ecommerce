@@ -1,37 +1,31 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ChevronDown, Eye, EyeOff, KeyIcon, Upload } from "lucide-react";
+
+import {  KeyIcon, Upload } from "lucide-react";
 import { Button } from "../atoms/buttons/Button";
 import { useAuthStore } from "@/stores/authStore";
 import Image from "next/image";
 import {
   locationService,
   userService,
-  authService,
 } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
 import {
   BrandCountry,
-  LoginResponse,
   ProfileResponse,
   UploadImageResponse,
-  UserData,
 } from "@/utils/types";
-import VerificationCodeDialog from "../Dialogs/VerificationCodeDialog";
 import { useTranslations } from "next-intl";
 import ChangePasswordDialog from "../Dialogs/ChangePasswordDialog";
 import ChangePhoneDialog from "../Dialogs/ChangePhoneDialog";
 const AccountForm = () => {
   const { userData, setUserData } = useAuthStore();
-  const avatarr=useAuthStore(s=>s.userData.avatar)
+  const avatarr = useAuthStore(s => s.userData?.avatar)|| "assets/images/avatar.png";
   const [showPhoneDialog, setShowPhoneDialog] = useState(false);
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(
     null,
@@ -40,12 +34,11 @@ const AccountForm = () => {
   const [avatarUrl, setAvatarUrl] = useState(avatarr);
   const [uploadedAvatar, setUploadedAvatar] = useState("");
 
-  const [newPhone, setNewPhone] = useState<{
-    phone: string;
-    phone_code: string;
-  } | null>(null);
+  // const [newPhone, setNewPhone] = useState<{
+  //   phone: string;
+  //   phone_code: string;
+  // } | null>(null);
 
-  const [showVerification, setShowVerification] = useState(false);
   const t = useTranslations("ACCOUNT_FORM");
 
   useEffect(() => {
@@ -70,16 +63,6 @@ const AccountForm = () => {
     email: Yup.string().email(t("invalid_email")).required(t("email_required")),
   });
 
-  const passwordSchema = Yup.object().shape({
-    old_password: Yup.string().required(t("current_password_required")),
-    password: Yup.string()
-      .min(6, t("password_too_short"))
-      .required(t("new_password_required")),
-    password_confirmation: Yup.string()
-      .oneOf([Yup.ref("password")], t("passwords_must_match"))
-      .required(t("confirm_new_password_required")),
-  });
-
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -102,8 +85,8 @@ const AccountForm = () => {
     <>
       <Formik
         initialValues={{
-          full_name: userData.full_name || "",
-          email: userData.email || "",
+          full_name: userData?.full_name || "",
+          email: userData?.email || "",
         }}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
@@ -196,7 +179,7 @@ const AccountForm = () => {
                     className="max-w-[80px] rounded !bg-gray-200 px-3 py-2"
                   />
                   <input
-                    value={userData.phone}
+                    value={userData?.phone}
                     disabled
                     className="flex-1 rounded !bg-gray-200 px-3 py-2"
                   />
@@ -263,3 +246,4 @@ const AccountForm = () => {
 };
 
 export default AccountForm;
+

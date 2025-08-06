@@ -1,4 +1,3 @@
-// components/Dialogs/ChangePasswordDialog.tsx
 "use client";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -9,8 +8,15 @@ import { useState } from "react";
 import { Button } from "../atoms/buttons/Button";
 import toast from "react-hot-toast";
 import { authService } from "@/services/ClientApiHandler";
+import { UserData } from "@/stores/authStore";
+interface ChangePasswordDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  t: (key: string) => string;
+  setUserData: (data: UserData) => void;
+}
 
-const ChangePasswordDialog = ({ open, onOpenChange, t, setUserData }: any) => {
+const ChangePasswordDialog = ({ open, onOpenChange, t, setUserData }: ChangePasswordDialogProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const passwordSchema = Yup.object().shape({
@@ -23,7 +29,7 @@ const ChangePasswordDialog = ({ open, onOpenChange, t, setUserData }: any) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="bg-bg">
         <h3 className="text-lg font-semibold">{t("change_password_dialog_title")}</h3>
         <Formik
           initialValues={{
@@ -34,7 +40,7 @@ const ChangePasswordDialog = ({ open, onOpenChange, t, setUserData }: any) => {
           validationSchema={passwordSchema}
           onSubmit={async (values, { resetForm }) => {
             try {
-              const res = await authService.resetPassword(values);
+              const res = await authService.changePassword(values);
               toast.success(t("password_changed_success"));
               setUserData(res.data);
               resetForm();
@@ -47,7 +53,7 @@ const ChangePasswordDialog = ({ open, onOpenChange, t, setUserData }: any) => {
         >
           {({ values, handleChange, handleBlur, touched, errors }) => (
             <Form className="mt-3 space-y-3">
-              {["old_password", "password", "password_confirmation"].map((field, idx) => (
+              {["old_password", "password", "password_confirmation"].map((field) => (
                 <div key={field} className="relative">
                   <input
                     type={showPassword ? "text" : "password"}

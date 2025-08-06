@@ -28,6 +28,11 @@ import dynamic from "next/dynamic";
 //   iconUrl: markerIcon.src,
 //   shadowUrl: markerShadow.src,
 // });
+interface GeoAddress {
+  lat: number;
+  lng: number;
+  location: string;
+}
 
 const ContactForm = () => {
   const [countryCodes, setCountryCodes] = useState<BrandCountry[]>([]);
@@ -42,6 +47,15 @@ const ContactForm = () => {
       : null;
   const address = getContact("store_address");
   console.log(address);
+  function isGeoAddress(value: unknown): value is GeoAddress {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      "lat" in value &&
+      "lng" in value &&
+      "location" in value
+    );
+  }
 
   const LeafletMap = dynamic(() => import("../LeafletMap"), {
     ssr: false, // مهم عشان Leaflet مش شغال على السيرفر
@@ -116,7 +130,7 @@ const ContactForm = () => {
   });
   return (
     <div className="container mt-10 rounded-lg bg-white">
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 relative">
+      <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-2">
         <div className="space-y-6 p-8">
           <h2 className="text-4xl font-bold">Contact Us</h2>
           <p className="text-gray-500">
@@ -210,9 +224,13 @@ const ContactForm = () => {
 
         {/* Right Side: Map Placeholder */}
         <div className="ps-8">
-       <div className="h-[350px] rounded-md bg-green-400 lg:h-[725px] z-0">
-            {address?.lat && address?.lng ? (
-              <LeafletMap lat={+address.lat} lng={+address.lng} loc={address.location} />
+          <div className="z-0 h-[350px] rounded-md bg-green-400 lg:h-[725px]">
+            {isGeoAddress(address) ? (
+              <LeafletMap
+                lat={+address.lat}
+                lng={+address.lng}
+                loc={address.location}
+              />
             ) : (
               <div className="flex h-full items-center justify-center text-white">
                 Location not available
@@ -220,29 +238,29 @@ const ContactForm = () => {
             )}
           </div>
         </div>
-            <div className="absolute -top-9 right-1 z-40">
-            <div className="phoneContainer bg-primary group flex max-h-[70px] rounded-full p-3 hover:ps-8 hover:pr-4">
-              <div className="hidden w-[200px] ps-2 text-white group-hover:block">
-                <p className="font-bold">Call Center</p>
-                <a
-                  href={`tel:${firstPhone?.phone_code}${firstPhone?.phone}`}
-                  className="flex items-center gap-2"
-                >
-                  <Image
-                    src={firstPhone?.flag}
-                    alt="flag"
-                    width={24}
-                    height={20}
-                    className="h-5 w-6"
-                  />
-                  ({firstPhone?.phone_code}) {firstPhone?.phone}
-                </a>
-              </div>
-              <div className="flex h-[47px] w-[47px] items-center justify-center rounded-full bg-white">
-                <FaPhone className="text-primary text-xl" />
-              </div>
+        <div className="absolute -top-9 right-1 z-40">
+          <div className="phoneContainer bg-primary group flex max-h-[70px] rounded-full p-3 hover:ps-8 hover:pr-4">
+            <div className="hidden w-[200px] ps-2 text-white group-hover:block">
+              <p className="font-bold">Call Center</p>
+              <a
+                href={`tel:${firstPhone?.phone_code}${firstPhone?.phone}`}
+                className="flex items-center gap-2"
+              >
+                <Image
+                  src={firstPhone?.flag}
+                  alt="flag"
+                  width={24}
+                  height={20}
+                  className="h-5 w-6"
+                />
+                ({firstPhone?.phone_code}) {firstPhone?.phone}
+              </a>
+            </div>
+            <div className="flex h-[47px] w-[47px] items-center justify-center rounded-full bg-white">
+              <FaPhone className="text-primary text-xl" />
             </div>
           </div>
+        </div>
       </div>
     </div>
   );

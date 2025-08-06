@@ -103,8 +103,8 @@ function ProductReview({ productId }: Props) {
             key={review.id}
             className="flex items-start space-x-3 border-t border-gray-300 pt-4">
             <Image
-              src={review.user.avatar}
-              alt={review.user.full_name}
+              src={review.user?.avatar}
+              alt={review.user?.full_name}
               width={40}
               height={40}
               className="h-10 w-10 rounded-full object-cover"
@@ -113,7 +113,7 @@ function ProductReview({ productId }: Props) {
             <div className="flex-1">
               <div className="mb-1 flex items-center justify-between">
                 <h4 className="font-medium text-gray-900">
-                  {review.user.full_name}
+                  {review.user?.full_name}
                 </h4>
                 <span className="text-sm text-gray-500">
                   {review.created_at}

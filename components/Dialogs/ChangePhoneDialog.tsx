@@ -10,31 +10,34 @@ import { authService } from "@/services/ClientApiHandler";
 import toast from "react-hot-toast";
 import VerificationCodeDialog from "./VerificationCodeDialog";
 import { BrandCountry } from "@/utils/types";
-
+import { UserData } from "@/stores/authStore";
 const ChangePhoneDialog = ({
   open,
   onOpenChange,
   t,
   countryCodes,
   selectedCountry,
-  setSelectedCountry,
-  setUserData,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  t: any;
+  t: (key: string) => string;
   countryCodes: BrandCountry[];
   selectedCountry: BrandCountry | null;
   setSelectedCountry: (c: BrandCountry) => void;
-  setUserData: any;
+  setUserData: (data: UserData) => void;
 }) => {
-  const [newPhone, setNewPhone] = useState<{ phone: string; phone_code: string } | null>(null);
+  const [newPhone, setNewPhone] = useState<{
+    phone: string;
+    phone_code: string;
+  } | null>(null);
   const [showVerification, setShowVerification] = useState(false);
-
+const phoneLimit = selectedCountry?.phone_limit || 10;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <h3 className="text-lg font-semibold">{t("change_phone_dialog_title")}</h3>
+      <DialogContent className="bg-bg">
+        <h3 className="text-lg font-semibold">
+          {t("change_phone_dialog_title")}
+        </h3>
         {!showVerification ? (
           <Formik
             initialValues={{
@@ -46,18 +49,23 @@ const ChangePhoneDialog = ({
                 .required(t("phone_required"))
                 .matches(/^\d+$/, t("phone_digits_only"))
                 .max(
-                  selectedCountry?.phone_limit || 10,
-                  t("phone_max_digits", { limit: selectedCountry?.phone_limit || 10 }),
+                  phoneLimit,
+                  t("phone_max_digits").replace("{limit}", phoneLimit.toString())
                 ),
             })}
             onSubmit={async (values, { setSubmitting, setErrors }) => {
               try {
                 setSubmitting(true);
-                await authService.verifyCode(values);
+                await authService.verifyCode({
+                  ...values,
+                  verification_code: "0000", 
+                  verificationType: "register",
+                });
                 setNewPhone(values);
                 setShowVerification(true);
               } catch (error) {
-                const errorMsg = error?.response?.data?.message || t("something_went_wrong");
+                const errorMsg =
+                  error?.response?.data?.message || t("something_went_wrong");
                 toast.error(errorMsg);
                 if (error?.response?.data?.errors) {
                   setErrors(error.response.data.errors);

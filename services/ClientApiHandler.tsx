@@ -4,6 +4,7 @@ import axiosClient from "./axiosClient";
 import {
   BrandCountry,
   Category,
+  ChangePasswordPayload,
   LoginPayload,
   LogoutPayload,
   OrderData,
@@ -33,10 +34,14 @@ export const authService = {
     return res.data;
   },
   
-  resetPassword: async (payload: ResetPasswordPayload) => {
-    const res = await axiosClient.post("auth/reset_password", payload);
-    return res.data;
-  },
+resetPassword: async (payload: ResetPasswordPayload) => {
+  const res = await axiosClient.post<{ data: UserData }>("auth/reset_password", payload);
+  return res.data; 
+},
+changePassword: async (payload: ChangePasswordPayload) => {
+  const res = await axiosClient.post<{ data: UserData }>("auth/reset_password", payload);
+  return res.data; 
+},
   
   verifyCode: async ({
     phone_code,
@@ -177,6 +182,8 @@ export const orderService = {
   getOrder: async (slug: number) => {
     try {
       const res = await axiosClient.get<{ data: OrderData }>(`/orders/${slug}`);
+      // const res = await axiosClient.get<{ data: OrderData }>(`/orders/${slug}`);
+      console.log("🚀 ~ data:", res.data)
       return res.data.data;
     } catch (error) {
       console.error("Fetch error at: Order", error);
