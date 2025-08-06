@@ -27,7 +27,7 @@ axiosInstance.interceptors.request.use(
       }
     
     if (!config.headers) {
-      config.headers = {};
+      // config.headers = {};
     }
         if (store_id) {
               config.params = {

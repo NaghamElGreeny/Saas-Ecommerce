@@ -6,7 +6,7 @@ import CheckoutCartItem from "./CheckoutCartItem";
 
 function CheckoutOrders() {
   const { cart } = useCartStore();
-  const products = cart?.data?.products || [];
+  const products = cart?.data?.products  || [];
   return (
     <>
       <ScrollArea className="scrollArea max-h-[350px] w-[97%] overflow-y-auto rounded-md p-4">

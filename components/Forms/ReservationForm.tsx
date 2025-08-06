@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -19,13 +19,27 @@ import {  ReservationPayload } from "@/utils/types";
 export default function ReservationForm({ show, className }: { show: boolean; className?: string }) {
   const t = useTranslations("RESERVATION_FORM");
   const router = useRouter();
-
+  console.log('reservation ............')
+  // const fetchCountryCodes = useCountryCodesStore((state) => state.fetchCountryCodes);
   const countryCodes = useCountryCodesStore((state) => state.countryCodes);
+  console.log("🚀 ~ ReservationForm ~ countryCodes:", countryCodes)
   const stores = useStore((state) => state.stores);
-
+  console.log("🚀 ~ ReservationForm ~ stores:", stores)
   // const [selectedCountry, setSelectedCountry] = useState<BrandCountry | null>(null);
   const [branchDialogOpen, setBranchDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      await useCountryCodesStore.getState().fetchCountryCodes();
+    } catch (error) {
+      toast.error((error as Error)?.message || t("fetch_country_codes_error"));
+    }
+  };
+
+  fetchData();
+}, [t]);
+
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t("name_required")).min(2, t("name_min_chars")),
@@ -164,8 +178,8 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
                     }}
                     onBlur={handleBlur}
                     className="w-full appearance-none rounded-xl border p-3"
-                  >
-                    {countryCodes.map((country) => (
+                  > 
+                    {countryCodes?.map((country) => (
                       <option key={country.id} value={country.phone_code}>
                         +{country.phone_code}
                       </option>

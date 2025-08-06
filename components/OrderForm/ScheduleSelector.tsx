@@ -24,14 +24,10 @@ export default function ScheduleSelector({
   errors,
   setFieldValue,
 }: ScheduleSelectorProps) {
-
   const t = useTranslations("ORDER_FORM");
-  const handleTimeChange = (order_time: dayjs.Dayjs | null) => {
-    
-    if (order_time) {
-      const formatted = order_time.format("h:mm A");
-      setFieldValue("order_time", formatted);
-    }
+  const formatTime = (time: string) => {
+    const parsedTime = dayjs(time, "hh:mm A");
+    return parsedTime.isValid() ? parsedTime.format("hh:mm A") : time;
   };
   return (
     <div className="mt-5 flex flex-col gap-5 font-semibold">
@@ -45,16 +41,16 @@ export default function ScheduleSelector({
               checked={!values.is_schedule}
               onChange={() => setFieldValue("is_schedule", false)}
             />
-{t("order_now")}
+            {t("order_now")}
           </label>
-          <label className="flex items-center gap-2 ">
+          <label className="flex items-center gap-2">
             <input
               type="radio"
               name="is_schedule"
               checked={values.is_schedule}
               onChange={() => setFieldValue("is_schedule", true)}
             />
-           {t("schedule_order")}
+            {t("schedule_order")}
           </label>
         </div>
 
@@ -66,15 +62,25 @@ export default function ScheduleSelector({
             className="!w-1/2 rounded-2xl !border-none p-3 text-gray-600"
             disabled={!values.is_schedule}
           />
-
-          <TimePicker
-            use12Hours
-            format="h:mm A"
-            onChange={handleTimeChange}
-            placeholder="Select Time"
-            className="order_time-picker w-1/2 !rounded-2xl !border-none !p-3"
-            disabled={!values.is_schedule}
-          />
+          <div className="order_time-picker w-1/2 !rounded-2xl !border-none !p-3">
+            <TimePicker
+              // use12Hours
+              format="h:mm A"
+              onChange={(time) => {
+                const formatted = time ? formatTime(values.order_time) : "";
+                setFieldValue("order_time", formatted); // ← يخزن string بصيغة "hh:mm A"
+              }}
+              placeholder="Select Time"
+              // value={
+              //   values.order_time
+              //     ? dayjs(values.order_time, "hh:mm A")
+              //     : null
+              // }
+              // placeholder="Select Time"
+              // value={values.order_time ? values.order_time : null}
+              disabled={!values.is_schedule}
+            />
+          </div>
         </div>
 
         <div className="flex w-full">

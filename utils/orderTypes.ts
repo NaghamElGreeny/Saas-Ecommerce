@@ -24,6 +24,8 @@ export interface OrderItem {
   call_center: string;
   call_center_message: string;
   order_status: OrderStatus[];
+  total_amount?: string | number;
+  currency?: string | number;
 }
 
 interface Address {

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Image from "next/image";
-import {  ItemModifier } from "@/utils/cartTypes";
+import {  CartProduct, ItemModifier } from "@/utils/cartTypes";
 import { OrderItem } from "@/utils/types";
 
 type Props = {
-  // cartProduct: CartProduct;
-  cartProduct: OrderItem;
+  cartProduct: CartProduct | OrderItem;
+  // cartProduct: OrderItem;
 };
 
 export default function CheckoutCartItem({ cartProduct }: Props) {

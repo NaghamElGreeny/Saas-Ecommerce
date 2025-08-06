@@ -54,8 +54,8 @@ export default function ReservationDetails({ order }: any) {
     };
 
     try {
-      const res = await orderService.cancelReservation(order!.id, payload);
-      toast.success(res.message || "Order cancelled successfully");
+      await orderService.cancelReservation(order!.id, payload);
+      toast.success( "Order cancelled successfully");
       setIsCancelOpen(false);
 
       setTimeout(() => {
