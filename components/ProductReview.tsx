@@ -103,8 +103,8 @@ function ProductReview({ productId }: Props) {
             key={review.id}
             className="flex items-start space-x-3 border-t border-gray-300 pt-4">
             <Image
-              src={review.user?.avatar}
-              alt={review.user?.full_name}
+              src={review.user?.avatar || "/assets/images/default-avatar.png"}
+              alt={review.user?.full_name || "review"}
               width={40}
               height={40}
               className="h-10 w-10 rounded-full object-cover"
