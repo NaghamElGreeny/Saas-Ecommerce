@@ -109,11 +109,11 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="mx-auto flex w-full flex-col gap-4 p-4"
+      className="mx-auto flex w-full flex-col gap-4 p-0"
     >
       {/* Phone Section */}
       <div className="items-center gap-2">
-        <div className="flex gap-1">
+        <div className="flex gap-1 rtl:flex-row-reverse">
           {/* Country Code Selector */}
           <div className="relative w-26">
             <select
@@ -127,7 +127,7 @@ export default function LoginForm() {
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
+            <div className="pointer-events-none absolute top-1/2 right-3 rtl:right-12 -translate-y-1/2 text-gray-500">
               <ChevronDown size={18} />
             </div>
           </div>
@@ -136,7 +136,7 @@ export default function LoginForm() {
           <input
             type="tel"
             placeholder={t("phone_placeholder")}
-            className="w-full rounded-md border p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            className="w-full rounded-md border p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none rtl:text-end"
             {...formik.getFieldProps("phone")}
           />
         </div>
@@ -169,26 +169,28 @@ export default function LoginForm() {
       </div>
 
       {/* Remember Me & Forgot Password */}
-      <div className="flex w-full items-center justify-between text-sm">
-        <label className="flex items-center gap-2 text-gray-700">
-          <input
-            type="checkbox"
-            checked={formik.values.rememberMe}
-            onChange={() =>
-              formik.setFieldValue("rememberMe", !formik.values.rememberMe)
-            }
-            className="h-4 w-4 accent-blue-600"
-          />
-          <span className="select-none">{t("remember_me")}</span>
-        </label>
-        <button
-          type="button"
-          className="text-blue-600 hover:underline"
-          onClick={handleForgetPassword}
-        >
-          {t("forgot_password")}
-        </button>
-      </div>
+     <div className="flex w-full items-center justify-between text-sm">
+  <label className="flex items-center gap-2 text-gray-700 whitespace-nowrap">
+    <input
+      type="checkbox"
+      checked={formik.values.rememberMe}
+      onChange={() =>
+        formik.setFieldValue("rememberMe", !formik.values.rememberMe)
+      }
+      className="h-4 w-4 accent-blue-600"
+    />
+    <span className="select-none">{t("remember_me")}</span>
+  </label>
+
+  <button
+    type="button"
+    className="text-blue-600 hover:underline whitespace-nowrap"
+    onClick={handleForgetPassword}
+  >
+    {t("forgot_password")}
+  </button>
+</div>
+
 
       {/* Submit Button */}
       <button

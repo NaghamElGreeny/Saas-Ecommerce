@@ -75,7 +75,8 @@ changePassword: async (payload: ChangePasswordPayload) => {
       const res = await axiosClient.post(url, dataToSend);
       return res.data;
     } catch (error: any) {
-      throw new Error(error?.response?.data?.message || "Verification failed");
+      console.log("error", error);
+      // throw new Error(error?.response?.data?.message || "Verification failed");
     }
   },
 };
