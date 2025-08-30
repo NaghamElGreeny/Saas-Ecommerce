@@ -1,16 +1,17 @@
 "use client";
 import { Slider } from "@/utils/types";
 import "@/styles/hero.css";
-import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+//  ChevronLeft, ChevronRight 
 import Link from "next/link";
 import Image from "next/image";
-import { useState} from "react";
+// import { useState} from "react";
 import LocalePath from "../localePath";
 import { useTranslations } from "next-intl"; 
 
 export default function Hero({ sliders }: { sliders: Slider[] }) {
   const socials = ["facebook", "twitter", "messenger", "instagram"];
-  const [current, setCurrent] = useState(0);
+  // const [current, setCurrent] = useState(0);
   // const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const t = useTranslations("HERO"); 
 
@@ -34,18 +35,19 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
   //   if (intervalRef.current) clearInterval(intervalRef.current);
   // };
 
-  const handleNext = () => {
-    setCurrent((prev) => (prev + 1) % images.length);
-    // startAutoSlide();
-  };
+  // const handleNext = () => {
+  //   setCurrent((prev) => (prev + 1) % images.length);
+  //   // startAutoSlide();
+  // };
 
-  const handlePrev = () => {
-    setCurrent((prev) => (prev - 1 + images.length) % images.length);
-    // startAutoSlide();
-  };
+  // const handlePrev = () => {
+  //   setCurrent((prev) => (prev - 1 + images.length) % images.length);
+  //   // startAutoSlide();
+  // };
 
   const style = {
-    backgroundImage: images[current],
+    // backgroundImage: images[current],
+    backgroundImage: images[0],
   };
   return (
     <section
@@ -81,12 +83,12 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
           </LocalePath>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex md:justify-between justify-center">
           <div className="flex w-56 gap-4">
             {socials.map((social, index) => (
               <Link
                 key={index}
-                className="flex size-11 items-center justify-center rounded-full border border-white"
+                className="flex size-11  items-center justify-center rounded-full border border-white"
                 href={`${social}.com`}
               >
                 <Image
@@ -99,7 +101,7 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
               </Link>
             ))}
           </div>
-          <div className="flex w-28 justify-between text-gray-400 rtl:flex-row-reverse">
+          {/* <div className="flex w-28 justify-between text-gray-400 rtl:flex-row-reverse">
             <ChevronLeft
               className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-white/30 text-white hover:bg-white/50"
               onClick={handlePrev}
@@ -108,7 +110,7 @@ export default function Hero({ sliders }: { sliders: Slider[] }) {
               className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-white/30 text-white hover:bg-white/50"
               onClick={handleNext}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

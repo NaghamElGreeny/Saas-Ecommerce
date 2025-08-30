@@ -322,7 +322,13 @@
     "enterYourEmail": "Enter Your Email",
     "fullname": "Full Name",
     "Message": "Message",
-    "optional": " (Optional) "
+    "optional": " (Optional) ",
+      "fromTime": "From",
+    "toTime": "To",
+    "selectTime": "Select Time",
+    "bookTable": "Book a Table",
+    "cancel": "Cancel",
+    "ok": "OK"
   },
    "PRODUCT_DETAILS": {
     "item_details_title": "Item Details",

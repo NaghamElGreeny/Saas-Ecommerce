@@ -7,7 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
-import { TimePicker } from "antd";
+// import { TimePicker } from "antd";
 import { ChevronDown } from "lucide-react";
 
 import { locationService } from "@/services/ClientApiHandler";
@@ -15,7 +15,8 @@ import { useCountryCodesStore } from "@/stores/countryCodesStore";
 import { useStore } from "@/stores/useStore";
 import GlobalDialog from "@/components/shared/GlobalDialog";
 import { ReservationPayload } from "@/utils/types";
-
+import { TimePickerField } from "../TimePicker";
+// import { ReservationFromType } from "@/helper/schema";
 export default function ReservationForm({ show, className }: { show: boolean; className?: string }) {
   const t = useTranslations("RESERVATION_FORM");
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
   const [branchDialogOpen, setBranchDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+ 
   const validationSchema = Yup.object({
     name: Yup.string().required(t("name_required")).min(2, t("name_min_chars")),
     phone_code: Yup.string().required(t("country_code_required")),
@@ -242,34 +244,10 @@ export default function ReservationForm({ show, className }: { show: boolean; cl
                 </button>
               </GlobalDialog>
 
-              <div className="flex w-full flex-col gap-4 md:flex-row">
-                <div className="time-picker md:w-1/2">
-                  <TimePicker
-                    // use12Hours
-                    format="h:mm A"
-                    // onChange={(time) =>
-                    //   setFieldValue("from_time", time ? time.format("h:mm A") : "")
-                    // }
-                    // placeholder={t("from_time_placeholder")}
-                    // value={values.from_time ? dayjs(values.from_time, "h:mm A") : null}
-                    onChange={(time) =>
-                      setFieldValue("from_time", time )
-                    }
-                    placeholder={t("from_time_placeholder")}
-                    value={values.from_time}
-                  />
-                </div>
-                <div className="time-picker md:w-1/2">
-                  <TimePicker
-                    format="h:mm A"
-                    onChange={(time) =>
-                      setFieldValue("to_time", time )
-                    }
-                    placeholder={t("to_time_placeholder")}
-                    value={values.to_time}
-                  />
-                </div>
-              </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <TimePickerField  name="from_time" />
+              <TimePickerField  name="to_time" />
+            </div>
               <ErrorMessage name="from_time" component="div" className="text-sm text-red-500" />
               <ErrorMessage name="to_time" component="div" className="text-sm text-red-500" />
 

@@ -318,7 +318,13 @@
     "phone": "رقم الموبايل",
     "enterYourEmail": "ادخل بريدك الالكتروني",
     "fullname": "الاسم بالكامل",
-    "email": "البريد الإلكتروني"
+    "email": "البريد الإلكتروني",
+     "fromTime": "من",
+    "toTime": "إلى",
+    "selectTime": "حدد الوقت",
+    "bookTable": "احجز طاولة",
+    "cancel": "إلغاء",
+    "ok": "موافق"
   },
    "PRODUCT_DETAILS": {
     "item_details_title": "تفاصيل المنتج",
