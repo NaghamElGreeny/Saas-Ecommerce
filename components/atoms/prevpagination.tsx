@@ -1,5 +1,5 @@
 import * as React from "react"
-const Prevpagination = (props:any) => (
+const Prevpagination = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={9}
